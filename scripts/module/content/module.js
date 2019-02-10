@@ -1,0 +1,90 @@
+/**
+ * Created by Yuiitsu on 2018/10/23.
+ */
+App.module.extend('content', function() {
+    //
+    let self = this,
+        adoptableArticle = null,
+        article_data = {
+            'title': '',
+            'content': ''
+        },
+        reader_page_src = chrome.runtime.getURL('reader.html');
+
+    this.init = function() {
+        // this.is_open(function() {
+        //     // open, todo.
+        //     $('p').each(function() {
+        //         let innerHtml = $(this).html();
+        //         if (innerHtml.indexOf('An increasing') !== -1) {
+        //             $(this).html(innerHtml.replace(new RegExp('increasing', 'g'), '<span class="polio-">increasing</span>'));
+        //         }
+        //     });
+        // });
+
+        let is_available = this.reader_is_available();
+        if (is_available) {
+            let article = $(adoptableArticle.outerHTML);
+            article_data['title'] = ReaderArticleFinderJS.articleTitle();
+            article_data['content'] = article[0].outerHTML;
+        }
+
+        // send message to background js.
+        chrome.extension.sendMessage({
+            'method': 'reader_ready',
+            'data': {
+                is_available: is_available,
+                article_data: article_data
+            }
+        }, function (is_open) {
+        });
+
+        // listen background script send message.
+        chrome.extension.onMessage.addListener(function(request, _, response) {
+            let method = request.method;
+            if (self.hasOwnProperty(method)) {
+                self[method]();
+            } else {
+                self.log('method '+ method +' not exist.');
+            }
+        });
+    };
+
+    this.reader_is_available = function() {
+        if(!ReaderArticleFinderJS.adoptableArticle()){
+            ReaderArticleFinderJS.isReaderModeAvailable();
+        }
+        return !!(adoptableArticle = ReaderArticleFinderJS.adoptableArticle());
+    };
+
+    this.reader_mode = function() {
+        let target = $('#fika-reader');
+        if (target.length === 0) {
+            this.view.append('content', 'reader_page', {
+                src: reader_page_src,
+                name: window.location.href
+            });
+            $('body').css('overflow-y', 'hidden');
+        } else {
+            $('body').css('overflow-y', 'auto');
+            target.remove();
+        }
+    };
+
+    this.is_open = function(callback) {
+        // 检查是否开启
+        chrome.extension.sendMessage({
+            'method': 'is_open',
+            'data': {
+                url: location.href
+            }
+        }, function (is_open) {
+            if (is_open) {
+                callback();
+            } else {
+                self.log('Highlight off.');
+            }
+        });
+    };
+});
+

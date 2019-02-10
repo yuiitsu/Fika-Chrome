@@ -1,0 +1,62 @@
+{
+    "manifest_version": 2,
+    "name": "Folio",
+    "short_name": "Folio",
+    "version": "0.1.0",
+    "description":"Folio",
+    "homepage_url": "https://www.Folio.com",
+    "author":"Folio",
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+    "default_locale": "en",
+    "background": {
+        "scripts": [
+            "scripts/lib/jquery-1.11.0.min.js",
+            "scripts/model.js",
+            "scripts/app.js",
+            "scripts/module/common/module.js",
+            "scripts/module/data/module.js",
+            "scripts/module/background/module.js",
+            "scripts/run.js"
+        ]
+    },
+    "content_scripts": [{
+        "matches": [
+            "http://*/*",
+            "https://*/*"
+        ],
+        "js": [
+            "scripts/lib/jquery-1.11.0.min.js",
+            "scripts/lib/reader.js",
+            "scripts/app.js",
+            "scripts/model.js",
+            "scripts/module/common/module.js",
+            "scripts/module/common/view.js",
+            "scripts/module/common/event.js",
+            "scripts/module/data/module.js",
+            "scripts/module/content/module.js",
+            "scripts/module/content/view.js",
+            "scripts/module/content/event.js",
+            "scripts/run.js"
+        ],
+        "css": [
+            "style/content.css"
+        ]
+    }],
+    "browser_action": {
+        "default_title": "Folio",
+        "default_icon": "images/logo64.png"
+    },
+    "permissions": [
+        "tabs",
+        "cookies",
+        "contextMenus",
+        "http://*/*",
+        "https://*/*"
+    ],
+    "icons": {
+        "16": "images/logo16.png",
+        "48": "images/logo64.png",
+        "128": "images/logo128.png"
+    },
+    "web_accessible_resources": [ "reader.html" ]
+}
