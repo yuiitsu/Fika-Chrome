@@ -26,6 +26,8 @@ App.module.extend('reader', function() {
                 });
             });
             self.view.display('reader', 'toc', tocs, $('.f-toc'));
+            //
+            appearance();
         });
     };
 });

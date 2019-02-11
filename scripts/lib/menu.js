@@ -99,75 +99,82 @@ window.addEventListener('resize', ()=>{
 
 
 /* Appearance */
-const settings = {
-    fontSize: {
-        activeVal: localStorage.getItem('fontSize') || 'medium',
-        cont: document.querySelector('.f-article'),
-        selects: document.querySelectorAll('.f-select-size'),
-        classPrefix: 'f-size'
-    },
-    theme: {
-        activeVal: localStorage.getItem('theme') || 'vanilla',
-        cont: document.querySelector('.f-app'),
-        selects: document.querySelectorAll('.f-select-theme'),
-        classPrefix: 'theme'
-    },
-    font:{
-        activeVal: localStorage.getItem('font') || 'georgia',
-        cont: document.querySelector('.f-article'),
-        selects: document.querySelectorAll('.f-select-font'),
-        classPrefix: 'f-font'
+function appearance() {
+    const settings = {
+        fontSize: {
+            activeVal: localStorage.getItem('fontSize') || 'medium',
+            cont: document.querySelector('.f-article'),
+            selects: document.querySelectorAll('.f-select-size'),
+            classPrefix: 'f-size'
+        },
+        theme: {
+            activeVal: localStorage.getItem('theme') || 'vanilla',
+            cont: document.querySelector('.f-app'),
+            selects: document.querySelectorAll('.f-select-theme'),
+            classPrefix: 'theme'
+        },
+        font: {
+            activeVal: localStorage.getItem('font') || 'georgia',
+            cont: document.querySelector('.f-article'),
+            selects: document.querySelectorAll('.f-select-font'),
+            classPrefix: 'f-font'
+        }
     }
-}
 
-function setAppearance(prop, val){
-    // change class name (theme) for app
-    let oldVal, cont = settings[prop].cont;
-    try {
+    function setAppearance(prop, val) {
+        // change class name (theme) for app
+        let oldVal, cont = settings[prop].cont
         cont.classList.forEach(c => {
             if (c.startsWith(settings[prop].classPrefix)) {
                 oldVal = c
-                console.log(oldVal)
             }
         })
         cont.classList.replace(oldVal, `${settings[prop].classPrefix}-${val}`)
-    } catch (e) {
-
-    }
-    // change state and storage
-    settings[prop].activeVal = val
-    localStorage.setItem(prop, val)
-    // change class name for ctrl btns
-    for (let el of settings[prop].selects){
-        el.classList.remove('active')
-        if (el.classList.contains(val)){
-            el.classList.add('active')
+        // change state and storage
+        settings[prop].activeVal = val
+        localStorage.setItem(prop, val)
+        // change class name for ctrl btns
+        for (let el of settings[prop].selects) {
+            el.classList.remove('active')
+            if (el.classList.contains(val)) {
+                el.classList.add('active')
+            }
         }
+    }
+
+    // set theme from localStorage
+    setAppearance('theme', settings['theme'].activeVal)
+    setAppearance('fontSize', settings['fontSize'].activeVal)
+    setAppearance('font', settings['font'].activeVal)
+
+    Array.from(settings['theme'].selects).forEach(el => {
+        el.addEventListener('click', () => {
+            setAppearance('theme', el.classList.item(1))
+        })
+    })
+    Array.from(settings['fontSize'].selects).forEach(el => {
+        el.addEventListener('click', () => {
+            setAppearance('fontSize', el.classList.item(1))
+        })
+    })
+    Array.from(settings['font'].selects).forEach(el => {
+        el.addEventListener('click', () => {
+            setAppearance('font', el.classList.item(1))
+        })
+    })
+
+    // drawer tabs
+    const tabsButtons = document.querySelectorAll('.f-btn.tab')
+    const  tabsWrap = document.querySelector('.f-drawer-content-wrap')
+    for (let i=0; i <3; i++){
+        tabsButtons[i].addEventListener('click', ()=>{
+            tabsWrap.style.transform = `translateX(${i*-359}px)`
+            for (let el of tabsButtons) {
+                el.classList.remove('active')
+            }
+            tabsButtons[i].classList.add('active')
+        })
     }
 }
 
-// set theme from localStorage
-setAppearance('theme', settings['theme'].activeVal)
-setAppearance('fontSize', settings['fontSize'].activeVal)
-setAppearance('font', settings['font'].activeVal)
-
-// binding appearance button click event
-document.querySelector('.f-appearance-toggle').addEventListener('click', ()=>{
-    const el = document.querySelector('.f-appearance')
-    el.style.display = el.style.display === "none" ? "block" : "none";
-}, false)
-Array.from(settings['theme'].selects).forEach(el=>{
-    el.addEventListener('click', ()=>{
-        setAppearance('theme',el.classList.item(1))
-    })
-})
-Array.from(settings['fontSize'].selects).forEach(el=>{
-    el.addEventListener('click', ()=>{
-        setAppearance('fontSize',el.classList.item(1))
-    })
-})
-Array.from(settings['font'].selects).forEach(el=>{
-    el.addEventListener('click', ()=>{
-        setAppearance('font',el.classList.item(1))
-    })
-})
+// appearance()

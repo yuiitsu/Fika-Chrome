@@ -12,8 +12,6 @@
 </head>
 <body>
 
-<!--app  ! must has 'theme' class-->
-<!--app  ! must has 'theme' class-->
 <div id="fika" class="f-app theme-blabar">
     <!--drawer-->
     <div class="f-drawer-btn">
@@ -25,70 +23,88 @@
     </div>
     <div class="f-drawer">
         <div class="my-2 d-flex align-center justify-space-between">
-            <button class="f-btn">Sign in</button>
-            <button class="f-btn f-btn-icon f-drawer-close">
+            <!-- ** sign in button-->
+            <!--
+            <button class="f-btn" style="display: none;">Sign in</button>
+            -->
+            <!-- ** authorized user avatar & name -->
+            <!--
+            <button class="f-btn f-avatar">
+                <img src="https://lh3.googleusercontent.com/-IvSppfPGUEE/AAAAAAAAAAI/AAAAAAAAAAA/ACevoQPWKABIL1pznV_P0TGMb18IA8PXpw/s32-c-mo/photo.jpg">
+                <span>Username</span>
+            </button>
+            -->
+
+            <!-- tabs' buttons -->
+            <button class="f-btn f-btn-icon tab active">
+                <svg class="f-icon" viewBox="0 0 24 24">
+                    <path d="M4 13c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0-8c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm4 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zm0 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zM7 8c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1zm-3 5c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0-8c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm4 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zm0 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zM7 8c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1z"/>
+                </svg>
+            </button>
+            <!--
+            <button class="f-btn f-btn-icon tab">
+                <svg class="f-icon" viewBox="0 0 24 24">
+                    <path d="M6.35771799,15.5289702 L11.4367849,18.1092048 C11.6928133,18.2392707 11.8388062,18.5168235 11.8009253,18.8014859 C11.7635474,19.0823675 11.5435992,19.3039339 11.2629991,19.3433697 L4.76762157,20.2562354 C4.22071162,20.3330986 3.71504358,19.9520504 3.6381804,19.4051405 C3.61196974,19.2186419 3.63895697,19.0285326 3.71603549,18.8566966 L4.99238499,16.0112506 C5.21841899,15.5073389 5.81015695,15.2820744 6.31406873,15.5081084 C6.32878459,15.5147093 6.3433386,15.5216653 6.35771799,15.5289702 Z"  transform="translate(7.717655, 17.843183) rotate(8.000000) translate(-7.717655, -17.843183) "></path>
+                    <path d="M14.391764,17.4401532 L16.2204467,16.0756516 L16.3866663,16.0757926 C16.9529212,16.0762731 17.4764311,15.7585487 17.7326856,15.2427018 L20.5272308,9.61721073 C20.532032,9.6074871 20.532032,9.6074871 20.5367392,9.59771763 C20.8945358,8.85054088 20.5788808,7.954783 19.8317041,7.59698641 L11.8763376,3.78744202 C11.1367887,3.43329814 10.2499145,3.73863292 9.88511474,4.47298408 L7.09056952,10.0984751 C7.08576834,10.1081987 7.08576834,10.1081987 7.08106111,10.1179682 C6.82443127,10.6538812 6.90956225,11.2829159 7.28468031,11.7305245 L7.39248366,11.8591606 L7.50666158,14.1496019 C7.51579763,14.3328737 7.62459,14.4964159 7.79009214,14.575669 L13.8767988,17.4903781 C14.0444453,17.5706581 14.2427887,17.5513136 14.391764,17.4401532 Z" transform="translate(13.808900, 10.589658) rotate(8.000000) translate(-13.808900, -10.589658) "></path>
+                </svg>
+            </button>
+            -->
+            <button class="f-btn f-btn-icon tab">
+                <svg class="f-icon" viewBox="0 0 24 24">
+                    <path d="M21.94,18.66l-5-14a1,1,0,0,0-1.88,0L10.48,17.48,7.43,9.64a1,1,0,0,0-1.86,0l-3.5,9a1,1,0,1,0,1.86.72l.66-1.68H8.41l.66,1.68A1,1,0,0,0,10,20a.92.92,0,0,0,.36-.07.67.67,0,0,0,.14-.09.7.7,0,0,0,.16.1,1,1,0,0,0,1.28-.6l1-2.84h6.1l1,2.84A1,1,0,0,0,21,20a1,1,0,0,0,.34-.06A1,1,0,0,0,21.94,18.66Zm-16.58-3L6.5,12.76l1.14,2.92Zm8.31-1.18L16,8l2.33,6.53Z"/></svg>
+            </button>
+            <div class="flex-fill"></div>
+            <button class="f-btn f-btn-icon ml-1 f-drawer-close">
                 <svg class="f-icon" viewBox="0 0 24 24">
                     <path d="M14.71 15.88L10.83 12l3.88-3.88c.39-.39.39-1.02 0-1.41-.39-.39-1.02-.39-1.41 0L8.71 11.3c-.39.39-.39 1.02 0 1.41l4.59 4.59c.39.39 1.02.39 1.41 0 .38-.39.39-1.03 0-1.42z"/>
                 </svg>
             </button>
         </div>
-        <div class="f-drawer-tile">
-            <svg class="f-icon" viewBox="0 0 24 24">
-                <path d="M6.35771799,15.5289702 L11.4367849,18.1092048 C11.6928133,18.2392707 11.8388062,18.5168235 11.8009253,18.8014859 C11.7635474,19.0823675 11.5435992,19.3039339 11.2629991,19.3433697 L4.76762157,20.2562354 C4.22071162,20.3330986 3.71504358,19.9520504 3.6381804,19.4051405 C3.61196974,19.2186419 3.63895697,19.0285326 3.71603549,18.8566966 L4.99238499,16.0112506 C5.21841899,15.5073389 5.81015695,15.2820744 6.31406873,15.5081084 C6.32878459,15.5147093 6.3433386,15.5216653 6.35771799,15.5289702 Z"  transform="translate(7.717655, 17.843183) rotate(8.000000) translate(-7.717655, -17.843183) "></path>
-                <path d="M14.391764,17.4401532 L16.2204467,16.0756516 L16.3866663,16.0757926 C16.9529212,16.0762731 17.4764311,15.7585487 17.7326856,15.2427018 L20.5272308,9.61721073 C20.532032,9.6074871 20.532032,9.6074871 20.5367392,9.59771763 C20.8945358,8.85054088 20.5788808,7.954783 19.8317041,7.59698641 L11.8763376,3.78744202 C11.1367887,3.43329814 10.2499145,3.73863292 9.88511474,4.47298408 L7.09056952,10.0984751 C7.08576834,10.1081987 7.08576834,10.1081987 7.08106111,10.1179682 C6.82443127,10.6538812 6.90956225,11.2829159 7.28468031,11.7305245 L7.39248366,11.8591606 L7.50666158,14.1496019 C7.51579763,14.3328737 7.62459,14.4964159 7.79009214,14.575669 L13.8767988,17.4903781 C14.0444453,17.5706581 14.2427887,17.5513136 14.391764,17.4401532 Z" transform="translate(13.808900, 10.589658) rotate(8.000000) translate(-13.808900, -10.589658) "></path>
-            </svg>
-            <span>My Highlight</span>
-        </div>
-        <div class="f-drawer-tile f-appearance-toggle">
-            <svg class="f-icon" viewBox="0 0 24 24">
-                <path d="M21.94,18.66l-5-14a1,1,0,0,0-1.88,0L10.48,17.48,7.43,9.64a1,1,0,0,0-1.86,0l-3.5,9a1,1,0,1,0,1.86.72l.66-1.68H8.41l.66,1.68A1,1,0,0,0,10,20a.92.92,0,0,0,.36-.07.67.67,0,0,0,.14-.09.7.7,0,0,0,.16.1,1,1,0,0,0,1.28-.6l1-2.84h6.1l1,2.84A1,1,0,0,0,21,20a1,1,0,0,0,.34-.06A1,1,0,0,0,21.94,18.66Zm-16.58-3L6.5,12.76l1.14,2.92Zm8.31-1.18L16,8l2.33,6.53Z"/></svg>
-            <span>Appearance</span>
-        </div>
-        <div class="pa-1 f-appearance" style="display: none;">
-            <!--font size selection-->
-            <div class="f-select-label">text size</div>
-            <div class="f-select-sizes">
-                <div class="f-select-size small active">small</div>
-                <div class="f-select-size medium">medium</div>
-                <div class="f-select-size large">large</div>
-            </div>
-            <!--theme selection-->
-            <div class="f-select-label">theme</div>
-            <div class="f-select-themes">
-                <div class="f-select-theme vanilla"></div>
-                <div class="f-select-theme latte"></div>
-                <div class="f-select-theme blabar"></div>
-                <div class="f-select-theme licorice"></div>
-            </div>
-            <!--font selection-->
-            <div class="f-select-label">Font</div>
-            <div class="f-select-fonts">
-                <div class="f-select-font courier active">Courier</div>
-                <div class="f-select-font georgia">Georgia</div>
-                <div class="f-select-font merriweather">Merriweather</div>
-                <div class="f-select-font open-sans">Open Sans</div>
-                <div class="f-select-font palatino">Palatino</div>
-                <div class="f-select-font verdana">Verdana</div>
-            </div>
-        </div>
-        <hr class="my-2">
 
-        <div class="f-toc">
-            <!--
-            <h1>What is a Microinteraction Anyway?</h1>
-            <div class="f-hl">Details are what keep them there. And details are what actually make our app stand out from our competition.</div>
-            <h1>Why Microinteractions Work</h1>
-            <h1>Identifying Opportunities</h1>
-            <h2>Show System Status</h2>
-            <h2>Highlight Changes</h2>
-            <h3>Keep Context</h3>
-            <h4>Visualize Input</h4>
-            <h5>Call to Action</h5>
-            <h1>Things to Remember</h1>
-            <h1>Conclusion</h1>
-            -->
+        <div class="f-drawer-content">
+            <div class="f-drawer-content-wrap">
+                <!-- ** toc-->
+                <div class="f-toc"></div>
+                <!-- ** highlights 仅仅是这篇文章中的highlights -->
+                <div class="f-hl-list">
+                    <!-- highlights samples -->
+                    <!--
+                    <a><span>Details are what keep them there. And details are what actually make our app stand out from our competition.</span></a>
+                    <a><span>As first described in Dan Saffer’s book Microinteractions, these tiny details typically serve these essential functions:</span></a>
+                    -->
+                </div>
+                <div>
+                    <!--font size selection-->
+                    <div class="f-select-label" style="margin-top: 0px">text size</div>
+                    <div class="f-select-sizes">
+                        <div class="f-select-size small active">small</div>
+                        <div class="f-select-size medium">medium</div>
+                        <div class="f-select-size large">large</div>
+                    </div>
+                    <!--theme selection-->
+                    <div class="f-select-label">theme</div>
+                    <div class="f-select-themes">
+                        <div class="f-select-theme vanilla"></div>
+                        <div class="f-select-theme latte"></div>
+                        <div class="f-select-theme blabar"></div>
+                        <div class="f-select-theme licorice"></div>
+                    </div>
+                    <!--font selection-->
+                    <div class="f-select-label">Font</div>
+                    <div class="f-select-fonts">
+                        <div class="f-select-font courier active">Courier</div>
+                        <div class="f-select-font georgia">Georgia</div>
+                        <div class="f-select-font merriweather">Merriweather</div>
+                        <div class="f-select-font open-sans">Open Sans</div>
+                        <div class="f-select-font palatino">Palatino</div>
+                        <div class="f-select-font verdana">Verdana</div>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
+
     <!--overlay-->
     <div class="f-overlay"></div>
     <!--paper-->
