@@ -1,0 +1,19 @@
+@import "../variables.styl"
+/*! App */
+
+f-app($theme)
+  background: $theme.bg
+
+
+for $name, $theme in $themes
+  .theme-{$name}.f-app
+      f-app($theme)
+
+.f-app
+  display: flex
+  min-height: 100vh
+  drawer-transition()
+  &-drawer-on
+    padding-left: 352px
+    @media screen and (max-width: 1280px)
+      padding-left: 0

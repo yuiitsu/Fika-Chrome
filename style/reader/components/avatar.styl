@@ -1,0 +1,29 @@
+@import "../variables.styl"
+
+.f-avatar
+  display flex
+  align-items center
+
+  img
+    border-radius 50%
+    width 32px
+    height 32px
+    object-fit cover
+
+.f-btn
+  &.f-avatar
+    radius(18px)
+    $padding(r,2)
+    padding-left: 2px !important
+
+    span
+      $margin(l, 1)
+      font-size 16px
+      line-height 1.2
+      font-weight normal
+      text-transform none
+      max-width 112px
+      overflow hidden
+      white-space nowrap
+      text-overflow ellipsis
+

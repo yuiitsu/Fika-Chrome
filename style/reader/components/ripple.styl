@@ -1,0 +1,24 @@
+.f-ripple
+  position: absolute
+  border-radius: 100%
+  color: inherit
+  background: currentColor
+  opacity: 0.2
+  transform: scale(0)
+  pointer-events: none
+  transition: 0.35s $transition.ease-in-out
+
+  &-container
+    position:relative
+    overflow: hidden
+    cursor: pointer
+    user-select: none
+
+  &.active
+    transform: scale(2)
+    opacity: 0
+
+
+.f-drawer-tile
+  .f-ripple
+    transition: 0.5s $transition.ease-in-out

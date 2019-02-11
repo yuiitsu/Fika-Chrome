@@ -166,7 +166,7 @@ function appearance() {
     // drawer tabs
     const tabsButtons = document.querySelectorAll('.f-btn.tab')
     const  tabsWrap = document.querySelector('.f-drawer-content-wrap')
-    for (let i=0; i <3; i++){
+    for (let i=0; i <2; i++){
         tabsButtons[i].addEventListener('click', ()=>{
             tabsWrap.style.transform = `translateX(${i*-359}px)`
             for (let el of tabsButtons) {

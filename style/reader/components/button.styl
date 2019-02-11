@@ -1,0 +1,38 @@
+@import '../variables.styl'
+
+/*! Button */
+
+f-btn($theme)
+  &:hover
+    background: rgba($theme.text, $hover-opacity)
+
+  &.active
+    border: 2px solid $theme.accent
+    color: $theme.accent
+
+theme(f-btn, 'f-btn')
+
+.f-btn
+  $center()
+  display: inline-flex
+  radius(18px)
+  height: 36px
+  $padding(x,2)
+  color: inherit
+  cursor:pointer
+  font-size: 14px
+  font-weight: bold
+  text-transform: uppercase
+  background: none
+
+  & > *
+    pointer-events: none
+
+  &-icon
+    width: 36px
+    border-radius: 100%
+    $padding(a, 0)
+
+  &.tab
+    margin-left: 4px
+    box-sizing: border-box;

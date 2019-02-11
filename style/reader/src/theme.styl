@@ -1,0 +1,54 @@
+// global variables
+$primary := {
+  dark: #00A2EB,
+  //light: #6BCFFD
+  light: #7DD6FF
+}
+
+//themes
+$vanilla := {
+  bg: #F5F5F5,
+  paper: #FFF,
+  text: #000,
+  accent: $primary.light,
+  light: true
+}
+
+$latte := {
+  bg: #FCF3CA,
+  paper: #FFFCEF,
+  text: #4E342E,
+  accent: $primary.light,
+  light: true
+}
+
+$blabar := {
+  bg: #191D2D,
+  paper: #2A2F43,
+  text: #D4DCFF,
+  accent: $primary.dark,
+  light: false
+}
+
+$licorice := {
+  bg: #121212,
+  paper: #1E1E1E,
+  text: #DCDCDC,
+  accent: $primary.dark,
+  light: false
+}
+
+// themes' metadata
+$themes := {
+  vanilla: $vanilla,
+  latte: $latte,
+  blabar: $blabar,
+  licorice: $licorice
+}
+
+// theme builder for components
+theme($builder, $class)
+  for $name, $theme in $themes
+    .theme-{$name}
+      .{$class}
+        $builder($theme)

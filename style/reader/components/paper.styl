@@ -1,0 +1,26 @@
+@import "../variables.styl"
+
+/*! Paper */
+
+f-paper($theme)
+  background: $theme.paper
+  color: $theme.text
+
+theme(f-paper, "f-paper")
+
+.f-paper
+  width: 100%
+  max-width: 880px
+  $margin(x, auto)
+  $margin(y, 3)
+  $padding(x, 3)
+  radius()
+  shadow(1)
+
+  @media screen and (max-width: 880px)
+    $margin(a, 0)
+
+.f-article
+  $margin(x, auto)
+  width: 100%
+  max-width: 720px

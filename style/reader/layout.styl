@@ -1,0 +1,48 @@
+@require 'src/spacing.styl'
+
+/*! Layouts */
+
+// display
+for i in (block inline flex grid none)
+  .d-{i}
+    display: i
+
+for i in (center flex-start flex-end)
+  .align-{i}
+    align-items: i
+
+for i in (space-around space-between center flex-start flex-end)
+  .justify-{i}
+    justify-content: i
+
+.d-flex
+  .flex-fill
+    flex: 1 1 auto
+  .flex-none
+    flex: none
+  .flex-wrap
+    flex-wrap: wrap
+  &.row
+    flex-direction row
+  &.column
+    flex-direction column
+
+// spacing
+directions = a y x l r t b
+// auto margin
+for d in directions
+  .m{d}-auto
+    $margin(d, auto)
+
+// margin
+for i in (0..5)
+  for d in directions
+    .m{d}-{i}
+      $margin(d, i)
+
+// padding
+for i in (0..5)
+  for d in directions
+    .p{d}-{i}
+      $padding(d, i)
+

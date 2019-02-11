@@ -1,0 +1,29 @@
+spacer := 8px
+directions = a y x l r t b
+$spacing(prop, dir, level)
+  // outputs according to levels: 0px 8px 16 24 32 48 64 80 96
+  levels = 0 1 2 3 4 6 8 10 12
+  space = level == auto ? auto : spacer*levels[level]
+  if dir == a
+    {prop}: space
+  else if dir == x
+    {prop}-left: space
+    {prop}-right: space
+  else if dir == y
+    {prop}-top: space
+    {prop}-bottom: space
+  else if dir == l
+    {prop}-left: space
+  else if dir == r
+    {prop}-right: space
+  else if dir == t
+    {prop}-top: space
+  else if dir == b
+    {prop}-bottom: space
+
+
+$margin(dir, level)
+  $spacing(margin, dir, level)
+
+$padding(dir, level)
+  $spacing(padding, dir, level)

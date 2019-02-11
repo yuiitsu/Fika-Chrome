@@ -1,0 +1,76 @@
+@import "../variables.styl"
+
+/*! Article */
+
+
+.f-title
+    $margin(y, 0)
+    font-size: 40px
+    line-height 52px
+    font-weight bold
+
+.f-subtitle
+  $margin(y, 4)
+  font-size: 16px
+  sans-serif()
+
+
+// rich text
+.f-content
+  $margin(t, 5)
+
+  a
+    & ,&:link ,&:visited ,&:active
+      color:$primary.dark
+
+  img
+    max-width: 100%
+    object-fit: cover
+    $margin(x, auto)
+    display: block
+
+
+  figure
+    $margin(y, 3)
+    $margin(x, 0)
+
+  figcaption
+    *
+      font-size: inherit !important
+    sans-serif()
+    font-size: 16px !important
+
+  blockquote
+    font-style: italic;
+    $margin(x, 0)
+    $padding(l, 4)
+
+  table
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+    td, th
+      $padding(a, 1)
+
+  iframe
+    border:none
+    &[src^="https://player.vimeo.com/video"]
+    &[src^="https://www.youtube.com/embed"]
+      width:100%
+      height:394px
+
+
+theme-tinting($theme)
+  $border-color = $theme.light ? tint($theme.text, $border-opacity) : shade($theme.text, $border-opacity)
+  f-content($border-color)
+
+f-content($border-color)
+  table
+    td, th
+      border:solid 1px $border-color
+
+  blockquote
+    border-left: solid 5px $border-color
+
+
+theme(theme-tinting, "f-content")
