@@ -64,10 +64,38 @@ App.module.extend('content', function() {
                 src: reader_page_src,
                 name: window.location.href
             });
-            $('body').css('overflow-y', 'hidden');
+            $('html, body').css('overflow-y', 'hidden');
         } else {
-            $('body').css('overflow-y', 'auto');
+            $('html, body').css('overflow-y', 'auto');
             target.remove();
+        }
+    };
+
+    this.reader_article_find = function() {
+
+        var ReaderArticleFinderJS = new ReaderArticleFinder(document);
+        let is_available = this.reader_is_available();
+        if (is_available) {
+            let article = $(adoptableArticle.outerHTML);
+            article_data['title'] = ReaderArticleFinderJS.articleTitle();
+            article_data['content'] = article[0].outerHTML;
+        }
+
+        let target = $('#fika-reader');
+        if (target.length > 0) {
+            $('html, body').css('overflow-y', 'auto');
+            target.remove();
+        } else {
+            // send message to background js.
+            chrome.extension.sendMessage({
+                'method': 'reader_ready',
+                'data': {
+                    is_available: is_available,
+                    article_data: article_data,
+                    show_reader_page: true
+                }
+            }, function (is_open) {
+            });
         }
     };
 

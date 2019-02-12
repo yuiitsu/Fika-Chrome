@@ -459,8 +459,12 @@ App.module.extend('common', function() {
         }
         let parse_Url = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/;
         let result = parse_Url.exec(url);
-        let last = result[4] ? ':' + result[4] : '';
-        return result[1] + ':' + result[2] + result[3] + last;
+        if (!result[1] || !result[2] || !result[3]) {
+            return false;
+        }
+        return result[1] + ':' + result[2] + result[3];
+        // let last = result[4] ? ':' + result[4] : '';
+        // return result[1] + ':' + result[2] + result[3] + last;
     };
 
     this.cajax = function(data, callback) {

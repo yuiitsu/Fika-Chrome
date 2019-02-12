@@ -21,11 +21,12 @@ App.module.extend('background', function() {
             // } else {
             //     self.badge_text.off();
             // }
-            let url_hash = self.common.md5(tab.url),
-                method = 'reader_mode';
-            // if (!article_data.hasOwnProperty(url_hash)) {
-            //     method = 'reader_article_find';
-            // }
+            let url_hash = self.module.common.md5(tab.url),
+                method = 'reader_mode',
+                article_data = Model.get('article_data');
+            if (!article_data.hasOwnProperty('url_hash') || article_data['url_hash'] !== url_hash) {
+                method = 'reader_article_find';
+            }
 
             chrome.tabs.sendMessage(tab.id, {
                 'method': method
@@ -46,13 +47,27 @@ App.module.extend('background', function() {
 
     this.reader_ready = function(data, send_response) {
         let is_available = data['is_available'],
-            article_data = data['article_data'];
+            article_data = data['article_data'],
+            show_reader_page = data['show_reader_page'];
 
         if (is_available) {
             self.badge_text.on();
-            Model.set('article_data', article_data);
+            // Model.set('article_data', article_data);
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+                article_data['url_hash'] = self.module.common.md5(tabs[0].url);
+                Model.set('article_data', article_data);
+            });
         } else {
             self.badge_text.off();
+        }
+
+        if (show_reader_page) {
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+                chrome.tabs.sendMessage(tabs[0].id, {
+                    'method': 'reader_mode'
+                }, function (response) {
+                });
+            });
         }
     };
 
