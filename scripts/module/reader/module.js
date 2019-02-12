@@ -35,6 +35,9 @@ App.module.extend('reader', function() {
                     $(this).attr('src', host + '/' + src);
                 }
             });
+            $('.f-paper').find('svg').each(function() {
+                $(this).remove();
+            });
             // 处理noscript
             // $('noscript').each(function() {
             //     console.log($(this).text());
