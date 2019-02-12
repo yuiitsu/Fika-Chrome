@@ -1209,16 +1209,20 @@ CandidateElement = function(e, t) {
                     if (Y)
                         m.style.width = Y;
                     else {
-                        var Z = v.getMatchedCSSRules(d, "", !0);
-                        if (Z) {
-                            var et = Z.length;
-                            for (var V = et - 1; V >= 0; --V) {
-                                Y = Z[V].style.getPropertyValue("width");
-                                if (Y) {
-                                    m.style.width = Y;
-                                    break
+                        try {
+                            var Z = v.getMatchedCSSRules(d, "", !0);
+                            if (Z) {
+                                var et = Z.length;
+                                for (var V = et - 1; V >= 0; --V) {
+                                    Y = Z[V].style.getPropertyValue("width");
+                                    if (Y) {
+                                        m.style.width = Y;
+                                        break
+                                    }
                                 }
                             }
+                        } catch (e) {
+                            
                         }
                     }
                     l === 1&&!Y && (m.style.width = cachedElementBoundingRect(d).width + "px");
