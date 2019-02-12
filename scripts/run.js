@@ -1,6 +1,6 @@
 /**
  * last script
  */
-//$(function(){
-    App.run();
-//});
+$(function(){
+  App.run();
+});

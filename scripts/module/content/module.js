@@ -21,8 +21,8 @@ App.module.extend('content', function() {
         //         }
         //     });
         // });
-
-        let is_available = this.reader_is_available();
+        var ReaderArticleFinderJS = new ReaderArticleFinder(document);
+        let is_available = this.reader_is_available(ReaderArticleFinderJS);
         if (is_available) {
             let article = $(adoptableArticle.outerHTML);
             article_data['title'] = ReaderArticleFinderJS.articleTitle();
@@ -50,7 +50,7 @@ App.module.extend('content', function() {
         });
     };
 
-    this.reader_is_available = function() {
+    this.reader_is_available = function(ReaderArticleFinderJS) {
         if(!ReaderArticleFinderJS.adoptableArticle()){
             ReaderArticleFinderJS.isReaderModeAvailable();
         }
@@ -74,7 +74,7 @@ App.module.extend('content', function() {
     this.reader_article_find = function() {
 
         var ReaderArticleFinderJS = new ReaderArticleFinder(document);
-        let is_available = this.reader_is_available();
+        let is_available = this.reader_is_available(ReaderArticleFinderJS);
         if (is_available) {
             let article = $(adoptableArticle.outerHTML);
             article_data['title'] = ReaderArticleFinderJS.articleTitle();
