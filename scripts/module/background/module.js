@@ -4,10 +4,7 @@
 App.module.extend('background', function() {
     //
     let self = this,
-        article_data = {
-            'title': '',
-            'content': ''
-        };
+        article_data = {};
 
     this.init = function() {
         // chrome.tabs.sendMessage(tab_id, {
@@ -24,8 +21,14 @@ App.module.extend('background', function() {
             // } else {
             //     self.badge_text.off();
             // }
+            let url_hash = self.common.md5(tab.url),
+                method = 'reader_mode';
+            // if (!article_data.hasOwnProperty(url_hash)) {
+            //     method = 'reader_article_find';
+            // }
+
             chrome.tabs.sendMessage(tab.id, {
-                'method': 'reader_mode'
+                'method': method
             }, function (response) {
             });
         });
