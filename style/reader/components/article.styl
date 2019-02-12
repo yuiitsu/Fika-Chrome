@@ -19,6 +19,10 @@
 .f-content
   $margin(t, 5)
 
+  *
+    white-space: pre-wrap;
+    word-break: break-word;
+
   a
     & ,&:link ,&:visited ,&:active
       color:$primary.dark
@@ -29,6 +33,11 @@
     $margin(x, auto)
     display: block
 
+  pre
+  code
+    $padding(a, 2)
+    font-size: 80% !important;
+    line-height: 1 !important;
 
   figure
     $margin(y, 3)
@@ -62,15 +71,19 @@
 
 theme-tinting($theme)
   $border-color = $theme.light ? tint($theme.text, $border-opacity) : shade($theme.text, $border-opacity)
-  f-content($border-color)
+  f-content($border-color, $theme)
 
-f-content($border-color)
+f-content($border-color, $theme)
   table
     td, th
       border:solid 1px $border-color
 
   blockquote
     border-left: solid 5px $border-color
+
+  pre
+  code
+    background: $theme.bg
 
 
 theme(theme-tinting, "f-content")
