@@ -20,7 +20,6 @@
   $margin(t, 5)
 
   *
-    white-space: pre-wrap;
     word-break: break-word;
 
   a
@@ -38,6 +37,8 @@
     $padding(a, 2)
     font-size: 80% !important;
     line-height: 1 !important;
+    overflow-x auto
+    $scroll-bar()
 
   figure
     $margin(y, 3)
@@ -84,6 +85,7 @@ f-content($border-color, $theme)
   pre
   code
     background: $theme.bg
+    $scroll-bar-color($theme)
 
 
 theme(theme-tinting, "f-content")
