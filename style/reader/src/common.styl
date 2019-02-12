@@ -34,3 +34,21 @@ $center()
   display flex
   align-items center
   justify-content center
+
+$scroll-bar-color($theme)
+  &::-webkit-scrollbar-thumb
+    background: rgba($theme.text, 0.35)
+  &::-webkit-scrollbar-thumb:hover
+    background: rgba($theme.text,0.6)
+
+$scroll-bar()
+  &::-webkit-scrollbar
+    width: 6px
+    height: 6px
+    -webkit-appearance: none
+  &::-webkit-scrollbar-track
+    background:transparent
+  &::-webkit-scrollbar-thumb
+    border-radius: 6px
+  &::-webkit-scrollbar-thumb:hover
+    opacity 1
