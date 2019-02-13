@@ -24,7 +24,7 @@ App.module.extend('background', function() {
             let url_hash = self.module.common.md5(tab.url),
                 method = 'reader_mode',
                 article_data = Model.get('article_data');
-            if (!article_data.hasOwnProperty('url_hash') || article_data['url_hash'] !== url_hash) {
+            if (!article_data || !article_data.hasOwnProperty('url_hash') || article_data['url_hash'] !== url_hash) {
                 method = 'reader_article_find';
             }
 
@@ -51,11 +51,16 @@ App.module.extend('background', function() {
             show_reader_page = data['show_reader_page'];
 
         if (is_available) {
-            self.badge_text.on();
+            // self.badge_text.on();
             // Model.set('article_data', article_data);
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
                 article_data['url_hash'] = self.module.common.md5(tabs[0].url);
                 Model.set('article_data', article_data);
+
+                //
+                chrome.browserAction.disable(tabs[0].id, function(res) {
+                    console.log(res);
+                });
             });
         } else {
             self.badge_text.off();
