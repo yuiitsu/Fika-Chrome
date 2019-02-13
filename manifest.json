@@ -1,9 +1,9 @@
 {
     "manifest_version": 2,
-    "name": "Fika",
+    "name": "Fika - Reader Mode",
     "short_name": "Fika",
     "version": "0.1.0",
-    "description":"Fika is where you can immerse in reading. Navigator, Ads, Popups and horrible layouts always interfere with reading. Fika is a tool which can help you extract the main content from the webpage and present it in a peaceful reading mode. Other than that, Fika retrieves the table of content and offers four delightful themes. ",
+    "description":"Fika is where you can immerse in reading. It removes all clutters and retrieves the table of content for you. ",
     "homepage_url": "https://www.fika.io",
     "author":"Fika",
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
