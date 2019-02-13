@@ -72,8 +72,7 @@ App.module.extend('content', function() {
     };
 
     this.reader_article_find = function() {
-
-        var ReaderArticleFinderJS = new ReaderArticleFinder(document);
+        let ReaderArticleFinderJS = new ReaderArticleFinder(document);
         let is_available = this.reader_is_available(ReaderArticleFinderJS);
         if (is_available) {
             let article = $(adoptableArticle.outerHTML);
@@ -93,6 +92,20 @@ App.module.extend('content', function() {
                     is_available: is_available,
                     article_data: article_data,
                     show_reader_page: true
+                }
+            }, function (is_open) {
+            });
+        }
+    };
+
+    this.reader_check_for_icon = function() {
+        let ReaderArticleFinderJS = new ReaderArticleFinder(document);
+        let is_available = this.reader_is_available(ReaderArticleFinderJS);
+        if (is_available) {
+            chrome.extension.sendMessage({
+                'method': 'set_browser_icon',
+                'data': {
+                    is_available: is_available
                 }
             }, function (is_open) {
             });

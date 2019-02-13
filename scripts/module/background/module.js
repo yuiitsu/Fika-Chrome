@@ -50,34 +50,58 @@ App.module.extend('background', function() {
             article_data = data['article_data'],
             show_reader_page = data['show_reader_page'];
 
-        if (is_available) {
-            // self.badge_text.on();
-            // Model.set('article_data', article_data);
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            if (is_available) {
+                // self.badge_text.on();
+                // Model.set('article_data', article_data);
                 article_data['url_hash'] = self.module.common.md5(tabs[0].url);
                 Model.set('article_data', article_data);
 
                 //
-                chrome.browserAction.disable(tabs[0].id, function(res) {
-                    console.log(res);
+                // chrome.browserAction.enable(tabs[0].id, function (res) {
+                // });
+                chrome.browserAction.setIcon({
+                    path: {'64': 'images/logo64.png'},
+                    tabId: tabs[0].id
+                }, function () {
                 });
-            });
-        } else {
-            self.badge_text.off();
-        }
 
-        if (show_reader_page) {
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-                chrome.tabs.sendMessage(tabs[0].id, {
-                    'method': 'reader_mode'
-                }, function (response) {
-                });
-            });
-        }
+                if (show_reader_page) {
+                    chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+                        chrome.tabs.sendMessage(tabs[0].id, {
+                            'method': 'reader_mode'
+                        }, function (response) {
+                        });
+                    });
+                }
+            } else {
+                // self.badge_text.off();
+                // chrome.browserAction.disable(tabs[0].id, function (res) {
+                // });
+                chrome.browserAction.setIcon({
+                    path: {'64': 'images/logo64-grey.png'},
+                    tabId: tabs[0].id
+                }, function () {
+                })
+            }
+        });
     };
 
     this.reader_get_article = function(data, send_response) {
         send_response(Model.get('article_data'));
+    };
+
+    this.set_browser_icon = function(data, send_response) {
+        let is_available = data['is_available'];
+        if (is_available) {
+            chrome.browserAction.setIcon({
+                    path: {'64': 'images/logo64.png'}
+                }, function () {})
+        } else {
+            chrome.browserAction.setIcon({
+                    path: {'64': 'images/logo64-grey.png'}
+                }, function () {})
+        }
     };
 
     this.is_open = function(data, send_response) {
