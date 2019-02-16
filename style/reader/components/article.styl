@@ -4,20 +4,26 @@
 
 
 .f-title
-    $margin(y, 0)
-    font-size: 40px
-    line-height 52px
-    font-weight bold
+  $margin(y, 0)
+  font-size: 40px
+  line-height 52px
+  font-weight bold
 
 .f-subtitle
   $margin(y, 4)
   font-size: 16px
   sans-serif()
 
+.f-article
+  $margin(x, auto)
+  width: 100%
+  max-width: 720px
+  position relative
 
 // rich text
 .f-content
   $margin(t, 5)
+  line-height 1.6
 
   *
     word-break: break-word;
@@ -59,6 +65,10 @@
     text-align: center;
     td, th
       $padding(a, 1)
+
+  sup
+  sub
+    line-height: 1
 
   iframe
     border:none
