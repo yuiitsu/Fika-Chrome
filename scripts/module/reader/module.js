@@ -18,13 +18,16 @@ App.module.extend('reader', function() {
             // toc
             let tocs = [];
             $(":header").each(function() {
-                let id = Math.random() * 10000;
-                $(this).attr('id', id);
-                tocs.push({
-                    tag: $(this)[0].localName,
-                    text: $(this)[0].innerText,
-                    id: id
-                });
+                let text = $(this)[0].innerText;
+                if (text) {
+                    let id = Math.random() * 10000;
+                    $(this).attr('id', id);
+                    tocs.push({
+                        tag: $(this)[0].localName,
+                        text: text,
+                        id: id
+                    });
+                }
             });
             self.view.display('reader', 'toc', tocs, $('.f-toc'));
             // 处理img，如果没有域名，使用当前域名

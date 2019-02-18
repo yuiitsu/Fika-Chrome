@@ -13,6 +13,23 @@ App.module.extend('background', function() {
         //     'response': res,
         // }, function (response) {
         // });
+        chrome.i18n.getAcceptLanguages(function(languageList) {
+            var languages = languageList.join(",");
+            console.log(languages);
+        });
+        chrome.fontSettings.getFontList(function(res) {
+            console.log(res);
+        });
+        chrome.i18n.detectLanguage('Detects up to 3 languages and their percentages of the provided string', function(result) {
+            var languages =  "Languages: \n";
+            for (var i = 0; i < result.languages.length; i++) {
+                languages += result.languages[i].language + " ";
+                languages += result.languages[i].percentage + "\n";
+            }
+
+            var is_reliable = "\nReliable? \n" + result.isReliable + "\n";
+            console.log(languages + is_reliable);
+        });
 
         // open main screen in new tab.
         chrome.browserAction.onClicked.addListener(function(tab) {

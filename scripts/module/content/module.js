@@ -72,7 +72,7 @@ App.module.extend('content', function() {
     };
 
     this.reader_article_find = function() {
-        let ReaderArticleFinderJS = new ReaderArticleFinder(document);
+        var ReaderArticleFinderJS = new ReaderArticleFinder(document);
         let is_available = this.reader_is_available(ReaderArticleFinderJS);
         if (is_available) {
             let article = $(adoptableArticle.outerHTML);
