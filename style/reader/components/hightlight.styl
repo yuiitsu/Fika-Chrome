@@ -19,19 +19,26 @@ theme(f-hl, "f-hl")
   $padding(x, 1)
   border-radius 4px 24px 24px 4px
 
-.f-hl-list
-  a
-    display block
-    text-align: justify
-    $margin(b, 4)
-    cursor: pointer
-    text-decoration none
+  &-list
+    a
+      display block
+      text-align: justify
+      $margin(b, 4)
+      cursor: pointer
+      text-decoration none
 
-    &:hover
-      text-decoration underline
+      &:hover
+        text-decoration underline
 
-    span
-      $padding(y,1)
-      line-height 1.5
-      -webkit-box-decoration-break: clone
-      box-decoration-break: clone
+      span
+        $padding(y,1)
+        line-height 1.5
+        -webkit-box-decoration-break: clone
+        box-decoration-break: clone
+
+  &-tool
+    position: absolute
+    background: #000
+    radius(4px)
+    height 24px;
+    width 48px;

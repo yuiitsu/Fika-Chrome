@@ -2,7 +2,7 @@ App.view.extend('reader', function() {
 
     this.container = function() {
         return `
-            <div class="f-article f-size-medium f-font-geogia">
+            <div class="f-article size-medium font-geogia">
                 <h1 class="f-title">
                     {{ data['title'] }}
                 </h1>

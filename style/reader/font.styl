@@ -1,48 +1,28 @@
-@font-face
-  font-family "Open Sans"
-  src url('../assets/fonts/Open_Sans/OpenSans-Regular.ttf') format('truetype')
-  font-weight: normal
-  font-style normal
+$fonts := {
+  courier: "Courier, 'Courier New', 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace",
+  georgia: "Georgia, Times, 'Times New Roman', serif",
+  merriweather: "Merriweather, Garamond, serif",
+  open-sans: "'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+  palatino: "Palatino, 'Palatino Linotype', 'Palatino LT STD', 'Book Antiqua', serif"
+  arial: "Arial, Arial Unicode MS, Tahoma, sans-serif",
+  times: "Times, Times New Roman, serif"
 
-@font-face
-  font-family "Open Sans"
-  src url('../assets/fonts/Open_Sans/OpenSans-Italic.ttf') format('truetype')
-  font-weight: normal
-  font-style italic
+  // cn
+  heiti:"-apple-system, 'Helvetica Neue',Helvetica, Arial, 'PingFang SC','Microsoft YaHei','微软雅黑','Hiragino Sans GB','Heiti SC','Noto Sans CJK SC','WenQuanYi Micro Hei',sans-serif",
+  songti:"Times, 'Times New Roman', SimSun, STSong, 'Songti SC','宋体','Source Han Serif SC', serif",
+  kaiti:"Georgia, KaiTi, STKaiti, STXingkai, Xingkai SC, serif",
+  yuanti:"Yuanti SC, YouYuan, sans-serif",
 
-@font-face
-  font-family "Open Sans"
-  src url('../assets/fonts/Open_Sans/OpenSans-Bold.ttf') format('truetype')
-  font-weight: bold;
-  font-style normal
+  // jp
+  gothic:"'Helvetica Neue',Helvetica, Arial, 'ヒラギノ角ゴ ProN' , 'Hiragino Kaku Gothic ProN' ,'游ゴシック' ,'游ゴシック体' ,'Noto Serif CJK JP',YuGothic ,'Yu Gothic' ,'メイリオ' ,Meiryo , 'ＭＳ ゴシック' ,'MS Gothic' , sans-serif",
+  mincho:"Times, Times New Roman, 'ヒラギノ明朝 ProN' ,'Hiragino Mincho ProN' ,'游明朝','游明朝体','Noto Sans CJK JP',YuMincho,'Yu Mincho' ,'ＭＳ 明朝' , 'MS Mincho' , HiraMinProN-W3 , serif",
+  maru:"'ヒラギノ丸ゴ Pro W4','ヒラギノ丸ゴ Pro', 'Hiragino Maru Gothic Pro','HG丸ｺﾞｼｯｸM-PRO','HGMaruGothicMPRO', sans-serif"
+}
 
-@font-face
-  font-family "Open Sans"
-  src url('../assets/fonts/Open_Sans/OpenSans-BoldItalic.ttf') format('truetype')
-  font-weight: bold
-  font-style italic
+for $name, $font in $fonts
+  .font-{$name}
+  .{$name}
+    font-family unquote($font) !important
 
-
-@font-face
-  font-family Merriweather
-  src url('../assets/fonts/Merriweather/Merriweather-Regular.ttf') format('truetype')
-  font-weight: normal
-  font-style normal
-
-@font-face
-  font-family Merriweather
-  src url('../assets/fonts/Merriweather/Merriweather-Italic.ttf') format('truetype')
-  font-weight: normal
-  font-style italic
-
-@font-face
-  font-family Merriweather
-  src url('../assets/fonts/Merriweather/Merriweather-Bold.ttf') format('truetype')
-  font-weight: bold;
-  font-style normal
-
-@font-face
-  font-family Merriweather
-  src url('../assets/fonts/Merriweather/Merriweather-BoldItalic.ttf') format('truetype')
-  font-weight: bold
-  font-style italic
+.rtl
+  direction rtl

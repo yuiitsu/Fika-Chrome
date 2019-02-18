@@ -30,7 +30,7 @@ theme(f-drawer, 'f-drawer')
   $padding(a, 2)
   sans-serif()
   drawer-transition()
-  z-index 1
+  z-index 10
   overflow-y auto
   $scroll-bar()
 
@@ -71,16 +71,19 @@ theme(f-drawer, 'f-drawer')
         $margin(r, 2)
         $padding(a, 1)
 
-  /*
-  &-tile
-    $padding(a, 1)
-    radius(4px)
-    display flex
-    align-items center
-    cursor pointer
-    font-weight bold
 
-    span
-      font-size: 16px
-      $margin(l, 2)
-  */
+.f-overlay
+  background rgba(0,0,0,.58)
+  height 100vh
+  width 100vw
+  position fixed
+  opacity 0
+  display: none
+  top 0
+  left 0
+  z-index 1
+  common-transition()
+
+  &-active
+    opacity 1
+    display block

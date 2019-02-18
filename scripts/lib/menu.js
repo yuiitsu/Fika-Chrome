@@ -105,7 +105,7 @@ function appearance() {
             activeVal: localStorage.getItem('fontSize') || 'medium',
             cont: document.querySelector('.f-article'),
             selects: document.querySelectorAll('.f-select-size'),
-            classPrefix: 'f-size'
+            classPrefix: 'size'
         },
         theme: {
             activeVal: localStorage.getItem('theme') || 'vanilla',
@@ -117,7 +117,7 @@ function appearance() {
             activeVal: localStorage.getItem('font') || 'georgia',
             cont: document.querySelector('.f-article'),
             selects: document.querySelectorAll('.f-select-font'),
-            classPrefix: 'f-font'
+            classPrefix: 'font'
         }
     }
 
@@ -157,11 +157,11 @@ function appearance() {
             setAppearance('fontSize', el.classList.item(1))
         })
     })
-    Array.from(settings['font'].selects).forEach(el => {
-        el.addEventListener('click', () => {
-            setAppearance('font', el.classList.item(1))
-        })
-    })
+    // Array.from(settings['font'].selects).forEach(el => {
+    //     el.addEventListener('click', () => {
+    //         setAppearance('font', el.classList.item(1))
+    //     })
+    // })
 
     // drawer tabs
     const tabsButtons = document.querySelectorAll('.f-btn.tab')
