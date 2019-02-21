@@ -8,8 +8,8 @@ App.module.extend('content', function() {
         article_data = {
             'title': '',
             'content': ''
-        },
-        reader_page_src = chrome.runtime.getURL('reader.html');
+        };
+        // reader_page_src = chrome.runtime.getURL('reader.html');
 
     this.init = function() {
         // this.is_open(function() {
@@ -36,8 +36,7 @@ App.module.extend('content', function() {
                 is_available: is_available,
                 article_data: article_data
             }
-        }, function (is_open) {
-        });
+        }, function () {});
 
         // listen background script send message.
         chrome.extension.onMessage.addListener(function(request, _, response) {
@@ -61,7 +60,7 @@ App.module.extend('content', function() {
         let target = $('#fika-reader');
         if (target.length === 0) {
             this.view.append('content', 'reader_page', {
-                src: reader_page_src,
+                src: chrome.runtime.getURL('reader.html'),
                 name: window.location.href
             });
             $('html, body').css('overflow-y', 'hidden');
