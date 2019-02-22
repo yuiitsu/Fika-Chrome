@@ -26,7 +26,14 @@ App.module.extend('reader', function() {
                     id: id
                 });
             });
-            self.view.display('reader', 'toc', tocs, $('.f-toc'));
+            console.log(tocs)
+            // 如果没有抓到TOC 提示用户 - nil
+            if (tocs.length > 1){
+                self.view.display('reader', 'toc', tocs, $('.f-toc'));
+            } else {
+                self.view.display('reader', 'tocEmpty', null , $('.f-toc'))
+            }
+
             // 处理img，如果没有域名，使用当前域名
             $('.f-paper').find('img').each(function() {
                 let src = $(this).attr('src');
