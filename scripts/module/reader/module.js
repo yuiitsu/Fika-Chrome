@@ -26,7 +26,6 @@ App.module.extend('reader', function() {
                     id: id
                 });
             });
-            console.log(tocs)
             // 如果没有抓到TOC 提示用户 - nil
             if (tocs.length > 1){
                 self.view.display('reader', 'toc', tocs, $('.f-toc'));
@@ -37,14 +36,22 @@ App.module.extend('reader', function() {
             // 处理img，如果没有域名，使用当前域名
             $('.f-paper').find('img').each(function() {
                 let src = $(this).attr('src');
-                let host = self.module.common.getHost(src);
+                let host = self.module.common.hasHost(src);
                 if (!host) {
-                    $(this).attr('src', host + '/' + src);
+                    let host_data = self.module.common.getHost(res.host);
+                    if (src.indexOf('//') === 0){
+                        let host_type = host_data[1] ? host_data[1] : 'http';
+                        $(this).attr('src', host_type + ':' + src);
+                    } else {
+                        host = res.host;
+                        $(this).attr('src', host + '/' + src);
+                    }
                 }
             });
             $('.f-paper').find('svg').each(function() {
                 $(this).remove();
             });
+            //
             // 处理noscript
             // $('noscript').each(function() {
             //     console.log($(this).text());

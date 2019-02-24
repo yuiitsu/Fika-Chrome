@@ -13,6 +13,7 @@ App.module.extend('background', function() {
         //     'response': res,
         // }, function (response) {
         // });
+        Model.set('reader_mode_open', 0);
 
         // open main screen in new tab.
         chrome.browserAction.onClicked.addListener(function(tab) {
@@ -55,6 +56,7 @@ App.module.extend('background', function() {
                 // self.badge_text.on();
                 // Model.set('article_data', article_data);
                 article_data['url_hash'] = self.module.common.md5(tabs[0].url);
+                article_data['host'] = self.module.common.getHost(tabs[0].url);
                 Model.set('article_data', article_data);
 
                 //
@@ -67,11 +69,15 @@ App.module.extend('background', function() {
                 });
 
                 if (show_reader_page) {
-                    chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-                        chrome.tabs.sendMessage(tabs[0].id, {
-                            'method': 'reader_mode'
-                        }, function (response) {
-                        });
+                    // chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+                    //     chrome.tabs.sendMessage(tabs[0].id, {
+                    //         'method': 'reader_mode'
+                    //     }, function (response) {
+                    //     });
+                    // });
+                    chrome.tabs.sendMessage(tabs[0].id, {
+                        'method': 'reader_mode'
+                    }, function (response) {
                     });
                 }
             } else {
@@ -88,6 +94,11 @@ App.module.extend('background', function() {
     };
 
     this.reader_get_article = function(data, send_response) {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            //
+            chrome.browserAction.setBadgeText({'text': 'on', 'tabId': tabs[0].id}, function() {});
+        });
+        //
         send_response(Model.get('article_data'));
     };
 
@@ -105,17 +116,17 @@ App.module.extend('background', function() {
     };
 
     this.is_open = function(data, send_response) {
-        if (!data || !data.url) {
+        if (!data) {
             self.badge_text.off();
             send_response(false);
             return false;
         }
 
-        if (!self.module.data.is_open(data.url)) {
-            self.badge_text.off();
-            send_response(false);
-            return false;
-        }
+        // if (!self.module.data.is_open(data.url)) {
+        //     self.badge_text.off();
+        //     send_response(false);
+        //     return false;
+        // }
 
         self.badge_text.on();
         send_response(true);
@@ -126,10 +137,12 @@ App.module.extend('background', function() {
             this.run('on');
         },
         off: function() {
-            this.run('off');
+            this.run('');
         },
         run: function(text) {
-            chrome.browserAction.setBadgeText({'text': text}, function() {});
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                chrome.browserAction.setBadgeText({'text': text, 'tabId': tabs[0].id}, function () {});
+            });
         }
     };
 });

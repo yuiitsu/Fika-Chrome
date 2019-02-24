@@ -458,13 +458,25 @@ App.module.extend('common', function() {
             return false;
         }
         let parse_Url = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/;
+        return parse_Url.exec(url);
+        // if (!result[1] || !result[2] || !result[3]) {
+        //     return false;
+        // }
+        // return result[1] + ':' + result[2] + result[3];
+        // let last = result[4] ? ':' + result[4] : '';
+        // return result[1] + ':' + result[2] + result[3] + last;
+    };
+
+    this.hasHost = function(url) {
+        if (!url) {
+            return false;
+        }
+        let parse_Url = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/;
         let result = parse_Url.exec(url);
         if (!result[1] || !result[2] || !result[3]) {
             return false;
         }
-        return result[1] + ':' + result[2] + result[3];
-        // let last = result[4] ? ':' + result[4] : '';
-        // return result[1] + ':' + result[2] + result[3] + last;
+        return true;
     };
 
     this.cajax = function(data, callback) {
