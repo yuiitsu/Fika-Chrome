@@ -24,7 +24,7 @@ f-select($theme)
 theme(f-select, "f-select")
 
 for $name, $theme in $themes
-  .f-select-theme.{$name}
+  .f-select-theme.theme-{$name}
     background: $theme.bg
 
 .f-select
@@ -52,13 +52,13 @@ for $name, $theme in $themes
       short-transition()
 
 
-      &.small
+      &.size-small
         font-size:12px
 
-      &.medium
+      &.size-medium
         font-size:14px
 
-      &.large
+      &.size-large
         font-size:16px
 
 

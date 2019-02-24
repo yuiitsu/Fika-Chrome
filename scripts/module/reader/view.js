@@ -33,4 +33,13 @@ App.view.extend('reader', function() {
             </div>
         `
     };
+
+    // add font selections
+    this.fonts = function () {
+        return `
+            {{ for var i in data }}
+                <div class="f-select-font {{ 'font-' + data[i]['class'] }}">{{ data[i]['name'] }}</div>
+            {{ end }}
+        `
+    }
 });

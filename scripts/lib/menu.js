@@ -99,29 +99,37 @@ window.addEventListener('resize', ()=>{
 
 
 /* Appearance */
-function appearance() {
+// language 当前语言，用于字体设置 
+function appearance(language) {
     const settings = {
         fontSize: {
             activeVal: localStorage.getItem('fontSize') || 'medium',
             cont: document.querySelector('.f-article'),
             selects: document.querySelectorAll('.f-select-size'),
-            classPrefix: 'size'
+            classPrefix: 'size-'
         },
         theme: {
             activeVal: localStorage.getItem('theme') || 'vanilla',
             cont: document.querySelector('.f-app'),
             selects: document.querySelectorAll('.f-select-theme'),
-            classPrefix: 'theme'
+            classPrefix: 'theme-'
         },
         font: {
-            activeVal: localStorage.getItem('font') || 'georgia',
+            activeVal: (function (){
+                if (localStorage.getItem('font')){
+                    return JSON.parse(localStorage.getItem('font'))[language.typeface.script]
+                } else {
+                    return language.typeface.fonts[language.typeface.default]['class']
+                }
+            })(),
             cont: document.querySelector('.f-article'),
             selects: document.querySelectorAll('.f-select-font'),
-            classPrefix: 'font'
+            classPrefix: 'font-'
         }
     }
 
     function setAppearance(prop, val) {
+
         // change class name (theme) for app
         let oldVal, cont = settings[prop].cont
         cont.classList.forEach(c => {
@@ -129,19 +137,34 @@ function appearance() {
                 oldVal = c
             }
         })
-        cont.classList.replace(oldVal, `${settings[prop].classPrefix}-${val}`)
+        cont.classList.replace(oldVal, `${settings[prop].classPrefix}${val}`)
         // change state and storage
         settings[prop].activeVal = val
-        localStorage.setItem(prop, val)
+        if (prop === 'font'){
+            let fontSettings = JSON.parse(localStorage.getItem('font'))
+            script = language.typeface.script
+            if (fontSettings){
+                fontSettings[script] = val
+                localStorage.setItem('font', JSON.stringify(fontSettings))
+            } else {
+                let store = {}
+                store[script] = val
+                localStorage.setItem('font', JSON.stringify(store))
+            }
+        } else {
+            localStorage.setItem(prop, val)
+        }
         // change class name for ctrl btns
+        console.log(settings[prop].selects)
         for (let el of settings[prop].selects) {
             el.classList.remove('active')
-            if (el.classList.contains(val)) {
+            if (el.classList.contains(`${settings[prop].classPrefix}${val}`)) {
                 el.classList.add('active')
             }
         }
     }
 
+    console.log(settings.font)
     // set theme from localStorage
     setAppearance('theme', settings['theme'].activeVal)
     setAppearance('fontSize', settings['fontSize'].activeVal)
@@ -149,32 +172,32 @@ function appearance() {
 
     Array.from(settings['theme'].selects).forEach(el => {
         el.addEventListener('click', () => {
-            setAppearance('theme', el.classList.item(1))
+            setAppearance('theme', el.classList.item(1).split('-')[1])
         })
     })
     Array.from(settings['fontSize'].selects).forEach(el => {
         el.addEventListener('click', () => {
-            setAppearance('fontSize', el.classList.item(1))
+            setAppearance('fontSize', el.classList.item(1).split('-')[1])
         })
     })
-    // Array.from(settings['font'].selects).forEach(el => {
-    //     el.addEventListener('click', () => {
-    //         setAppearance('font', el.classList.item(1))
-    //     })
-    // })
-
-    // drawer tabs
-    const tabsButtons = document.querySelectorAll('.f-btn.tab')
-    const  tabsWrap = document.querySelector('.f-drawer-content-wrap')
-    for (let i=0; i <2; i++){
-        tabsButtons[i].addEventListener('click', ()=>{
-            tabsWrap.style.transform = `translateX(${i*-359}px)`
-            for (let el of tabsButtons) {
-                el.classList.remove('active')
-            }
-            tabsButtons[i].classList.add('active')
+    Array.from(settings['font'].selects).forEach(el => {
+        el.addEventListener('click', () => {
+            setAppearance('font', el.classList.item(1).split('-')[1])
         })
-    }
-}
+    })
 
+}
 // appearance()
+
+// drawer tabs
+const tabsButtons = document.querySelectorAll('.f-btn.tab')
+const  tabsWrap = document.querySelector('.f-drawer-content-wrap')
+for (let i=0; i <2; i++){
+    tabsButtons[i].addEventListener('click', ()=>{
+        tabsWrap.style.transform = `translateX(${i*-359}px)`
+        for (let el of tabsButtons) {
+            el.classList.remove('active')
+        }
+        tabsButtons[i].classList.add('active')
+    })
+}
