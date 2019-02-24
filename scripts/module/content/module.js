@@ -65,9 +65,19 @@ App.module.extend('content', function() {
                 name: window.location.href
             });
             $('html, body').css('overflow-y', 'hidden');
+            //
+            chrome.extension.sendMessage({
+                'method': 'is_open',
+                'data': true
+            }, function () {});
         } else {
             $('html, body').css('overflow-y', 'auto');
             target.remove();
+            //
+            chrome.extension.sendMessage({
+                'method': 'is_open',
+                'data': false
+            }, function () {});
         }
     };
 

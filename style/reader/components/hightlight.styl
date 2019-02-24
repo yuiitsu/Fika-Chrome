@@ -42,3 +42,17 @@ theme(f-hl, "f-hl")
     radius(4px)
     height 24px;
     width 48px;
+
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border: 8px solid transparent;
+      border-top-color: #000;
+      border-bottom: 0;
+      margin-left: -8px;
+      margin-bottom: -8px;
+    }

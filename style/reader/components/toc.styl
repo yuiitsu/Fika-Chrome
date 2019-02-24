@@ -10,12 +10,17 @@ theme(f-toc, 'f-toc')
 
 .f-toc
   sans-serif()
-  $padding(a, 1)
+
   *
     white-space nowrap
     text-overflow ellipsis
     overflow hidden
     font-weight normal
+
+  &-empty
+    opacity 0.4
+    font-size: 16px
+    $margin(t, 4)
 
   a
     display block
