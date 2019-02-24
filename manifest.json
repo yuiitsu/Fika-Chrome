@@ -4,7 +4,7 @@
     "short_name": "Fika",
     "version": "0.2.0",
     "description":"Fika is where you can immerse in reading. It removes all clutters and retrieves the table of content for you. ",
-    "homepage_url": "https://www.fika.io",
+    "homepage_url": "http://www.fika.io",
     "author":"Fika",
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "default_locale": "en",

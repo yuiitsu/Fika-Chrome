@@ -13,13 +13,13 @@ App.module.extend('background', function() {
         //     'response': res,
         // }, function (response) {
         // });
-        chrome.i18n.getAcceptLanguages(function(languageList) {
-            var languages = languageList.join(",");
-            console.log(languages);
-        });
-        chrome.fontSettings.getFontList(function(res) {
-            console.log(res);
-        });
+        // chrome.i18n.getAcceptLanguages(function(languageList) {
+        //     var languages = languageList.join(",");
+        //     console.log(languages);
+        // });
+        // chrome.fontSettings.getFontList(function(res) {
+        //     console.log(res);
+        // });
         chrome.i18n.detectLanguage('Detects up to 3 languages and their percentages of the provided string', function(result) {
             var languages =  "Languages: \n";
             for (var i = 0; i < result.languages.length; i++) {
@@ -61,14 +61,15 @@ App.module.extend('background', function() {
             }
         });
 
-        chrome.runtime.onInstalled.addListener(function() {
-            chrome.tabs.create({
-                url: 'https://www.fika.io',
-                active: true
-            });
+        // 安装完成后，打开网站
+        // chrome.runtime.onInstalled.addListener(function() {
+        //     chrome.tabs.create({
+        //         url: 'http://www.fika.io',
+        //         active: true
+        //     });
 
-            return false;
-        });
+        //     return false;
+        // });
     };
 
     this.reader_ready = function(data, send_response) {
