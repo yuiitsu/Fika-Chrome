@@ -10,10 +10,11 @@ App.module.extend('reader', function() {
             'method': 'reader_get_article',
             'data': {}
         }, function (res) {
+            let _paper = $('.f-paper');
             self.view.display('reader', 'container', {
                 title: res.title,
                 content: res.content
-            }, $('.f-paper'));
+            }, _paper);
 
             // toc
             let tocs = [];
@@ -34,7 +35,7 @@ App.module.extend('reader', function() {
             }
 
             // 处理img，如果没有域名，使用当前域名
-            $('.f-paper').find('img').each(function() {
+            _paper.find('img').each(function() {
                 let src = $(this).attr('src');
                 let host = self.module.common.hasHost(src);
                 if (!host) {
@@ -48,7 +49,8 @@ App.module.extend('reader', function() {
                     }
                 }
             });
-            $('.f-paper').find('svg').each(function() {
+            //
+            _paper.find('svg').each(function() {
                 $(this).remove();
             });
             //
