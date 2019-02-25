@@ -28,7 +28,6 @@ App.view.extend('reader', function() {
     this.tocEmpty = function() {
         return `
             <div class="f-toc-empty">
-              <div style="font-size:32px;margin-bottom:16px">(｡•́︿•̀｡)</div>
               TOC is not available for this article!
             </div>
         `
