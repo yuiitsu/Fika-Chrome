@@ -69,7 +69,7 @@ App.module.extend('reader', function() {
                         $(this).attr('id', id);
                         tocs.push({
                             tag: $(this)[0].localName,
-                            text: text,
+                            text: text.replace(/\&nbsp;/, '').replace(/\s/, ''),
                             id: id
                         });
                     }
