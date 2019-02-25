@@ -46,6 +46,7 @@ App.module.extend('content', function() {
             } else {
                 self.log('method '+ method +' not exist.');
             }
+            response('');
         });
     };
 

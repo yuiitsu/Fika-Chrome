@@ -7,30 +7,6 @@ App.module.extend('background', function() {
         article_data = {};
 
     this.init = function() {
-        // chrome.tabs.sendMessage(tab_id, {
-        //     'callback_method': callback_method,
-        //     'callback_module': callback_module,
-        //     'response': res,
-        // }, function (response) {
-        // });
-        // chrome.i18n.getAcceptLanguages(function(languageList) {
-        //     var languages = languageList.join(",");
-        //     console.log(languages);
-        // });
-        // chrome.fontSettings.getFontList(function(res) {
-        //     console.log(res);
-        // });
-        chrome.i18n.detectLanguage('Detects up to 3 languages and their percentages of the provided string', function(result) {
-            var languages =  "Languages: \n";
-            for (var i = 0; i < result.languages.length; i++) {
-                languages += result.languages[i].language + " ";
-                languages += result.languages[i].percentage + "\n";
-            }
-
-            var is_reliable = "\nReliable? \n" + result.isReliable + "\n";
-            console.log(languages + is_reliable);
-        });
-
         // open main screen in new tab.
         chrome.browserAction.onClicked.addListener(function(tab) {
             // if (self.module.data.highlight_swtich(tab.url)) {
@@ -81,15 +57,11 @@ App.module.extend('background', function() {
 
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             if (is_available) {
-                // self.badge_text.on();
-                // Model.set('article_data', article_data);
                 article_data['url_hash'] = self.module.common.md5(tabs[0].url);
                 article_data['host'] = self.module.common.getHost(tabs[0].url);
                 Model.set('article_data', article_data);
 
                 //
-                // chrome.browserAction.enable(tabs[0].id, function (res) {
-                // });
                 chrome.browserAction.setIcon({
                     path: {'64': 'images/logo64.png'},
                     tabId: tabs[0].id
@@ -97,21 +69,12 @@ App.module.extend('background', function() {
                 });
 
                 if (show_reader_page) {
-                    // chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-                    //     chrome.tabs.sendMessage(tabs[0].id, {
-                    //         'method': 'reader_mode'
-                    //     }, function (response) {
-                    //     });
-                    // });
                     chrome.tabs.sendMessage(tabs[0].id, {
                         'method': 'reader_mode'
                     }, function (response) {
                     });
                 }
             } else {
-                // self.badge_text.off();
-                // chrome.browserAction.disable(tabs[0].id, function (res) {
-                // });
                 chrome.browserAction.setIcon({
                     path: {'64': 'images/logo64-grey.png'},
                     tabId: tabs[0].id
@@ -119,6 +82,8 @@ App.module.extend('background', function() {
                 })
             }
         });
+
+        send_response('');
     };
 
     this.reader_get_article = function(data, send_response) {
@@ -130,7 +95,7 @@ App.module.extend('background', function() {
         send_response(Model.get('article_data'));
     };
 
-    this.click_browser_icon = function(tab) {
+    this.click_browser_icon = function(tab, send_response) {
         let do_function = function(tab) {
             let url_hash = self.module.common.md5(tab.url),
                 method = 'reader_mode',
@@ -152,6 +117,7 @@ App.module.extend('background', function() {
         } else {
             do_function(tab);
         }
+        send_response('');
     };
 
     this.set_browser_icon = function(data, send_response) {
