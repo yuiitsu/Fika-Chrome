@@ -82,6 +82,9 @@ App.module.extend('content', function() {
         }
     };
 
+    /**
+     * 关闭reader mode
+     */
     this.close_reader_mode = function() {
         let target = $('#fika-reader');
         $('html, body').css('overflow-y', 'auto');

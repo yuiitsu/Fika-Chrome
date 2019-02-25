@@ -117,6 +117,19 @@ App.module.extend('background', function() {
         } else {
             do_function(tab);
         }
+
+        if ($.isFunction(send_response)) {
+            send_response('');
+        }
+    };
+
+    this.close_reader_mode = function(data, send_response) {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, {
+                'method': 'close_reader_mode'
+            }, function (response) {
+            });
+        });
         send_response('');
     };
 

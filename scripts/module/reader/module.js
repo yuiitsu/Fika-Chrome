@@ -106,6 +106,22 @@ App.module.extend('reader', function() {
             });
         });
     };
+
+    /**
+     * 关闭reader mode
+     */
+    this.close_reader_mode = function() {
+        // // let target = window.parent.$('#fika-reader');
+        // let target = window.parent.document.getElementById('fika-reader');
+        // console.log(target);
+        // $('html, body').css('overflow-y', 'auto');
+        // target.remove();
+        //
+        chrome.extension.sendMessage({
+            'method': 'close_reader_mode',
+            'data': false
+        }, function () {});
+    };
 });
 
 // 字体 metadata

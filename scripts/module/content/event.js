@@ -10,7 +10,7 @@ App.event.extend('content', function() {
         open_reader_mode: function() {
             $(document).keydown(function(e) {
                 // 打开reader mode
-                if (e.which === 70 && e.altKey) {
+                if (e.which === 82 && e.altKey) {
                     chrome.extension.sendMessage({
                         'method': 'click_browser_icon',
                         'data': false
