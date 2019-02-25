@@ -7,33 +7,24 @@ App.event.extend('content', function() {
     let self = this;
 
     this.event = {
-        selection: function() {
-            // $('body').off('mouseup').on('mouseup', function(e) {
-            //     let selector = window.getSelection();
-            //     let selectContent = selector.toString();
-            //     if (selectContent) {
-            //         self.module.content.is_open(function() {
-            //             // console.log(selector);
-            //             // 检查父对象是否是polio对象
-            //             let parent = selector.anchorNode.parentNode;
-            //             if (parent.nodeName === 'SPAN' && parent.className === 'polio-') {
-            //                 self.log('High lighted.');
-            //                 return false;
-            //             }
-            //             //
-            //             let range = selector.getRangeAt(0);
-            //             let span = document.createElement("span");
-            //             span.className = "polio-";
-            //             span.appendChild(document.createTextNode(selectContent));
-            //             range.insertNode(span);
-
-            //             range.setStartAfter(span);
-            //             range.deleteContents();
-            //             // selector.removeAllRanges();
-            //             // selector.addRange(range);
-            //         });
-            //     }
-            // });
+        open_reader_mode: function() {
+            $(document).keydown(function(e) {
+                // 打开reader mode
+                if (e.which === 70 && e.altKey) {
+                    chrome.extension.sendMessage({
+                        'method': 'click_browser_icon',
+                        'data': false
+                    }, function () {});
+                }
+            });
+        },
+        close_reader_mode: function() {
+            $(document).keydown(function(e) {
+                if (e.which === 27) {
+                    console.log('esc');
+                    self.module.content.close_reader_mode();
+                }
+            });
         }
     }
 });

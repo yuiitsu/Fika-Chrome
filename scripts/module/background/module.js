@@ -38,17 +38,19 @@ App.module.extend('background', function() {
             // } else {
             //     self.badge_text.off();
             // }
-            let url_hash = self.module.common.md5(tab.url),
-                method = 'reader_mode',
-                article_data = Model.get('article_data');
-            if (!article_data || !article_data.hasOwnProperty('url_hash') || article_data['url_hash'] !== url_hash) {
-                method = 'reader_article_find';
-            }
+            // let url_hash = self.module.common.md5(tab.url),
+            //     method = 'reader_mode',
+            //     article_data = Model.get('article_data');
+            // if (!article_data || !article_data.hasOwnProperty('url_hash') || article_data['url_hash'] !== url_hash) {
+            //     method = 'reader_article_find';
+            // }
 
-            chrome.tabs.sendMessage(tab.id, {
-                'method': method
-            }, function (response) {
-            });
+            // chrome.tabs.sendMessage(tab.id, {
+            //     'method': method
+            // }, function (response) {
+            // });
+
+            self.click_browser_icon(tab);
         });
 
         // // listen content script message.
@@ -126,6 +128,30 @@ App.module.extend('background', function() {
         });
         //
         send_response(Model.get('article_data'));
+    };
+
+    this.click_browser_icon = function(tab) {
+        let do_function = function(tab) {
+            let url_hash = self.module.common.md5(tab.url),
+                method = 'reader_mode',
+                article_data = Model.get('article_data');
+            if (!article_data || !article_data.hasOwnProperty('url_hash') || article_data['url_hash'] !== url_hash) {
+                method = 'reader_article_find';
+            }
+
+            chrome.tabs.sendMessage(tab.id, {
+                'method': method
+            }, function (response) {
+            });
+        };
+
+        if (!tab) {
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                do_function(tabs[0]);
+            });
+        } else {
+            do_function(tab);
+        }
     };
 
     this.set_browser_icon = function(data, send_response) {

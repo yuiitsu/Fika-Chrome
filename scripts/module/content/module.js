@@ -70,14 +70,26 @@ App.module.extend('content', function() {
                 'data': true
             }, function () {});
         } else {
-            $('html, body').css('overflow-y', 'auto');
-            target.remove();
-            //
-            chrome.extension.sendMessage({
-                'method': 'is_open',
-                'data': false
-            }, function () {});
+            // $('html, body').css('overflow-y', 'auto');
+            // target.remove();
+            // //
+            // chrome.extension.sendMessage({
+            //     'method': 'is_open',
+            //     'data': false
+            // }, function () {});
+            this.close_reader_mode();
         }
+    };
+
+    this.close_reader_mode = function() {
+        let target = $('#fika-reader');
+        $('html, body').css('overflow-y', 'auto');
+        target.remove();
+        //
+        chrome.extension.sendMessage({
+            'method': 'is_open',
+            'data': false
+        }, function () {});
     };
 
     this.reader_article_find = function() {
