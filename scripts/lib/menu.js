@@ -116,10 +116,14 @@ function appearance(language) {
         },
         font: {
             activeVal: (function (){
-                if (localStorage.getItem('font')){
-                    return JSON.parse(localStorage.getItem('font'))[language.typeface.script]
+                const fontSettings = localStorage.getItem('font')
+                console.log(fontSettings && fontSettings[0] === '{')
+                const defaultFont = language.typeface.fonts[language.typeface.default]['class']
+                if (fontSettings && fontSettings[0] === '{'){
+                    let fontOfLang = JSON.parse(localStorage.getItem('font'))[language.typeface.script]
+                    return fontOfLang ? fontOfLang : defaultFont
                 } else {
-                    return language.typeface.fonts[language.typeface.default]['class']
+                    return defaultFont
                 }
             })(),
             cont: document.querySelector('.f-article'),
@@ -127,6 +131,7 @@ function appearance(language) {
             classPrefix: 'font-'
         }
     }
+
 
     function setAppearance(prop, val) {
 
@@ -141,9 +146,10 @@ function appearance(language) {
         // change state and storage
         settings[prop].activeVal = val
         if (prop === 'font'){
-            let fontSettings = JSON.parse(localStorage.getItem('font'))
-            script = language.typeface.script
-            if (fontSettings){
+            let fontSettings = localStorage.getItem('font')
+            const script = language.typeface.script
+            if (fontSettings && fontSettings[0] === '{'){
+                fontSettings = JSON.parse(fontSettings)
                 fontSettings[script] = val
                 localStorage.setItem('font', JSON.stringify(fontSettings))
             } else {
