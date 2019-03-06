@@ -7,10 +7,6 @@ f-drawer($theme)
   color: $theme.text
   $scroll-bar-color($theme)
 
-  &-btn
-    background: tint($theme.text, 20%)
-    color: $theme.paper
-
   &-tile:hover
     background: rgba($theme.text, $hover-opacity)
 
@@ -23,42 +19,23 @@ theme(f-drawer, 'f-drawer')
 
 .f-drawer
   position fixed
-  left -375px
+  left -320px
   top 0
   height 100vh
-  width 375px
+  width 320px
   $padding(a, 2)
   sans-serif()
   drawer-transition()
-  z-index 10
+  z-index 100
   overflow-y auto
   $scroll-bar()
+  @media print
+    display none
 
   &-on
     left:0
 
-  &-btn
-    position: fixed
-    left: -72px
-    top: 24px
-    height: 48px
-    width: 72px
-    padding: 6px
-    text-align right
-    border-radius: 0 24px 24px 0
-    box-shadow 0 2px 12px 0 rgba(0,0,0,.24)
-    short-transition()
-    cursor pointer
-
-    &-show
-      left: -24px
-      transition-delay 0.25s
-
-    &:hover
-      transform translateX(16px)
-
   &-content
-    $margin(t, 4)
     overflow hidden
 
     &-wrap
@@ -70,20 +47,3 @@ theme(f-drawer, 'f-drawer')
         min-width 100%
         $margin(r, 2)
         $padding(a, 1)
-
-
-.f-overlay
-  background rgba(0,0,0,.58)
-  height 100vh
-  width 100vw
-  position fixed
-  opacity 0
-  display: none
-  top 0
-  left 0
-  z-index 1
-  common-transition()
-
-  &-active
-    opacity 1
-    display block
