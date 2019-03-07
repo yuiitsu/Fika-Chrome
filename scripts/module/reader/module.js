@@ -308,6 +308,7 @@ const fonts = {
                     mainLang.percentage = result.languages[i].percentage
                 }
             }
+            console.log(languages);
 
             // 多语言字体  - nil
             // 检查是否为从"右往左"书写的文字
@@ -326,10 +327,10 @@ const fonts = {
             // 加入切换字体的按钮
             self.view.display('reader', 'fonts', mainLang['typeface']['fonts'], $('.f-select-fonts'))
 
-
             // toc
-            let tocs = [];
-            $(".f-content").find(':header').each(function() {
+            let targetContent = $(".f-content"),
+                tocs = [];
+            targetContent.find(':header').each(function() {
                 let text = $(this)[0].innerText;
                 if (text) {
                     let id = Math.random() * 10000;
@@ -349,7 +350,7 @@ const fonts = {
                 self.view.display('reader', 'tocEmpty', null , $('.f-toc'))
             }
             //
-            $('.f-content').find('svg').each(function() {
+            targetContent.find('svg').each(function() {
                 $(this).remove();
             });
 
