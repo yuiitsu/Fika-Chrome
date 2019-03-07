@@ -1,0 +1,25 @@
+@import "../variables.styl"
+
+/*! Feedback */
+
+f-feedback($theme)
+  &-divider
+    border-top: 1px solid $theme.text
+
+theme(f-feedback, "f-feedback")
+
+
+.f-feedback
+  text-align: center
+  font-size: 16px
+  $margin(y, 7)
+  @media print
+    display none
+
+  &-divider
+    $margin(x, auto)
+    width: 120px
+
+  &-inst
+    text-align center
+    font-size: 12px

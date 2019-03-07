@@ -28,7 +28,7 @@ theme(f-btn, 'f-btn')
   & > *
     pointer-events: none
 
-  &-icon
+  &.icon
     width: 36px
     border-radius: 100%
     $padding(a, 0)
@@ -36,3 +36,18 @@ theme(f-btn, 'f-btn')
   &.tab
     margin-left: 4px
     box-sizing: border-box;
+
+  &.large.icon
+    height: 48px
+    width: 48px
+
+  &.depress
+    opacity 0.4
+
+    &:hover
+    &.active
+      opacity 1
+
+  &.disabled
+    pointer-events none;
+    opacity 0.4

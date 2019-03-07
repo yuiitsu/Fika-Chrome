@@ -30,7 +30,7 @@ ripple(document.querySelectorAll('.f-drawer-tile'))
 
 /* Drawer */
 let drawer = {
-    open: true,
+    open: false,
     modal: false,
     close: document.querySelector('.f-drawer-close'),
     btn: document.querySelector('#toc-btn'),
@@ -38,7 +38,8 @@ let drawer = {
     app: document.querySelector('.f-app'),
     overlay: document.querySelector('.f-overlay'),
     w: null,
-    threshold: 1552
+    threshold: 1552,
+    available:false
 }
 
 // click events
@@ -54,23 +55,11 @@ drawer.overlay.addEventListener('click', ()=>{
     drawer.overlay.classList.remove('f-overlay-active')
 }, false)
 
-function initDrawerState(){
-    drawer.w = window.innerWidth
-    if (drawer.w >= drawer.threshold){
-        toggleDrawer(true)
-    } else {
-        toggleDrawer(false)
-        drawer.btn.classList.add('f-drawer-btn-show')
-    }
-}
-
 function toggleDrawer(open){
-    if (open){
+    if (open && drawer.available){
         // drawer.app.classList.add('f-app-drawer-on')
         drawer.el.classList.add('f-drawer-on')
-        if (drawer.w < drawer.threshold){
-            drawer.overlay.classList.add('f-overlay-active')
-        }
+        drawer.overlay.classList.add('f-overlay-active')
     } else {
         // drawer.app.classList.remove('f-app-drawer-on')
         drawer.el.classList.remove('f-drawer-on')
@@ -79,20 +68,29 @@ function toggleDrawer(open){
     drawer.open = open
 }
 
+function initDrawerState(){
+    drawer.w = window.innerWidth
+    drawer.available = drawer.w < 1400
+    $('#toc-btn').toggleClass('disabled', !drawer.available)
+    console.log(drawer.available )
+}
 
 initDrawerState()
 window.addEventListener('resize', ()=>{
     // current window width
     const w = window.innerWidth
-    if (drawer.open){
-        // w < 1280 and current width is smaller than old width, meaning window is shrinking
-        if (w < drawer.threshold && w < drawer.w){
-            drawer.overlay.classList.add('f-overlay-active')
-        } else if (w >= drawer.threshold){
-            drawer.overlay.classList.remove('f-overlay-active')
-        }
+    drawer.available = w < 1400
+    $('#toc-btn').toggleClass('disabled', !drawer.available)
+    if (drawer.open && !drawer.available){
+        toggleDrawer(false)
     }
+        // if (w < drawer.threshold && w < drawer.w){
+        //     drawer.overlay.classList.add('f-overlay-active')
+        // } else if (w >= drawer.threshold){
+        //     drawer.overlay.classList.remove('f-overlay-active')
+        // }
     drawer.w = w
+    console.log(drawer.available )
 })
 
 

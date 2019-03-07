@@ -11,10 +11,16 @@ theme(f-toc, 'f-toc')
 .f-toc
   sans-serif()
 
+  &-static
+    position absolute
+    right: 50%
+    width: 240px
+    top: 24px
+    margin-right: 456px
+    @media screen and (max-width: 1400px)
+      display none
+
   *
-    white-space nowrap
-    text-overflow ellipsis
-    overflow hidden
     font-weight normal
 
   &-empty
