@@ -134,7 +134,7 @@ App.module.extend('content', function() {
     };
 
     this.readerMode = function() {
-        let html = topArticleElement[0].innerHTML.replace(/class="(.+?)"/g, '');
+        let html = topArticleElement[0].innerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, '');
         this.view.append('content', 'layout', {title: '', content: html}, $('body'));
         //
     };
