@@ -33,27 +33,30 @@ let drawer = {
     open: true,
     modal: false,
     close: document.querySelector('.f-drawer-close'),
-    btn: document.querySelector('.f-drawer-btn'),
+    btn: document.querySelector('#toc-btn'),
     el: document.querySelector('.f-drawer'),
     app: document.querySelector('.f-app'),
     overlay: document.querySelector('.f-overlay'),
-    w: null
+    w: null,
+    threshold: 1552
 }
 
 // click events
 drawer.btn.addEventListener('click', ()=>{
-    toggleDrawer(true)
+    toggleDrawer(!drawer.open)
 }, false)
 drawer.close.addEventListener('click', ()=>{
     toggleDrawer(false)
 }, false)
 drawer.overlay.addEventListener('click', ()=>{
     toggleDrawer(false)
+    toggleAppearanceMenu(false)
+    drawer.overlay.classList.remove('f-overlay-active')
 }, false)
 
 function initDrawerState(){
     drawer.w = window.innerWidth
-    if (drawer.w >= 1280){
+    if (drawer.w >= drawer.threshold){
         toggleDrawer(true)
     } else {
         toggleDrawer(false)
@@ -63,19 +66,15 @@ function initDrawerState(){
 
 function toggleDrawer(open){
     if (open){
-        drawer.app.classList.add('f-app-drawer-on')
+        // drawer.app.classList.add('f-app-drawer-on')
         drawer.el.classList.add('f-drawer-on')
-        drawer.btn.classList.remove('f-drawer-btn-show')
-        if (drawer.w < 1280){
+        if (drawer.w < drawer.threshold){
             drawer.overlay.classList.add('f-overlay-active')
         }
     } else {
-        drawer.app.classList.remove('f-app-drawer-on')
+        // drawer.app.classList.remove('f-app-drawer-on')
         drawer.el.classList.remove('f-drawer-on')
-        drawer.btn.classList.add('f-drawer-btn-show')
-        if (drawer.w < 1280){
-            drawer.overlay.classList.remove('f-overlay-active')
-        }
+        drawer.overlay.classList.remove('f-overlay-active')
     }
     drawer.open = open
 }
@@ -87,9 +86,9 @@ window.addEventListener('resize', ()=>{
     const w = window.innerWidth
     if (drawer.open){
         // w < 1280 and current width is smaller than old width, meaning window is shrinking
-        if (w < 1280 && w < drawer.w){
-            toggleDrawer(false)
-        } else if (w >= 1280){
+        if (w < drawer.threshold && w < drawer.w){
+            drawer.overlay.classList.add('f-overlay-active')
+        } else if (w >= drawer.threshold){
             drawer.overlay.classList.remove('f-overlay-active')
         }
     }
@@ -99,8 +98,16 @@ window.addEventListener('resize', ()=>{
 
 
 /* Appearance */
-// language 当前语言，用于字体设置 
-function appearance(language) {
+function toggleAppearanceMenu(toggle){
+    const menu = $('.f-menu')
+    if (toggle !== undefined && !toggle){
+        menu.addClass('f-menu-on')
+    }
+    menu.toggleClass('f-menu-on')
+}
+$('#appearance').click(toggleAppearanceMenu)
+
+function appearance(language) { // language 当前语言，用于字体设置
     const settings = {
         fontSize: {
             activeVal: localStorage.getItem('fontSize') || 'medium',
@@ -161,7 +168,6 @@ function appearance(language) {
             localStorage.setItem(prop, val)
         }
         // change class name for ctrl btns
-        console.log(settings[prop].selects)
         for (let el of settings[prop].selects) {
             el.classList.remove('active')
             if (el.classList.contains(`${settings[prop].classPrefix}${val}`)) {
@@ -170,7 +176,6 @@ function appearance(language) {
         }
     }
 
-    console.log(settings.font)
     // set theme from localStorage
     setAppearance('theme', settings['theme'].activeVal)
     setAppearance('fontSize', settings['fontSize'].activeVal)
@@ -196,14 +201,47 @@ function appearance(language) {
 // appearance()
 
 // drawer tabs
-const tabsButtons = document.querySelectorAll('.f-btn.tab')
-const  tabsWrap = document.querySelector('.f-drawer-content-wrap')
-for (let i=0; i <2; i++){
-    tabsButtons[i].addEventListener('click', ()=>{
-        tabsWrap.style.transform = `translateX(${i*-359}px)`
-        for (let el of tabsButtons) {
-            el.classList.remove('active')
+// const tabsButtons = document.querySelectorAll('.f-btn.tab')
+// const  tabsWrap = document.querySelector('.f-drawer-content-wrap')
+// for (let i=0; i <2; i++){
+//     tabsButtons[i].addEventListener('click', ()=>{
+//         tabsWrap.style.transform = `translateX(${i*-359}px)`
+//         for (let el of tabsButtons) {
+//             el.classList.remove('active')
+//         }
+//         tabsButtons[i].classList.add('active')
+//     })
+// }
+
+
+//tools
+$('#print').click(function(){
+    window.print()
+})
+
+$('#fullscreen').click(function() {
+    chrome.windows.get(-2, function(window){
+        let fullScreenState = window.state;
+        if(fullScreenState === "fullscreen") {
+            chrome.windows.update(-2, {state: "normal"});
+            $('#fullscreen').removeClass('fs-on')
+        } else {
+            chrome.windows.update(-2, {state: "fullscreen"});
+            $('#fullscreen').addClass('fs-on')
         }
-        tabsButtons[i].classList.add('active')
-    })
-}
+    });
+})
+$('#tool-btn').click(function () {
+    $('.f-tool').toggleClass('f-tool-on')
+    $('.f-menu').removeClass('f-menu-on')
+})
+let hoverTimer;
+$('.f-tool').mouseleave(function () {
+    hoverTimer = setTimeout(()=>{
+        $(this).removeClass('f-tool-on')
+        $('.f-menu').removeClass('f-menu-on')
+    }, 1200)
+})
+$('.f-tool').mouseenter(function () {
+    clearTimeout(hoverTimer)
+})

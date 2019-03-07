@@ -1,0 +1,35 @@
+@import "../variables.styl"
+
+/*! Footer */
+
+f-footer($theme)
+  &-logo
+    color: rgba($theme.text, 0.5);
+
+  &-share
+    color: rgba($theme.text, 0.5);
+
+theme(f-footer, "f-footer")
+
+
+.f-footer
+  display: flex;
+  justify-content: space-between;
+
+  a
+    color currentColor
+    text-decoration none
+
+  &-logo
+    display flex
+    align-items flex-start
+    font-size 24px
+
+    img
+      $margin(r, 2)
+      height 36px
+      width 36px
+
+  &-share
+    @media print
+      display none
