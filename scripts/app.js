@@ -267,7 +267,7 @@ let App = {
     //},
 
     log: function(msg) {
-        console.log('[Polio]', msg);
+        console.log('[Fika]', msg);
     },
 
     run: function() {

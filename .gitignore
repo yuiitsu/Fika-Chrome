@@ -3,3 +3,5 @@
 .project
 /.settings
 /.vs
+/dist
+/node_modules
