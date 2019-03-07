@@ -1,3 +1,3 @@
-.polio-{background-color:#ee9900;}
-/* Content translate */
+.fika-reader-mode{position: fixed;left:0;top:0;width:100%;height:100%;background-color:#fff;padding:10px;
+    overflow-y:auto;z-index: 1000000;}
 

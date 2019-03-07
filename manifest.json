@@ -26,9 +26,9 @@
         ],
         "js": [
             "scripts/lib/jquery-1.11.0.min.js",
-            "scripts/lib/reader.js",
             "scripts/app.js",
             "scripts/model.js",
+            "scripts/module/reader/module.js",
             "scripts/module/common/module.js",
             "scripts/module/common/view.js",
             "scripts/module/common/event.js",
@@ -39,7 +39,8 @@
             "scripts/run.js"
         ],
         "css": [
-            "style/content.css"
+            "style/content.css",
+            "style/reader.css"
         ]
     }],
     "browser_action": {

@@ -9,23 +9,6 @@ App.module.extend('background', function() {
     this.init = function() {
         // open main screen in new tab.
         chrome.browserAction.onClicked.addListener(function(tab) {
-            // if (self.module.data.highlight_swtich(tab.url)) {
-            //     self.badge_text.on();
-            // } else {
-            //     self.badge_text.off();
-            // }
-            // let url_hash = self.module.common.md5(tab.url),
-            //     method = 'reader_mode',
-            //     article_data = Model.get('article_data');
-            // if (!article_data || !article_data.hasOwnProperty('url_hash') || article_data['url_hash'] !== url_hash) {
-            //     method = 'reader_article_find';
-            // }
-
-            // chrome.tabs.sendMessage(tab.id, {
-            //     'method': method
-            // }, function (response) {
-            // });
-
             self.click_browser_icon(tab);
         });
 
@@ -51,35 +34,20 @@ App.module.extend('background', function() {
     };
 
     this.reader_ready = function(data, send_response) {
-        let is_available = data['is_available'],
-            article_data = data['article_data'],
-            show_reader_page = data['show_reader_page'];
-
+        let is_available = data['is_available'];
+        //
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             if (is_available) {
-                article_data['url_hash'] = self.module.common.md5(tabs[0].url);
-                article_data['host'] = self.module.common.getHost(tabs[0].url);
-                Model.set('article_data', article_data);
-
                 //
                 chrome.browserAction.setIcon({
                     path: {'64': 'images/logo64.png'},
                     tabId: tabs[0].id
-                }, function () {
-                });
-
-                if (show_reader_page) {
-                    chrome.tabs.sendMessage(tabs[0].id, {
-                        'method': 'reader_mode'
-                    }, function (response) {
-                    });
-                }
+                }, function () {});
             } else {
                 chrome.browserAction.setIcon({
                     path: {'64': 'images/logo64-grey.png'},
                     tabId: tabs[0].id
-                }, function () {
-                })
+                }, function () {});
             }
         });
 
@@ -97,17 +65,16 @@ App.module.extend('background', function() {
 
     this.click_browser_icon = function(tab, send_response) {
         let do_function = function(tab) {
-            let url_hash = self.module.common.md5(tab.url),
-                method = 'reader_mode',
-                article_data = Model.get('article_data');
-            if (!article_data || !article_data.hasOwnProperty('url_hash') || article_data['url_hash'] !== url_hash) {
-                method = 'reader_article_find';
-            }
+            // let url_hash = self.module.common.md5(tab.url),
+            //     method = 'reader_mode',
+            //     article_data = Model.get('article_data');
+            // if (!article_data || !article_data.hasOwnProperty('url_hash') || article_data['url_hash'] !== url_hash) {
+            //     method = 'reader_article_find';
+            // }
 
             chrome.tabs.sendMessage(tab.id, {
-                'method': method
-            }, function (response) {
-            });
+                'method': 'readerMode'
+            }, function (response) {});
         };
 
         if (!tab) {
