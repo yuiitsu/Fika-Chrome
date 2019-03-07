@@ -31,7 +31,7 @@ App.module.extend('reader', function() {
                 // console.log(languages + is_reliable);
 
                 // 渲染页面
-                let _paper = $('.f-paper');
+                let _paper = $('.f-article');
                 self.view.display('reader', 'container', {
                     title: res.title,
                     content: res.content,
@@ -69,7 +69,8 @@ App.module.extend('reader', function() {
                         $(this).attr('id', id);
                         tocs.push({
                             tag: $(this)[0].localName,
-                            text: text.replace(/\&nbsp;/, '').replace(/\s/, ''),
+                            text: text.trim(),
+                            // text: text.replace(/\&nbsp;/, '').replace(/\s/, ''),
                             id: id
                         });
                     }

@@ -6,6 +6,7 @@ const Fs = require('fs');
 const Path = require('path');
 const uglify = require('uglify-js');
 const babel = require('babel-core');
+const stylus = require('stylus');
 
 // 排除文件夹或文件
 // excludes.copy 不复制文件夹或文件列表
@@ -21,7 +22,8 @@ let excludes = {
         '.git',
         '.idea',
         'node_modules',
-        'dist'
+        'dist',
+        'style'
     ],
     'mini': [
         './scripts/lib/reader.js'
@@ -131,4 +133,22 @@ let excludes = {
         //
          deploy('.', './dist');
     })();
+
+
+    // 编译CSS文件
+    const stylusInput = Fs.readFileSync('style/reader/index.styl','utf8')
+    stylus(stylusInput)
+      .set('paths', ['style/reader'])
+      .set('compress', true)
+      .render((err, css)=>{
+        if (err) throw err
+        css = css.replace(/\n/g, '')
+        Fs.mkdirSync('dist/style');
+        Fs.writeFile('dist/style/reader.css' , css, (err)=>{
+            if (err) throw err
+            console.log('CSS Built => ./dist/style/reader.css')
+        })
+    })
+
 })();
+
