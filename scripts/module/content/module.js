@@ -5,7 +5,7 @@ App.module.extend('content', function() {
     //
     let self = this,
         tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'code'],
-        excludeTags = ['BUTTON', 'IFRAME', 'CANVAS', '#comment'],
+        excludeTags = ['BUTTON', 'IFRAME', 'CANVAS', '#comment', 'SCRIPT'],
         topArticleElement = [],
         articleElementIndex = [],
         articleElements = {},
