@@ -11,18 +11,14 @@ App.event.extend('content', function() {
             $(document).keydown(function(e) {
                 // 打开reader mode
                 if (e.which === 82 && e.altKey) {
-                    chrome.extension.sendMessage({
-                        'method': 'click_browser_icon',
-                        'data': false
-                    }, function () {});
+                    self.module.content.readerMode();
                 }
             });
         },
         close_reader_mode: function() {
             $(document).keydown(function(e) {
                 if (e.which === 27) {
-                    console.log('esc');
-                    self.module.content.close_reader_mode();
+                    self.module.content.closeReaderMode();
                 }
             });
         }

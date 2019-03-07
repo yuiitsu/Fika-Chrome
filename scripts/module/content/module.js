@@ -134,9 +134,35 @@ App.module.extend('content', function() {
     };
 
     this.readerMode = function() {
-        let html = topArticleElement[0].innerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, '');
-        this.view.append('content', 'layout', {title: '', content: html}, $('body'));
+        let target = $('#fika-reader'),
+            title = $('title').text(),
+            html = topArticleElement[0].innerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, '');
+
+        if (target.length > 0) {
+            this.closeReaderMode();
+        } else {
+            this.view.append('content', 'layout', {title: title, content: html}, $('body'));
+            //
+            this.module.reader._init(html);
+            //
+            $('html, body').css('overflow-y', 'hidden');
+            //
+            chrome.extension.sendMessage({
+                'method': 'is_open',
+                'data': true
+            }, function () {});
+        }
+    };
+
+    this.closeReaderMode = function() {
+        let target = $('#fika-reader');
+        $('html, body').css('overflow-y', 'auto');
+        target.remove();
         //
+        chrome.extension.sendMessage({
+            'method': 'is_open',
+            'data': false
+        }, function () {});
     };
 });
 

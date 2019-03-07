@@ -4,7 +4,8 @@
 
 App.module.extend('reader', function() {
 
-    let self = this;
+    let self = this,
+        drawer = null;
 
     // 字体 metadata
 const fonts = {
@@ -58,105 +59,306 @@ const fonts = {
     ]
 };
 
+    this.ripple = function(els){
+        if (els){
+            Array.from(els).forEach(el=>{
+                el.addEventListener('click', (e)=>{
+                    const rect = el.getBoundingClientRect();
+                    el.classList.add('f-ripple-container');
+                    // create ripple element
+                    let ripple = document.createElement('span');
+                    ripple.className = 'f-ripple';
+                    ripple.style.height = ripple.style.width = Math.max(rect.width, rect.height) + 'px';
+                    el.appendChild(ripple);
+                    // set ripple position
+                    let top = e.pageY - rect.top - ripple.offsetHeight / 2 - document.body.scrollTop;
+                    let left = e.pageX - rect.left - ripple.offsetWidth / 2 - document.body.scrollLeft
+                    ripple.style.top = top+'px';
+                    ripple.style.left = left+'px';
+                    ripple.classList.add('active');
+                    setTimeout(()=>{
+                        ripple.remove()
+                    },1000)
+                }, false)
+            })
+        }
+    };
+
+    this.toggleDrawer = function(open){
+        if (open && drawer.available){
+            // drawer.app.classList.add('f-app-drawer-on')
+            drawer.el.classList.add('f-drawer-on');
+            drawer.overlay.classList.add('f-overlay-active')
+        } else {
+            // drawer.app.classList.remove('f-app-drawer-on')
+            drawer.el.classList.remove('f-drawer-on');
+            drawer.overlay.classList.remove('f-overlay-active')
+        }
+        drawer.open = open;
+    };
+
+    this.initDrawerState = function(){
+        drawer.w = window.innerWidth
+        drawer.available = drawer.w < 1400
+        $('#toc-btn').toggleClass('disabled', !drawer.available);
+        console.log(drawer.available )
+    };
+
+    this.toggleAppearanceMenu = function(toggle){
+        const menu = $('.f-menu');
+        if (toggle !== undefined && !toggle){
+            menu.addClass('f-menu-on')
+        }
+        menu.toggleClass('f-menu-on')
+    };
+
+    // language 当前语言，用于字体设置
+    this.appearance = function(language) {
+        const settings = {
+            fontSize: {
+                activeVal: localStorage.getItem('fontSize') || 'medium',
+                cont: document.querySelector('.f-article'),
+                selects: document.querySelectorAll('.f-select-size'),
+                classPrefix: 'size-'
+            },
+            theme: {
+                activeVal: localStorage.getItem('theme') || 'vanilla',
+                cont: document.querySelector('.f-app'),
+                selects: document.querySelectorAll('.f-select-theme'),
+                classPrefix: 'theme-'
+            },
+            font: {
+                activeVal: (function (){
+                    const fontSettings = localStorage.getItem('font');
+                    console.log(fontSettings && fontSettings[0] === '{');
+                    const defaultFont = language.typeface.fonts[language.typeface.default]['class'];
+                    if (fontSettings && fontSettings[0] === '{'){
+                        let fontOfLang = JSON.parse(localStorage.getItem('font'))[language.typeface.script];
+                        return fontOfLang ? fontOfLang : defaultFont
+                    } else {
+                        return defaultFont
+                    }
+                })(),
+                cont: document.querySelector('.f-article'),
+                selects: document.querySelectorAll('.f-select-font'),
+                classPrefix: 'font-'
+            }
+        };
+
+        function setAppearance(prop, val) {
+            // change class name (theme) for app
+            let oldVal, cont = settings[prop].cont;
+            if (cont) {
+                cont.classList.forEach(c => {
+                    if (c.startsWith(settings[prop].classPrefix)) {
+                        oldVal = c
+                    }
+                });
+                cont.classList.replace(oldVal, `${settings[prop].classPrefix}${val}`);
+            }
+            // change state and storage
+            settings[prop].activeVal = val;
+            if (prop === 'font'){
+                let fontSettings = localStorage.getItem('font');
+                const script = language.typeface.script;
+                if (fontSettings && fontSettings[0] === '{'){
+                    fontSettings = JSON.parse(fontSettings);
+                    fontSettings[script] = val;
+                    localStorage.setItem('font', JSON.stringify(fontSettings))
+                } else {
+                    let store = {};
+                    store[script] = val;
+                    localStorage.setItem('font', JSON.stringify(store))
+                }
+            } else {
+                localStorage.setItem(prop, val)
+            }
+            // change class name for ctrl btns
+            for (let el of settings[prop].selects) {
+                el.classList.remove('active');
+                if (el.classList.contains(`${settings[prop].classPrefix}${val}`)) {
+                    el.classList.add('active')
+                }
+            }
+        }
+
+        // set theme from localStorage
+        setAppearance('theme', settings['theme'].activeVal);
+        setAppearance('fontSize', settings['fontSize'].activeVal);
+        setAppearance('font', settings['font'].activeVal);
+
+        Array.from(settings['theme'].selects).forEach(el => {
+            el.addEventListener('click', () => {
+                setAppearance('theme', el.classList.item(1).split('-')[1])
+            })
+        });
+        Array.from(settings['fontSize'].selects).forEach(el => {
+            el.addEventListener('click', () => {
+                setAppearance('fontSize', el.classList.item(1).split('-')[1])
+            })
+        });
+        Array.from(settings['font'].selects).forEach(el => {
+            el.addEventListener('click', () => {
+                setAppearance('font', el.classList.item(1).split('-')[1])
+            })
+        })
+
+    };
+
+    this._initSidebar = function() {
+        this.ripple(document.querySelectorAll('.f-btn'));
+        this.ripple(document.querySelectorAll('.f-drawer-tile'));
+
+        /* Drawer */
+        drawer = {
+            open: false,
+            modal: false,
+            close: document.querySelector('.f-drawer-close'),
+            btn: document.querySelector('#toc-btn'),
+            el: document.querySelector('.f-drawer'),
+            app: document.querySelector('.f-app'),
+            overlay: document.querySelector('.f-overlay'),
+            w: null,
+            threshold: 1552,
+            available:false
+        };
+
+        // click events
+        drawer.btn.addEventListener('click', ()=>{
+            self.toggleDrawer(!drawer.open)
+        }, false);
+        drawer.close.addEventListener('click', ()=>{
+            self.toggleDrawer(false)
+        }, false);
+        drawer.overlay.addEventListener('click', ()=>{
+            self.toggleDrawer(false)
+            self.toggleAppearanceMenu(false)
+            drawer.overlay.classList.remove('f-overlay-active')
+        }, false);
+
+        this.initDrawerState();
+        //
+        window.addEventListener('resize', ()=>{
+            // current window width
+            const w = window.innerWidth;
+            drawer.available = w < 1400;
+            $('#toc-btn').toggleClass('disabled', !drawer.available)
+            if (drawer.open && !drawer.available){
+                self.toggleDrawer(false)
+            }
+                // if (w < drawer.threshold && w < drawer.w){
+                //     drawer.overlay.classList.add('f-overlay-active')
+                // } else if (w >= drawer.threshold){
+                //     drawer.overlay.classList.remove('f-overlay-active')
+                // }
+            drawer.w = w;
+            console.log(drawer.available )
+        });
+
+        $('#appearance').click(self.toggleAppearanceMenu);
+        //tools
+        $('#print').click(function(){
+            window.print()
+        });
+
+        $('#fullscreen').click(function() {
+            chrome.windows.get(-2, function(window){
+                let fullScreenState = window.state;
+                if(fullScreenState === "fullscreen") {
+                    chrome.windows.update(-2, {state: "normal"});
+                    $('#fullscreen').removeClass('fs-on')
+                } else {
+                    chrome.windows.update(-2, {state: "fullscreen"});
+                    $('#fullscreen').addClass('fs-on')
+                }
+            });
+        });
+        $('#tool-btn').click(function () {
+            $('.f-tool').toggleClass('f-tool-on')
+            $('.f-menu').removeClass('f-menu-on')
+        });
+        let hoverTimer;
+        $('.f-tool').mouseleave(function () {
+            hoverTimer = setTimeout(()=>{
+                $(this).removeClass('f-tool-on')
+                $('.f-menu').removeClass('f-menu-on')
+            }, 1200)
+        });
+        $('.f-tool').mouseenter(function () {
+            clearTimeout(hoverTimer)
+        })
+    };
+
+    this._init = function(content) {
+        //
+        this._initSidebar();
+        // 处理语言
+        chrome.i18n.detectLanguage(content, function(result) {
+            // demo
+            // result.languages[i].language 是语言代码
+            // result.languages[i].percentage 是所占比例，比例越高，说明文本所使用的语言越高
+            var languages =  "Languages: \n";
+            var mainLang = {code:'', percentage:0}
+            for (var i = 0; i < result.languages.length; i++) {
+                languages += result.languages[i].language + " ";
+                languages += result.languages[i].percentage + "\n";
+                // 找出主要语言
+                if (result.languages[i].percentage > mainLang.percentage){
+                    mainLang.code = result.languages[i].language
+                    mainLang.percentage = result.languages[i].percentage
+                }
+            }
+
+            // 多语言字体  - nil
+            // 检查是否为从"右往左"书写的文字
+            if (fonts.rtl.indexOf(mainLang.code) !== -1){
+                $('.f-article').addClass('rtl')
+            }
+            // 检索相应语言的字体列表
+            for (let j = 0; j < fonts.typeface.length; j++){
+                if (fonts.typeface[j]['lang'].indexOf(mainLang.code) !== -1){
+                    mainLang['typeface'] = fonts.typeface[j]
+                    break
+                } else if (j === 3){
+                    mainLang['typeface'] = fonts.typeface[3]
+                }
+            }
+            // 加入切换字体的按钮
+            self.view.display('reader', 'fonts', mainLang['typeface']['fonts'], $('.f-select-fonts'))
+
+
+            // toc
+            let tocs = [];
+            $(".f-content").find(':header').each(function() {
+                let text = $(this)[0].innerText;
+                if (text) {
+                    let id = Math.random() * 10000;
+                    $(this).attr('id', id);
+                    tocs.push({
+                        tag: $(this)[0].localName,
+                        text: text.replace(/\&nbsp;/, '').replace(/\s/, ''),
+                        id: id
+                    });
+                }
+            });
+            console.log('toc', tocs);
+            // 如果没有抓到TOC 提示用户 - nil
+            if (tocs.length > 1){
+                self.view.display('reader', 'toc', tocs, $('.f-toc'));
+            } else {
+                self.view.display('reader', 'tocEmpty', null , $('.f-toc'))
+            }
+            //
+            $('.f-content').find('svg').each(function() {
+                $(this).remove();
+            });
+
+            self.appearance(mainLang);
+        });
+    };
+
     this.init = function() {
-        // chrome.extension.sendMessage({
-        //     'method': 'reader_get_article',
-        //     'data': {}
-        // }, function (res) {
-        //     // 处理语言
-        //     chrome.i18n.detectLanguage(res.content, function(result) {
-        //         // demo
-        //         // result.languages[i].language 是语言代码
-        //         // result.languages[i].percentage 是所占比例，比例越高，说明文本所使用的语言越高
-        //         var languages =  "Languages: \n";
-        //         var mainLang = {code:'', percentage:0}
-        //         for (var i = 0; i < result.languages.length; i++) {
-        //             languages += result.languages[i].language + " ";
-        //             languages += result.languages[i].percentage + "\n";
-        //             // 找出主要语言
-        //             if (result.languages[i].percentage > mainLang.percentage){
-        //                 mainLang.code = result.languages[i].language
-        //                 mainLang.percentage = result.languages[i].percentage
-        //             }
-        //         }
-        //         var is_reliable = "\nReliable? \n" + result.isReliable + "\n";
-        //         // console.log(languages + is_reliable);
 
-        //         // 渲染页面
-        //         let _paper = $('.f-paper');
-        //         self.view.display('reader', 'container', {
-        //             title: res.title,
-        //             content: res.content,
-        //             language: '' // 可以传递需要使用的语言代码, 传到View里可以处理
-        //         }, _paper);
-
-        //         // 如果不在View里处理，可以在页面渲染完成后，在这里处理.
-        //         // todo
-
-
-        //         // 多语言字体  - nil
-        //         // 检查是否为从"右往左"书写的文字
-        //         if (fonts.rtl.indexOf(mainLang.code) !== -1){
-        //             $('.f-article').addClass('rtl')
-        //         }
-        //         // 检索相应语言的字体列表
-        //         for (let j = 0; j < fonts.typeface.length; j++){
-        //             if (fonts.typeface[j]['lang'].indexOf(mainLang.code) !== -1){
-        //                 mainLang['typeface'] = fonts.typeface[j]
-        //                 break
-        //             } else if (j === 3){
-        //                 mainLang['typeface'] = fonts.typeface[3]
-        //             }
-        //         }
-        //         // 加入切换字体的按钮
-        //         self.view.display('reader', 'fonts', mainLang['typeface']['fonts'], $('.f-select-fonts'))
-
-
-        //         // toc
-        //         let tocs = [];
-        //         $(":header").each(function() {
-        //             let text = $(this)[0].innerText;
-        //             if (text) {
-        //                 let id = Math.random() * 10000;
-        //                 $(this).attr('id', id);
-        //                 tocs.push({
-        //                     tag: $(this)[0].localName,
-        //                     text: text.replace(/\&nbsp;/, '').replace(/\s/, ''),
-        //                     id: id
-        //                 });
-        //             }
-        //         });
-        //         // 如果没有抓到TOC 提示用户 - nil
-        //         if (tocs.length > 1){
-        //             self.view.display('reader', 'toc', tocs, $('.f-toc'));
-        //         } else {
-        //             self.view.display('reader', 'tocEmpty', null , $('.f-toc'))
-        //         }
-
-        //         // 处理img，如果没有域名，使用当前域名
-        //         _paper.find('img').each(function() {
-        //             let src = $(this).attr('src');
-        //             let host = self.module.common.hasHost(src);
-        //             if (!host) {
-        //                 let host_data = self.module.common.getHost(res.host);
-        //                 if (src.indexOf('//') === 0){
-        //                     let host_type = host_data[1] ? host_data[1] : 'http';
-        //                     $(this).attr('src', host_type + ':' + src);
-        //                 } else {
-        //                     host = res.host;
-        //                     $(this).attr('src', host + '/' + src);
-        //                 }
-        //             }
-        //         });
-        //         //
-        //         _paper.find('svg').each(function() {
-        //             $(this).remove();
-        //         });
-
-
-        //         appearance(mainLang);
-        //     });
-        // });
     };
 
     /**

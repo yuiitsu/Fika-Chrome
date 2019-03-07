@@ -9,7 +9,7 @@ App.module.extend('background', function() {
     this.init = function() {
         // open main screen in new tab.
         chrome.browserAction.onClicked.addListener(function(tab) {
-            self.click_browser_icon(tab);
+            self.click_browser_icon({tab: tab, open: true});
         });
 
         // // listen content script message.
@@ -54,16 +54,7 @@ App.module.extend('background', function() {
         send_response('');
     };
 
-    this.reader_get_article = function(data, send_response) {
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            //
-            chrome.browserAction.setBadgeText({'text': 'on', 'tabId': tabs[0].id}, function() {});
-        });
-        //
-        send_response(Model.get('article_data'));
-    };
-
-    this.click_browser_icon = function(tab, send_response) {
+    this.click_browser_icon = function(data, send_response) {
         let do_function = function(tab) {
             // let url_hash = self.module.common.md5(tab.url),
             //     method = 'reader_mode',
@@ -76,6 +67,8 @@ App.module.extend('background', function() {
                 'method': 'readerMode'
             }, function (response) {});
         };
+        let tab = data.tab,
+            open = data.open;
 
         if (!tab) {
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -83,6 +76,12 @@ App.module.extend('background', function() {
             });
         } else {
             do_function(tab);
+        }
+
+        if (open) {
+            self.badge_text.on();
+        } else {
+            self.badge_text.off();
         }
 
         if ($.isFunction(send_response)) {
@@ -100,7 +99,7 @@ App.module.extend('background', function() {
         send_response('');
     };
 
-    this.set_browser_icon = function(data, send_response) {
+    this.setBrowserIcon = function(data, send_response) {
         let is_available = data['is_available'];
         if (is_available) {
             chrome.browserAction.setIcon({
