@@ -80,7 +80,7 @@ App.module.extend('content', function() {
     this.findNextNode = function(element) {
         if (tags.indexOf(element.localName) !== -1) {
             //
-            this.rateToParent(element.localName, element.parentElement, 2);
+            this.rateToParent(element.localName, element.parentElement, 3);
         } else {
             let childrenLen = element.children.length;
             if (childrenLen > 0) {
@@ -145,9 +145,7 @@ App.module.extend('content', function() {
             return false;
         }
 
-        if (chileNodesLen === 0 && element.innerText === '') {
-            return false;
-        }
+
 
         if (nodeName === '#text') {
             articleHtml.push(element.nodeValue);
@@ -170,6 +168,9 @@ App.module.extend('content', function() {
             articleHtml.push(element.outerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, ''));
             return true;
         } else {
+            if (chileNodesLen === 0 && element.innerText === '') {
+                return false;
+            }
             articleHtml.push('<' + nodeName + '>');
             let articleHtmlLen = articleHtml.length;
             for (let i = 0; i < chileNodesLen; i++) {
