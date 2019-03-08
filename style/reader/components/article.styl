@@ -1,32 +1,73 @@
 @import "../variables.styl"
 
 /*! Article */
+theme-tinting($theme)
+  $border-color = $theme.light ? tint($theme.text, $border-opacity) : shade($theme.text, $border-opacity)
+  article($border-color, $theme)
+
+article($border-color, $theme)
+  table
+    td, th
+      border:solid 1px $border-color
+
+  blockquote
+    border-left: solid 5px $border-color
+
+  pre
+  code
+    background: $theme.bg
+    $scroll-bar-color($theme)
+
+  h1
+  h2
+  h3
+  h4
+  h5
+  h6
+  p
+  pre
+  code
+  sup
+  sub
+  blockquote
+    color: $theme.text
 
 
-.f-title
+
+theme(theme-tinting, "article")
+
+
+.fika-title
   $margin(y, 0)
   font-size: 40px
   line-height 52px
   font-weight bold
 
-.f-subtitle
+.fika-subtitle
   $margin(y, 4)
   font-size: 16px
   sans-serif()
 
-.f-article
+.fika-article
   $margin(x, auto)
   width: 100%
   max-width: 720px
   position relative
 
 // rich text
-.f-content
+.fika-content
   $margin(t, 5)
   line-height 1.6
 
   *
     word-break: break-word;
+
+  p
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
 
   a
     & ,&:link ,&:visited ,&:active
@@ -77,23 +118,3 @@
       width:100%
       height:394px
 
-
-theme-tinting($theme)
-  $border-color = $theme.light ? tint($theme.text, $border-opacity) : shade($theme.text, $border-opacity)
-  f-content($border-color, $theme)
-
-f-content($border-color, $theme)
-  table
-    td, th
-      border:solid 1px $border-color
-
-  blockquote
-    border-left: solid 5px $border-color
-
-  pre
-  code
-    background: $theme.bg
-    $scroll-bar-color($theme)
-
-
-theme(theme-tinting, "f-content")

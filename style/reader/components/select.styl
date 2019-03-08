@@ -2,7 +2,7 @@
 
 /*! Select */
 
-f-select($theme)
+select($theme)
   &-sizes
   &-fonts
     background: $theme.bg
@@ -21,13 +21,15 @@ f-select($theme)
       border: solid 4px $theme.accent
 
 
-theme(f-select, "f-select")
+theme(select, "select")
 
 for $name, $theme in $themes
-  .f-select-theme.theme-{$name}
+  .fika-select-theme.theme-{$name}
     background: $theme.bg
 
-.f-select
+
+.fika-select
+  sans-serif()
   &-label
     $margin(t, 3)
     $margin(b, 1)
@@ -42,7 +44,7 @@ for $name, $theme in $themes
     display flex
     overflow hidden
 
-    & .f-select-size
+    & .fika-select-size
       cursor pointer
       flex: 1 1 auto
       text-align center
@@ -65,7 +67,7 @@ for $name, $theme in $themes
   &-themes
     display flex
 
-    & .f-select-theme
+    & .fika-select-theme
       cursor pointer
       $margin(r, 2)
       border-radius 50%
@@ -80,7 +82,7 @@ for $name, $theme in $themes
     radius(4px)
     $padding(y, 1)
 
-    & .f-select-font
+    & .fika-select-font
       cursor pointer
       $padding(x, 2)
       $padding(y, 1)

@@ -1,19 +1,30 @@
 @import "../variables.styl"
 /*! App */
 
-f-app($theme)
+app($theme)
   background: $theme.bg
 
 
 for $name, $theme in $themes
-  .f-app.theme-{$name}
-      f-app($theme)
+  .fika-app.theme-{$name}
+      app($theme)
 
-.f-app
+.fika-app
   display: flex
   min-height: 100vh
+  line-height 1
+  font-size 14px
+  san-serif()
   drawer-transition()
-  //&-drawer-on
-  //  padding-left: 352px
-  //  @media screen and (max-width: 1280px)
-  //    padding-left: 0
+
+
+
+.fika-reader-mode
+  position: fixed
+  left:0
+  top:0
+  width:100%
+  height:100%
+  background-color:#fff
+  overflow-y:auto
+  z-index: 2147483647

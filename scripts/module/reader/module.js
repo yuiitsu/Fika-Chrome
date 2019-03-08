@@ -69,10 +69,10 @@ const fonts = {
             Array.from(els).forEach(el=>{
                 el.addEventListener('click', (e)=>{
                     const rect = el.getBoundingClientRect();
-                    el.classList.add('f-ripple-container');
+                    el.classList.add('fika-ripple-container');
                     // create ripple element
                     let ripple = document.createElement('span');
-                    ripple.className = 'f-ripple';
+                    ripple.className = 'fika-ripple';
                     ripple.style.height = ripple.style.width = Math.max(rect.width, rect.height) + 'px';
                     el.appendChild(ripple);
                     // set ripple position
@@ -91,30 +91,23 @@ const fonts = {
 
     this.toggleDrawer = function(open){
         if (open && drawer.available){
-            // drawer.app.classList.add('f-app-drawer-on')
-            drawer.el.classList.add('f-drawer-on');
-            drawer.overlay.classList.add('f-overlay-active')
+            // drawer.app.classList.add('fika-app-drawer-on')
+            drawer.el.classList.add('fika-drawer-on');
+            drawer.overlay.classList.add('fika-overlay-active')
         } else {
-            // drawer.app.classList.remove('f-app-drawer-on')
-            drawer.el.classList.remove('f-drawer-on');
-            drawer.overlay.classList.remove('f-overlay-active')
+            // drawer.app.classList.remove('fika-app-drawer-on')
+            drawer.el.classList.remove('fika-drawer-on');
+            drawer.overlay.classList.remove('fika-overlay-active')
         }
         drawer.open = open;
     };
 
-    this.initDrawerState = function(){
-        drawer.w = window.innerWidth
-        drawer.available = drawer.w < 1400
-        $('#toc-btn').toggleClass('disabled', !drawer.available);
-        console.log(drawer.available )
-    };
-
     this.toggleAppearanceMenu = function(toggle){
-        const menu = $('.f-menu');
+        const menu = $('.fika-menu');
         if (toggle !== undefined && !toggle){
-            menu.addClass('f-menu-on')
+            menu.addClass('fika-menu-on')
         }
-        menu.toggleClass('f-menu-on')
+        menu.toggleClass('fika-menu-on')
     };
 
     // language 当前语言，用于字体设置
@@ -148,8 +141,8 @@ const fonts = {
                         return defaultFont
                     }
                 })(),
-                cont: document.querySelector('.f-article'),
-                selects: document.querySelectorAll('.f-select-font'),
+                cont: document.querySelector('.fika-article'),
+                selects: document.querySelectorAll('.fika-select-font'),
                 classPrefix: 'font-'
             }
         };
@@ -217,19 +210,26 @@ const fonts = {
 
     };
 
+    this.initDrawerState = function(){
+        drawer.w = window.innerWidth
+        drawer.available = drawer.w < 1400
+        $('#toc-btn').toggleClass('disabled', !drawer.available);
+        console.log(drawer.available )
+    };
+
     this._initSidebar = function() {
-        this.ripple(document.querySelectorAll('.f-btn'));
-        this.ripple(document.querySelectorAll('.f-drawer-tile'));
+        this.ripple(document.querySelectorAll('.fika-btn'));
+        this.ripple(document.querySelectorAll('.fika-drawer-tile'));
 
         /* Drawer */
         drawer = {
             open: false,
             modal: false,
-            close: document.querySelector('.f-drawer-close'),
+            close: document.querySelector('.fika-drawer-close'),
             btn: document.querySelector('#toc-btn'),
-            el: document.querySelector('.f-drawer'),
-            app: document.querySelector('.f-app'),
-            overlay: document.querySelector('.f-overlay'),
+            el: document.querySelector('.fika-drawer'),
+            app: document.querySelector('.fika-app'),
+            overlay: document.querySelector('.fika-overlay'),
             w: null,
             threshold: 1552,
             available:false
@@ -245,7 +245,7 @@ const fonts = {
         drawer.overlay.addEventListener('click', ()=>{
             self.toggleDrawer(false)
             self.toggleAppearanceMenu(false)
-            drawer.overlay.classList.remove('f-overlay-active')
+            drawer.overlay.classList.remove('fika-overlay-active')
         }, false);
 
         this.initDrawerState();
@@ -259,9 +259,9 @@ const fonts = {
                 self.toggleDrawer(false)
             }
                 // if (w < drawer.threshold && w < drawer.w){
-                //     drawer.overlay.classList.add('f-overlay-active')
+                //     drawer.overlay.classList.add('fika-overlay-active')
                 // } else if (w >= drawer.threshold){
-                //     drawer.overlay.classList.remove('f-overlay-active')
+                //     drawer.overlay.classList.remove('fika-overlay-active')
                 // }
             drawer.w = w;
             console.log(drawer.available )
@@ -286,17 +286,17 @@ const fonts = {
             });
         });
         $('#tool-btn').click(function () {
-            $('.f-tool').toggleClass('f-tool-on')
-            $('.f-menu').removeClass('f-menu-on')
+            $('.fika-tool').toggleClass('fika-tool-on')
+            $('.fika-menu').removeClass('fika-menu-on')
         });
         let hoverTimer;
-        $('.f-tool').mouseleave(function () {
+        $('.fika-tool').mouseleave(function () {
             hoverTimer = setTimeout(()=>{
-                $(this).removeClass('f-tool-on')
-                $('.f-menu').removeClass('f-menu-on')
+                $(this).removeClass('fika-tool-on')
+                $('.fika-menu').removeClass('fika-menu-on')
             }, 1200)
         });
-        $('.f-tool').mouseenter(function () {
+        $('.fika-tool').mouseenter(function () {
             clearTimeout(hoverTimer)
         })
     };
@@ -325,7 +325,7 @@ const fonts = {
             // 多语言字体  - nil
             // 检查是否为从"右往左"书写的文字
             if (fonts.rtl.indexOf(mainLang.code) !== -1){
-                $('.f-article').addClass('rtl')
+                $('.fika-article').addClass('rtl')
             }
             // 检索相应语言的字体列表
             for (let j = 0; j < fonts.typeface.length; j++){
@@ -337,10 +337,11 @@ const fonts = {
                 }
             }
             // 加入切换字体的按钮
-            self.view.display('reader', 'fonts', mainLang['typeface']['fonts'], $('.f-select-fonts'))
+            self.view.display('reader', 'fonts', mainLang['typeface']['fonts'], $('.fika-select-fonts'))
 
             // toc
-            let targetContent = $(".f-content"),
+
+            let targetContent = $(".fika-content"),
                 tocs = [];
             targetContent.find(':header').each(function() {
                 let text = $(this)[0].innerText;
@@ -355,11 +356,9 @@ const fonts = {
                 }
             });
             console.log('toc', tocs);
-            // 如果没有抓到TOC 提示用户 - nil
+            // 如果没有抓到TOC 就不显示 - nil
             if (tocs.length > 1){
-                self.view.display('reader', 'toc', tocs, $('.f-toc'));
-            } else {
-                self.view.display('reader', 'tocEmpty', null , $('.f-toc'))
+                self.view.display('reader', 'toc', tocs, $('.fika-toc'));
             }
             //
             targetContent.find('svg').each(function() {

@@ -2,14 +2,15 @@
 
 /*! Feedback */
 
-f-feedback($theme)
+feedback($theme)
   &-divider
     border-top: 1px solid $theme.text
 
-theme(f-feedback, "f-feedback")
+theme(feedback, "feedback")
 
 
-.f-feedback
+.fika-feedback
+  sans-serif()
   text-align: center
   font-size: 16px
   $margin(y, 7)
@@ -17,6 +18,7 @@ theme(f-feedback, "f-feedback")
     display none
 
   &-divider
+    $margin(y, 2)
     $margin(x, auto)
     width: 120px
 

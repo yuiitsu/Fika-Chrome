@@ -46,9 +46,10 @@ $themes := {
   licorice: $licorice
 }
 
+
 // theme builder for components
 theme($builder, $class)
   for $name, $theme in $themes
     .theme-{$name}
-      .{$class}
+      .fika-{$class}
         $builder($theme)
