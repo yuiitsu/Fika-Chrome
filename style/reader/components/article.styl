@@ -25,96 +25,109 @@ article($border-color, $theme)
   h5
   h6
   p
+  li
   pre
   code
   sup
   sub
+  table
   blockquote
     color: $theme.text
+
+  pre
+  code
+    *
+    span
+      color: $theme.text !important
 
 
 
 theme(theme-tinting, "article")
 
 
-.fika-title
-  $margin(y, 0)
-  font-size: 40px
-  line-height 52px
-  font-weight bold
+.fika-app
+  .fika-title
+    $margin(y, 0)
+    font-size: 40px
+    line-height 52px
+    font-weight bold
 
-.fika-subtitle
-  $margin(y, 4)
-  font-size: 16px
-  sans-serif()
-
-.fika-article
-  $margin(x, auto)
-  width: 100%
-  max-width: 720px
-  position relative
-
-// rich text
-.fika-content
-  $margin(t, 5)
-  line-height 1.6
-
-  *
-    word-break: break-word;
-
-  p
-    display: block;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-
-  a
-    & ,&:link ,&:visited ,&:active
-      color:$primary.dark
-
-  img
-    max-width: 100%
-    object-fit: cover
-    $margin(x, auto)
-    display: block
-
-  pre
-    $padding(a, 2)
-    line-height: 1.2 !important;
-    overflow-x auto
-    $scroll-bar()
-
-  figure
-    $margin(y, 3)
-    $margin(x, 0)
-
-  figcaption
-    *
-      font-size: inherit !important
+  .fika-subtitle
+    $margin(y, 4)
+    font-size: 16px
     sans-serif()
-    font-size: 16px !important
 
-  blockquote
-    font-style: italic;
-    $margin(x, 0)
-    $padding(l, 4)
+  .fika-article
+    $margin(x, auto)
+    width: 100%
+    max-width: 720px
+    position relative
 
-  table
-    border-collapse: collapse;
-    width: 100%;
-    text-align: center;
-    td, th
-      $padding(a, 1)
+  // rich text
+  .fika-content
+    $margin(t, 5)
 
-  sup
-  sub
-    line-height: 1
+    *
+      line-height 1.6
+      word-break: break-word;
 
-  iframe
-    border:none
-    &[src^="https://player.vimeo.com/video"]
-    &[src^="https://www.youtube.com/embed"]
-      width:100%
-      height:394px
+    p
+      display: block;
+      margin-block-start: 1em;
+      margin-block-end: 1em;
+      margin-inline-start: 0px;
+      margin-inline-end: 0px;
+
+    a
+      & ,&:link ,&:visited ,&:active
+        color:$primary.dark
+
+    img
+      max-width: 100%
+      object-fit: cover
+      $margin(x, auto)
+      display: block
+
+    code
+    pre
+      font-family: monospace
+
+    pre
+      $padding(a, 2)
+      line-height: 1.2 !important;
+      overflow-x auto
+      $scroll-bar()
+
+    figure
+      $margin(y, 3)
+      $margin(x, 0)
+
+    figcaption
+      *
+        font-size: inherit !important
+      sans-serif()
+      font-size: 16px !important
+
+    blockquote
+      font-style: italic;
+      $margin(x, 0)
+      $padding(l, 4)
+
+    table
+      border-collapse: collapse;
+      width: 100%;
+      text-align: center;
+      td, th
+        $padding(a, 1)
+
+    sup
+    sub
+      line-height: 1
+
+    iframe
+      border:none
+      &[src^="https://player.vimeo.com/video"]
+      &[src^="https://www.youtube.com/embed"]
+        width:100%
+        height:394px
 
