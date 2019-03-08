@@ -8,20 +8,20 @@ feedback($theme)
 
 theme(feedback, "feedback")
 
+.fika-app
+  .fika-feedback
+    sans-serif()
+    text-align: center
+    font-size: 16px
+    $margin(y, 7)
+    @media print
+      display none
 
-.fika-feedback
-  sans-serif()
-  text-align: center
-  font-size: 16px
-  $margin(y, 7)
-  @media print
-    display none
+    &-divider
+      $margin(y, 2)
+      $margin(x, auto)
+      width: 120px
 
-  &-divider
-    $margin(y, 2)
-    $margin(x, auto)
-    width: 120px
-
-  &-inst
-    text-align center
-    font-size: 12px
+    &-inst
+      text-align center
+      font-size: 12px

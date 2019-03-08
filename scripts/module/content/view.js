@@ -6,10 +6,10 @@ App.view.extend('content', function() {
     this.layout = function() {
         return `
             <div class="fika-reader-mode" id="fika-reader">
-                <div id="fika" class="fika-app theme-blabar">
+                <div id="fika" class="fika-app theme-vanilla">
                     <!--drawer-->
                     <div class="fika-tool">
-                        <button class="fika-btn fika-btn-icon" id="tool-btn">
+                        <button class="fika-btn fika-btn-icon" id="fika-tool-btn">
                             <svg class="fika-icon" viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
                         </button>
                         <button class="fika-btn fika-btn-icon" id="fika-toc-btn">
@@ -17,7 +17,7 @@ App.view.extend('content', function() {
                                 <path d="M4 13c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0-8c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm4 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zm0 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zM7 8c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1zm-3 5c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0-8c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm4 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zm0 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zM7 8c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1z"/>
                             </svg>
                         </button>
-                        <button class="fika-btn fika-btn-icon" id="appearance">
+                        <button class="fika-btn fika-btn-icon" id="fika-appearance">
                             <svg class="fika-icon" viewBox="0 0 24 24">
                                 <path d="M21.94,18.66l-5-14a1,1,0,0,0-1.88,0L10.48,17.48,7.43,9.64a1,1,0,0,0-1.86,0l-3.5,9a1,1,0,1,0,1.86.72l.66-1.68H8.41l.66,1.68A1,1,0,0,0,10,20a.92.92,0,0,0,.36-.07.67.67,0,0,0,.14-.09.7.7,0,0,0,.16.1,1,1,0,0,0,1.28-.6l1-2.84h6.1l1,2.84A1,1,0,0,0,21,20a1,1,0,0,0,.34-.06A1,1,0,0,0,21.94,18.66Zm-16.58-3L6.5,12.76l1.14,2.92Zm8.31-1.18L16,8l2.33,6.53Z"/></svg>
                         </button>
@@ -44,21 +44,21 @@ App.view.extend('content', function() {
                             </div>
                         </div>
                         <!--print-->
-                        <button class="fika-btn fika-btn-icon" id="print">
+                        <button class="fika-btn fika-btn-icon" id="fika-print">
                             <svg class="fika-icon" viewBox="0 0 24 24">
                                 <path d="M19,8H5c-1.7,0-3,1.3-3,3v6h4v4h12v-4h4v-6C22,9.3,20.7,8,19,8z M16,19H8v-5h8V19z M19,12c-0.5,0-1-0.4-1-1s0.5-1,1-1
                     s1,0.4,1,1S19.5,12,19,12z M18,3H6v4h12V3z"/>
                             </svg>
                         </button>
                         <!--fullscreen-->
-                        <button class="fika-btn fika-btn-icon" id="fullscreen">
+                        <button class="fika-btn fika-btn-icon" id="fika-fullscreen">
                             <!--exit-->
                             <svg class="fika-icon" viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>
                             <!--fs-->
                             <svg class="fika-icon" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
                         </button>
                             <!--exit-->
-                            <button class="fika-btn fika-btn-icon" id="exit">
+                            <button class="fika-btn fika-btn-icon" id="fika-exit">
                                 <svg class="fika-icon" viewBox="0 0 24 24"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
                             </button>
                     </div>

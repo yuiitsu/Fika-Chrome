@@ -12,28 +12,30 @@ footer($theme)
 theme(footer, "footer")
 
 
-.fika-footer
-  display: flex;
-  justify-content: space-between;
+.fika-app
+  .fika-footer
+    display: flex;
+    justify-content: space-between;
 
-  a
-    color currentColor
-    text-decoration none
+    a
+      & ,&:link ,&:visited ,&:active
+        color currentColor
+        text-decoration none
 
-  &-logo
-    display flex
-    align-items center
+    &-logo
+      display flex
+      align-items center
 
-    img
-      $margin(r, 2)
-      height 36px
-      width 36px
+      img
+        $margin(r, 2)
+        height 36px
+        width 36px
 
-  &-share
-    display flex
-    align-items center
-    color currentColor
-    text-decoration none
-    @media print
-      display none
+    &-share
+      display flex
+      align-items center
+      color currentColor
+      text-decoration none
+      @media print
+        display none
       

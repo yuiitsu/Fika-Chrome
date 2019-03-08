@@ -8,27 +8,28 @@ paper($theme)
 
 theme(paper, "paper")
 
-.fika-main-body
-  position relative
-  width: 100%
-  max-width: 880px
-  $margin(x, auto)
-  $margin(t, 4)
-  $margin(b, 8)
+.fika-app
+  .fika-main-body
+    position relative
+    width: 100%
+    max-width: 880px
+    $margin(x, auto)
+    $margin(t, 4)
+    $margin(b, 8)
 
-.fika-paper
-  position:relative
-  $padding(y, 3)
-  $padding(x, 3)
-  radius()
-  shadow(1)
+  .fika-paper
+    position:relative
+    $padding(y, 3)
+    $padding(x, 3)
+    radius()
+    shadow(1)
 
-  @media screen and (max-width: 992px)
-    margin: 0 52px
+    @media screen and (max-width: 992px)
+      margin: 0 52px
 
-  @media screen and (max-width: 700px)
-    margin: 0
+    @media screen and (max-width: 700px)
+      margin: 0
 
-  @media print
-    box-shadow none
-    color: #000 !important
+    @media print
+      box-shadow none
+      color: #000 !important

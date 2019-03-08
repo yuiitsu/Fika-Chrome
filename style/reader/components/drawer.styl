@@ -17,33 +17,34 @@ drawer($theme)
 
 theme(drawer, "drawer")
 
-.fika-drawer
-  position fixed
-  left -320px
-  top 0
-  height 100vh
-  width 320px
-  $padding(a, 2)
-  sans-serif()
-  drawer-transition()
-  z-index 100
-  overflow-y auto
-  $scroll-bar()
-  @media print
-    display none
+.fika-app
+  .fika-drawer
+    position fixed
+    left -320px
+    top 0
+    height 100vh
+    width 320px
+    $padding(a, 2)
+    sans-serif()
+    drawer-transition()
+    z-index 100
+    overflow-y auto
+    $scroll-bar()
+    @media print
+      display none
 
-  &-on
-    left:0
+    &-on
+      left:0
 
-  &-content
-    overflow hidden
+    &-content
+      overflow hidden
 
-    &-wrap
-      display flex
-      transition: 0.3s $transition.fast-in-fast-out
+      &-wrap
+        display flex
+        transition: 0.3s $transition.fast-in-fast-out
 
-      > *
-        width 100%
-        min-width 100%
-        $margin(r, 2)
-        $padding(a, 1)
+        > *
+          width 100%
+          min-width 100%
+          $margin(r, 2)
+          $padding(a, 1)

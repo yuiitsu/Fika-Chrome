@@ -1,17 +1,18 @@
 @import '../variables.styl'
 
-.fika-overlay
-  background rgba(0,0,0,.42)
-  height 100vh
-  width 100vw
-  position fixed
-  opacity 0
-  display: none
-  top 0
-  left 0
-  z-index 1
-  short-transition()
+.fika-app
+  .fika-overlay
+    background rgba(0,0,0,.42)
+    height 100vh
+    width 100vw
+    position fixed
+    opacity 0
+    display: none
+    top 0
+    left 0
+    z-index 1
+    short-transition()
 
-  &-active
-    opacity 1
-    display block
+    &-active
+      opacity 1
+      display block

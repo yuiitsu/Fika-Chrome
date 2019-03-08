@@ -84,19 +84,6 @@ const fonts = {
         }
     };
 
-    this.toggleDrawer = function(open){
-        if (open && drawer.available){
-            // drawer.app.classList.add('fika-app-drawer-on')
-            drawer.el.classList.add('fika-drawer-on');
-            drawer.overlay.classList.add('fika-overlay-active')
-        } else {
-            // drawer.app.classList.remove('fika-app-drawer-on')
-            drawer.el.classList.remove('fika-drawer-on');
-            drawer.overlay.classList.remove('fika-overlay-active')
-        }
-        drawer.open = open;
-    };
-
     this.toggleAppearanceMenu = function(toggle){
         const menu = $('.fika-menu');
         if (toggle !== undefined && !toggle){
@@ -114,20 +101,19 @@ const fonts = {
         const settings = {
             fontSize: {
                 activeVal: cacheFontSize || 'medium',
-                cont: document.querySelector('.f-article'),
-                selects: document.querySelectorAll('.f-select-size'),
+                cont: $('.fika-article'),
+                selects: $('.fika-select-size'),
                 classPrefix: 'size-'
             },
             theme: {
                 activeVal: cacheTheme || 'vanilla',
-                cont: document.querySelector('.f-app'),
-                selects: document.querySelectorAll('.f-select-theme'),
+                cont: $('.fika-app'),
+                selects: $('.fika-select-theme'),
                 classPrefix: 'theme-'
             },
             font: {
                 activeVal: (function (){
                     const fontSettings = cacheFont;
-                    console.log(fontSettings && fontSettings[0] === '{');
                     const defaultFont = language.typeface.fonts[language.typeface.default]['class'];
                     if (fontSettings && fontSettings[0] === '{'){
                         let fontOfLang = JSON.parse(cacheFont)[language.typeface.script];
@@ -136,23 +122,21 @@ const fonts = {
                         return defaultFont
                     }
                 })(),
-                cont: document.querySelector('.fika-article'),
-                selects: document.querySelectorAll('.fika-select-font'),
+                cont: $('.fika-article'),
+                selects: $('.fika-select-font'),
                 classPrefix: 'font-'
             }
         };
 
         function setAppearance(prop, val) {
             // change class name (theme) for app
-            let oldVal, cont = settings[prop].cont;
-            if (cont) {
-                cont.classList.forEach(c => {
-                    if (c.startsWith(settings[prop].classPrefix)) {
-                        oldVal = c
-                    }
-                });
-                cont.classList.replace(oldVal, `${settings[prop].classPrefix}${val}`);
-            }
+            let oldVal='', newVal='', cont = settings[prop].cont;
+            cont.attr('class').split(/\s+/).forEach(c => {
+                if (c.startsWith(settings[prop].classPrefix)) oldVal = c
+            });
+            cont.removeClass(oldVal)
+            newVal = `${settings[prop].classPrefix}${val}`
+            cont.addClass(newVal)
             // change state and storage
             settings[prop].activeVal = val;
             if (prop === 'font'){
@@ -174,12 +158,10 @@ const fonts = {
                 self.module.common.cache.set(prop, val);
             }
             // change class name for ctrl btns
-            for (let el of settings[prop].selects) {
-                el.classList.remove('active');
-                if (el.classList.contains(`${settings[prop].classPrefix}${val}`)) {
-                    el.classList.add('active')
-                }
-            }
+            settings[prop].selects.removeClass('active');
+            settings[prop].selects.each(function(){
+                if ($(this).hasClass(newVal)) $(this).addClass('active')
+            })
         }
 
         // set theme from localStorage
@@ -187,118 +169,131 @@ const fonts = {
         setAppearance('fontSize', settings['fontSize'].activeVal);
         setAppearance('font', settings['font'].activeVal);
 
-        Array.from(settings['theme'].selects).forEach(el => {
-            el.addEventListener('click', () => {
-                setAppearance('theme', el.classList.item(1).split('-')[1])
-            })
+        // bind click events
+        settings['theme'].selects.click(function(){
+            setAppearance('theme',
+              $(this).attr('class').split(/\s+/)[1].split('-')[1]
+            )
         });
-        Array.from(settings['fontSize'].selects).forEach(el => {
-            el.addEventListener('click', () => {
-                setAppearance('fontSize', el.classList.item(1).split('-')[1])
-            })
+        settings['fontSize'].selects.click(function(){
+            setAppearance('fontSize',
+              $(this).attr('class').split(/\s+/)[1].split('-')[1]
+            )
         });
-        Array.from(settings['font'].selects).forEach(el => {
-            el.addEventListener('click', () => {
-                setAppearance('font', el.classList.item(1).split('-')[1])
-            })
-        })
+        settings['font'].selects.click(function(){
+            setAppearance('font',
+              $(this).attr('class').split(/\s+/)[1].split('-')[1]
+            )
+        });
 
     };
 
-    this.initDrawerState = function(){
-        drawer.w = window.innerWidth;
-        drawer.available = drawer.w < 1400;
-        $('#toc-btn').toggleClass('disabled', !drawer.available);
-        console.log(drawer.available )
-    };
-
-    this._initSidebar = function() {
-        this.ripple(document.querySelectorAll('.fika-btn'));
-        this.ripple(document.querySelectorAll('.fika-drawer-tile'));
-
+    this.initDrawer = function(){
         /* Drawer */
         drawer = {
             open: false,
             modal: false,
-            close: document.querySelector('.fika-drawer-close'),
-            btn: document.querySelector('#toc-btn'),
-            el: document.querySelector('.fika-drawer'),
-            app: document.querySelector('.fika-app'),
-            overlay: document.querySelector('.fika-overlay'),
+            close: $('.fika-drawer-close'),
+            btn: $('#fika-toc-btn'),
+            el: $('.fika-drawer'),
+            app: $('.fika-app'),
+            overlay: $('.fika-overlay'),
             w: null,
             threshold: 1552,
             available:false
         };
 
-        // click events
-        drawer.btn.addEventListener('click', ()=>{
-            self.toggleDrawer(!drawer.open)
-        }, false);
-        drawer.close.addEventListener('click', ()=>{
-            self.toggleDrawer(false)
-        }, false);
-        drawer.overlay.addEventListener('click', ()=>{
-            self.toggleDrawer(false);
-            self.toggleAppearanceMenu(false);
-            drawer.overlay.classList.remove('fika-overlay-active')
-        }, false);
+        function toggleDrawer(open){
+            if (open && drawer.available){
+                drawer.el.addClass('fika-drawer-on');
+                drawer.overlay.addClass('fika-overlay-active')
+            } else {
+                drawer.el.removeClass('fika-drawer-on');
+                drawer.overlay.removeClass('fika-overlay-active')
+            }
+            drawer.open = open;
+        }
 
-        this.initDrawerState();
-        //
+        // click events
+        drawer.btn.click(function(){
+            toggleDrawer(!drawer.open)
+        });
+        drawer.close.click(function(){
+            toggleDrawer(false)
+        });
+        drawer.overlay.click(function(){
+            toggleDrawer(false);
+            toggleAppearanceMenu(false);
+            drawer.overlay.removeClass('fika-overlay-active')
+        });
+
         window.addEventListener('resize', ()=>{
             // current window width
             const w = window.innerWidth;
             drawer.available = w < 1400;
-            $('#toc-btn').toggleClass('disabled', !drawer.available)
+            drawer.btn.toggleClass('disabled', !drawer.available)
             if (drawer.open && !drawer.available){
-                self.toggleDrawer(false)
+                toggleDrawer(false)
             }
-                // if (w < drawer.threshold && w < drawer.w){
-                //     drawer.overlay.classList.add('fika-overlay-active')
-                // } else if (w >= drawer.threshold){
-                //     drawer.overlay.classList.remove('fika-overlay-active')
-                // }
             drawer.w = w;
-            console.log(drawer.available )
         });
 
-        $('#appearance').click(self.toggleAppearanceMenu);
+        // init drawer
+        drawer.w = window.innerWidth;
+        drawer.available = drawer.w < 1400;
+        drawer.btn.toggleClass('disabled', !drawer.available);
+    };
+
+    this._initTools = function() {
+        this.ripple(document.querySelectorAll('.fika-btn'));
+        this.initDrawer()
+
+        $('#fika-appearance').click(self.toggleAppearanceMenu);
         //tools
-        $('#print').click(function(){
-            window.print()
+        $('#fika-print').click(function(){
+
         });
 
-        $('#fullscreen').click(function() {
-            chrome.windows.get(-2, function(window){
-                let fullScreenState = window.state;
-                if(fullScreenState === "fullscreen") {
-                    chrome.windows.update(-2, {state: "normal"});
-                    $('#fullscreen').removeClass('fs-on')
-                } else {
-                    chrome.windows.update(-2, {state: "fullscreen"});
-                    $('#fullscreen').addClass('fs-on')
-                }
-            });
+        $('#fika-fullscreen').click(function() {
+            console.log(chrome, self)
+            // chrome.windows.get(-2, function(window){
+            //     let fullScreenState = window.state;
+            //     if(fullScreenState === "fullscreen") {
+            //         chrome.windows.update(-2, {state: "normal"});
+            //         $('#fullscreen').removeClass('fs-on')
+            //     } else {
+            //         chrome.windows.update(-2, {state: "fullscreen"});
+            //         $('#fullscreen').addClass('fs-on')
+            //     }
+            // });
+            const el = document.documentElement
+            if (el.requestFullscreen){
+                el.requestFullscreen()
+            } else if (el.webkitRequestFullScreen){
+                el.webkitRequestFullScreen()
+            }
         });
-        $('#tool-btn').click(function () {
-            $('.fika-tool').toggleClass('fika-tool-on')
+
+        let toolbar = $('.fika-tool')
+        $('#fika-tool-btn').click(function () {
+            toolbar.toggleClass('fika-tool-on')
             $('.fika-menu').removeClass('fika-menu-on')
         });
         let hoverTimer;
-        $('.fika-tool').mouseleave(function () {
+        toolbar.mouseleave(function () {
             hoverTimer = setTimeout(()=>{
                 $(this).removeClass('fika-tool-on')
                 $('.fika-menu').removeClass('fika-menu-on')
             }, 1200)
         });
-        $('.fika-tool').mouseenter(function () {
+        toolbar.mouseenter(function () {
             clearTimeout(hoverTimer)
         })
     };
 
     this._init = function(content) {
         //
-        this._initSidebar();
+        this._initTools();
         // 处理语言
         chrome.i18n.detectLanguage(content, function(result) {
             // demo
@@ -344,12 +339,11 @@ const fonts = {
                     $(this).attr('id', id);
                     tocs.push({
                         tag: $(this)[0].localName,
-                        text: text,
+                        text: text.trim(),
                         id: id
                     });
                 }
             });
-            console.log('toc', tocs);
             // 如果没有抓到TOC 就不显示 - nil
             if (tocs.length > 1){
                 self.view.display('reader', 'toc', tocs, $('.fika-toc'));
