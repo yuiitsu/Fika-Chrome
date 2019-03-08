@@ -5,12 +5,7 @@
 App.module.extend('reader', function() {
 
     let self = this,
-        drawer = null,
-        cache = {
-            fontSize: 'medium',
-            theme: 'vanilla',
-            font: ''
-        };
+        drawer = null;
 
     // 字体 metadata
 const fonts = {
@@ -211,8 +206,8 @@ const fonts = {
     };
 
     this.initDrawerState = function(){
-        drawer.w = window.innerWidth
-        drawer.available = drawer.w < 1400
+        drawer.w = window.innerWidth;
+        drawer.available = drawer.w < 1400;
         $('#toc-btn').toggleClass('disabled', !drawer.available);
         console.log(drawer.available )
     };
@@ -243,8 +238,8 @@ const fonts = {
             self.toggleDrawer(false)
         }, false);
         drawer.overlay.addEventListener('click', ()=>{
-            self.toggleDrawer(false)
-            self.toggleAppearanceMenu(false)
+            self.toggleDrawer(false);
+            self.toggleAppearanceMenu(false);
             drawer.overlay.classList.remove('fika-overlay-active')
         }, false);
 
@@ -316,11 +311,10 @@ const fonts = {
                 languages += result.languages[i].percentage + "\n";
                 // 找出主要语言
                 if (result.languages[i].percentage > mainLang.percentage){
-                    mainLang.code = result.languages[i].language
+                    mainLang.code = result.languages[i].language;
                     mainLang.percentage = result.languages[i].percentage
                 }
             }
-            console.log(languages);
 
             // 多语言字体  - nil
             // 检查是否为从"右往左"书写的文字
@@ -330,7 +324,7 @@ const fonts = {
             // 检索相应语言的字体列表
             for (let j = 0; j < fonts.typeface.length; j++){
                 if (fonts.typeface[j]['lang'].indexOf(mainLang.code) !== -1){
-                    mainLang['typeface'] = fonts.typeface[j]
+                    mainLang['typeface'] = fonts.typeface[j];
                     break
                 } else if (j === 3){
                     mainLang['typeface'] = fonts.typeface[3]
@@ -350,7 +344,7 @@ const fonts = {
                     $(this).attr('id', id);
                     tocs.push({
                         tag: $(this)[0].localName,
-                        text: text.replace(/\&nbsp;/, '').replace(/\s/, ''),
+                        text: text,
                         id: id
                     });
                 }
