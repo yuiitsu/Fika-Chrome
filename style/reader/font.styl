@@ -20,9 +20,24 @@ $fonts := {
 }
 
 for $name, $font in $fonts
-  .font-{$name}
-  .{$name}
-    font-family unquote($font) !important
+  .fika-app
+    .font-{$name}
+    .{$name}
+      font-family unquote($font) !important
+
+      h1
+      h2
+      h3
+      h4
+      h5
+      h6
+      p
+      pre
+      code
+      sup
+      sub
+      blockquote
+        font-family unquote($font) !important
 
 .rtl
   direction rtl

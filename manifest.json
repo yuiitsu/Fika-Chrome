@@ -40,7 +40,7 @@
             "scripts/run.js"
         ],
         "css": [
-            "style/content.css"
+            "style/reader.css"
         ]
     }],
     "browser_action": {

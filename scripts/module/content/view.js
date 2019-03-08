@@ -6,89 +6,88 @@ App.view.extend('content', function() {
     this.layout = function() {
         return `
             <div class="fika-reader-mode" id="fika-reader">
-                <div id="fika" class="f-app theme-blabar">
+                <div id="fika" class="fika-app theme-blabar">
                     <!--drawer-->
-                    <div class="f-tool">
-                        <button class="f-btn icon" id="tool-btn">
-                            <svg class="f-icon" viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
+                    <div class="fika-tool">
+                        <button class="fika-btn fika-btn-icon" id="tool-btn">
+                            <svg class="fika-icon" viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
                         </button>
-                        <button class="f-btn icon" id="toc-btn">
-                            <svg class="f-icon" viewBox="0 0 24 24">
+                        <button class="fika-btn fika-btn-icon" id="toc-btn">
+                            <svg class="fika-icon" viewBox="0 0 24 24">
                                 <path d="M4 13c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0-8c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm4 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zm0 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zM7 8c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1zm-3 5c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0-8c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm4 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zm0 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zM7 8c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1z"/>
                             </svg>
                         </button>
-                        <button class="f-btn icon" id="appearance">
-                            <svg class="f-icon" viewBox="0 0 24 24">
+                        <button class="fika-btn fika-btn-icon" id="appearance">
+                            <svg class="fika-icon" viewBox="0 0 24 24">
                                 <path d="M21.94,18.66l-5-14a1,1,0,0,0-1.88,0L10.48,17.48,7.43,9.64a1,1,0,0,0-1.86,0l-3.5,9a1,1,0,1,0,1.86.72l.66-1.68H8.41l.66,1.68A1,1,0,0,0,10,20a.92.92,0,0,0,.36-.07.67.67,0,0,0,.14-.09.7.7,0,0,0,.16.1,1,1,0,0,0,1.28-.6l1-2.84h6.1l1,2.84A1,1,0,0,0,21,20a1,1,0,0,0,.34-.06A1,1,0,0,0,21.94,18.66Zm-16.58-3L6.5,12.76l1.14,2.92Zm8.31-1.18L16,8l2.33,6.53Z"/></svg>
                         </button>
                         <!--appearance settings-->
-                        <div class="f-menu">
+                        <div class="fika-menu">
                             <!--font size selection-->
-                            <div class="f-select-label" style="margin-top: 0px">text size</div>
-                            <div class="f-select-sizes">
-                                <div class="f-select-size size-small active">small</div>
-                                <div class="f-select-size size-medium">medium</div>
-                                <div class="f-select-size size-large">large</div>
+                            <div class="fika-select-label" style="margin-top: 0px">text size</div>
+                            <div class="fika-select-sizes">
+                                <div class="fika-select-size size-small active">small</div>
+                                <div class="fika-select-size size-medium">medium</div>
+                                <div class="fika-select-size size-large">large</div>
                             </div>
                             <!--theme selection-->
-                            <div class="f-select-label">theme</div>
-                            <div class="f-select-themes">
-                                <div class="f-select-theme theme-vanilla"></div>
-                                <div class="f-select-theme theme-latte"></div>
-                                <div class="f-select-theme theme-blabar"></div>
-                                <div class="f-select-theme theme-licorice"></div>
+                            <div class="fika-select-label">theme</div>
+                            <div class="fika-select-themes">
+                                <div class="fika-select-theme theme-vanilla"></div>
+                                <div class="fika-select-theme theme-latte"></div>
+                                <div class="fika-select-theme theme-blabar"></div>
+                                <div class="fika-select-theme theme-licorice"></div>
                             </div>
                             <!--font selection-->
-                            <div class="f-select-label">Font</div>
-                            <div class="f-select-fonts">
+                            <div class="fika-select-label">Font</div>
+                            <div class="fika-select-fonts">
                             </div>
-                            <div class="f-select-label">Shortcut</div>
                         </div>
                         <!--print-->
-                        <button class="f-btn icon" id="print">
-                            <svg class="f-icon" viewBox="0 0 24 24">
+                        <button class="fika-btn fika-btn-icon" id="print">
+                            <svg class="fika-icon" viewBox="0 0 24 24">
                                 <path d="M19,8H5c-1.7,0-3,1.3-3,3v6h4v4h12v-4h4v-6C22,9.3,20.7,8,19,8z M16,19H8v-5h8V19z M19,12c-0.5,0-1-0.4-1-1s0.5-1,1-1
                     s1,0.4,1,1S19.5,12,19,12z M18,3H6v4h12V3z"/>
                             </svg>
                         </button>
                         <!--fullscreen-->
-                        <button class="f-btn icon" id="fullscreen">
+                        <button class="fika-btn fika-btn-icon" id="fullscreen">
                             <!--exit-->
-                            <svg class="f-icon" viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>
+                            <svg class="fika-icon" viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>
                             <!--fs-->
-                            <svg class="f-icon" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                            <svg class="fika-icon" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
                         </button>
                             <!--exit-->
-                            <button class="f-btn icon" id="exit">
-                                <svg class="f-icon" viewBox="0 0 24 24"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+                            <button class="fika-btn fika-btn-icon" id="exit">
+                                <svg class="fika-icon" viewBox="0 0 24 24"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
                             </button>
                     </div>
-                    <div class="f-drawer">
+                    <div class="fika-drawer">
                         <div class="my-2 d-flex align-center justify-space-between">
                             <!-- ** sign in button-->
                             <!--
-                            <button class="f-btn" style="display: none;">Sign in</button>
+                            <button class="fika-btn" style="display: none;">Sign in</button>
                             -->
                             <!-- ** authorized user avatar & name -->
                             <!--
-                            <button class="f-btn f-avatar">
+                            <button class="fika-btn fika-avatar">
                                 <img src="https://lh3.googleusercontent.com/-IvSppfPGUEE/AAAAAAAAAAI/AAAAAAAAAAA/ACevoQPWKABIL1pznV_P0TGMb18IA8PXpw/s32-c-mo/photo.jpg">
                                 <span>Username</span>
                             </button>
                             -->
-                            <div class="f-select-label" style="margin: 8px">Table of content</div>
+                            <div class="fika-select-label" style="margin: 8px">Table of content</div>
                             <div class="flex-fill"></div>
-                            <button class="f-btn icon ml-1 f-drawer-close">
-                                <svg class="f-icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                            <button class="fika-btn fika-btn-icon ml-1 fika-drawer-close">
+                                <svg class="fika-icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
                             </button>
                         </div>
 
-                        <div class="f-drawer-content">
-                            <div class="f-drawer-content-wrap">
+                        <div class="fika-drawer-content">
+                            <div class="fika-drawer-content-wrap">
                                 <!-- ** toc-->
-                                <div class="f-toc"></div>
+                                <div class="fika-toc"></div>
                                 <!-- ** highlights 仅仅是这篇文章中的highlights -->
-                                <!--<div class="f-hl-list">-->
+                                <!--<div class="fika-hl-list">-->
                                     <!--<a><span>Details are what keep them there. And details are what actually make our app stand out from our competition.</span></a>-->
                                     <!--<a><span>As first described in Dan Saffer’s book Microinteractions, these tiny details typically serve these essential functions:</span></a>-->
                                 <!--</div>-->
@@ -97,49 +96,49 @@ App.view.extend('content', function() {
 
                     </div>
                     <!--overlay-->
-                    <div class="f-overlay"></div>
+                    <div class="fika-overlay"></div>
 
                     <!--paper-->
-                    <div class="f-main-body">
-                            <div class="f-toc-static">
-                                <div class="f-toc"></div>
+                    <div class="fika-main-body">
+                            <div class="fika-toc-static">
+                                <div class="fika-toc"></div>
                             </div>
-                        <div class="f-paper">
-                            <div class="f-article size-medium font-geogia">
-                                <h1 class="f-title">
+                        <div class="fika-paper">
+                            <div class="fika-article size-medium font-geogia">
+                                <h1 class="fika-title">
                                     {{ data['title'] }}
                                 </h1>
-                                <div class="f-subtitle" style="display: none;">
+                                <div class="fika-subtitle" style="display: none;">
                                     By Nick Babich
                                 </div>
-                                <div class="f-content">
+                                <div class="fika-content">
                                     {{ data['content'] }}
                                 </div>
                             </div>
-                            <div class="f-feedback">
-                                  <div class="f-feedback-divider"></div>
+                            <div class="fika-feedback">
+                                  <div class="fika-feedback-divider"></div>
                                 <p>Is Fika working properly on this site?</p>
                                     <div class="my-3">
-                                        <button class="f-btn icon large depress">
-                                            <svg class="f-icon large" viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                                        <button class="fika-btn fika-btn-icon fika-btn-large fika-btn-depress">
+                                            <svg class="fika-icon large" viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
                                         </button>
-                                    <button class="f-btn icon large depress ml-2">
-                                        <svg class="f-icon large" viewBox="0 0 24 24"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+                                    <button class="fika-btn fika-btn-icon fika-btn-large fika-btn-depress ml-2">
+                                        <svg class="fika-icon large" viewBox="0 0 24 24"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
                                     </button>
                                     </div>
-                                    <div class="f-feedback-inst"><b>Alt+R (Option+R)</b>: to open Fika  <b class="ml-2">Esc</b>: to close reader mode
+                                    <div class="fika-feedback-inst"><b>Alt+R (Option+R)</b>: to open Fika  <b class="ml-2">Esc</b>: to close reader mode
                                   </div>
                             </div>
                         </div>
-                        <div class="f-footer mt-3">
-                            <a class="f-footer-logo" href="https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">
+                        <div class="fika-footer mt-3">
+                            <a class="fika-footer-logo" href="https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">
                                 <img style="" src="{{ chrome.runtime.getURL('images/logo64.png') }}">
                                 Made with love by Fika
                             </a>
-                            <div class="f-footer-share">
+                            <div class="fika-footer-share">
                                   Share Fika:
                                 <a href="https://twitter.com/intent/tweet?text=Read a lot of articles? This extension brings a Kindle-like reading experience to your browser&url=https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">
-                                    <svg class="f-icon large" viewBox="0 0 32 32">
+                                    <svg class="fika-icon large" viewBox="0 0 32 32">
                                         <path class="st0" d="M23.9,11.9c0,0.2,0,0.3,0,0.5c0,5.3-4.1,11.4-11.4,11.4c-2.2,0-4.4-0.7-6.2-1.8c0.3,0.1,0.7,0.1,1,0.1
                     c1.9,0,3.7-0.7,5-1.7c-1.7,0-3.3-1.2-3.8-2.8c0.2,0.1,0.5,0.1,0.7,0.1c0.4,0,0.7,0,1.1-0.1c-1.9-0.4-3.3-2-3.3-3.9v-0.1
                     c0.5,0.3,1.1,0.5,1.8,0.5c-1.1-0.7-1.8-2-1.8-3.3c0-0.7,0.2-1.4,0.6-2c2,2.4,4.9,4,8.4,4.1c0-0.3-0.1-0.6-0.1-0.9c0-2.2,1.8-4,4-4
@@ -148,7 +147,7 @@ App.view.extend('content', function() {
 
                                 </a>
                                 <a href="https://www.facebook.com/sharer/sharer.php?title=Read a lot of articles? This extension brings a Kindle-like reading experience to your browser&u=https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">
-                                    <svg class="f-icon large" viewBox="0 0 32 32">
+                                    <svg class="fika-icon large" viewBox="0 0 32 32">
                                         <path class="st0" d="M21.2,9.2h-2c-1.5,0-1.9,0.8-1.9,1.8v2.5h3.8l-0.8,3.7h-3l0.1,8.9h-3.7v-8.8h-3v-3.8h3v-3c0-3.1,2-4.6,4.7-4.6
                     C19.9,5.9,21,6,21.2,6V9.2z"/>
                                     </svg>

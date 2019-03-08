@@ -2,15 +2,15 @@
 
 /*! Tool Menu */
 
-f-tool($theme)
+tool($theme)
   background: tint($theme.text, 20%)
   color: $theme.paper
 
-theme(f-tool, 'f-tool')
+theme(tool, "tool")
 
-.f-tool
+.fika-tool
   position: fixed
-  right: -236px
+  right: -228px
   top: 24px
   height: 48px
   width: 280px
@@ -49,13 +49,13 @@ theme(f-tool, 'f-tool')
 
 
 //menu
-f-menu($theme)
+menu($theme)
   background: $theme.paper
   color: $theme.text
 
-theme(f-menu, "f-menu")
+theme(menu, "menu")
 
-.f-menu
+.fika-menu
   $padding(a, 2)
   position: absolute
   top: 48px;

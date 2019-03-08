@@ -1,14 +1,20 @@
 @import "../variables.styl"
 
-f-toc($theme)
+toc($theme)
+  h1
+  h2
+  h3
+  h4
+  h5
+  h6
   a
     & ,&:link ,&:visited ,&:active
       color: $theme.text
 
 
-theme(f-toc, 'f-toc')
+theme(toc, "toc")
 
-.f-toc
+.fika-toc
   sans-serif()
 
   &-static
