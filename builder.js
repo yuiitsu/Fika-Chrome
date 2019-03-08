@@ -144,9 +144,9 @@ let excludes = {
         if (err) throw err
         css = css.replace(/\n/g, '')
         Fs.mkdirSync('dist/style');
-        Fs.writeFile('dist/style/reader.css' , css, (err)=>{
+        Fs.writeFile('dist/style/content.css' , css, (err)=>{
             if (err) throw err
-            console.log('CSS Built => ./dist/style/reader.css')
+            console.log('CSS Built => ./dist/style/content.css')
         })
     })
 

@@ -5,10 +5,12 @@ App.module.extend('content', function() {
     //
     let self = this,
         tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'code'],
+        excludeTags = ['BUTTON', 'IFRAME', 'CANVAS', '#comment', 'SCRIPT'],
         topArticleElement = [],
         articleElementIndex = [],
         articleElements = {},
-        articleElementRate = {};
+        articleElementRate = {},
+        articleTitle = '';
 
     this.init = function() {
         //
@@ -133,17 +135,65 @@ App.module.extend('content', function() {
         return false;
     };
 
+    this.filterElement = function(element, articleHtml) {
+        let nodeName = element.nodeName,
+            chileNodesLen = element.childNodes.length;
+
+        // filter
+        if (nodeName === 'H1' && element.className.indexOf('title') !== -1) {
+            articleTitle = element.innerText;
+            return false;
+        }
+
+        if (nodeName === '#text') {
+            articleHtml.push(element.nodeValue);
+        } else if (nodeName === 'CODE') {
+            articleHtml.push('<code>'+ element.innerHTML +'</code>');
+        } else if (excludeTags.indexOf(nodeName) !== -1) {
+            return false;
+        } else if (nodeName === 'IMG') {
+            let attributes = element.attributes,
+                attributesLen = attributes.length,
+                src = element.src;
+
+            for (let i = 0; i < attributesLen; i++) {
+                if (attributes[i] === 'data-src') {
+                    src = attributes[i].nodeValue;
+                }
+            }
+            articleHtml.push(element.outerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, ''));
+        } else {
+            articleHtml.push('<' + nodeName + '>');
+            for (let i = 0; i < chileNodesLen; i++) {
+                this.filterElement(element.childNodes[i], articleHtml);
+            }
+            articleHtml.push('</' + nodeName + '>');
+        }
+    };
+
     this.readerMode = function() {
         let target = $('#fika-reader'),
-            title = $('title').text(),
+            title = articleTitle ? articleTitle : $('title').text(),
             html = topArticleElement[0].innerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, '');
 
+        let articleElementList = $(topArticleElement[0].innerHTML),
+            articleElementListLen = articleElementList.length,
+            articleHtml = [];
+
+        for (let i = 0; i < articleElementListLen; i++) {
+            this.filterElement(articleElementList[i], articleHtml);
+        }
+        console.log(articleElementList);
+        console.log(articleHtml);
+        // console.log(articleElement.html());
         if (target.length > 0) {
             this.closeReaderMode();
         } else {
-            this.view.append('content', 'layout', {title: title, content: html}, $('body'));
+            this.view.append('content', 'layout', {title: title, content: articleHtml.join('')}, $('body'));
             //
-            this.module.reader._init(html);
+            this.extFilter();
+            //
+            this.module.reader._init(topArticleElement[0].innerText);
             //
             $('html, body').css('overflow-y', 'hidden');
             //
@@ -152,6 +202,28 @@ App.module.extend('content', function() {
                 'data': true
             }, function () {});
         }
+    };
+
+    this.extFilter = function() {
+        //
+        let parent = $('#fika-reader');
+        parent.find('noscript').each(function() {
+            $(this).parent().html($(this).html().replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, ''));
+        });
+        //
+        parent.find('img').each(function() {
+            if (!$(this).attr('src')) {
+                let attributes = $(this)[0].attributes,
+                    attributesLen = attributes.length;
+
+                console.log(attributes);
+                for (let i = 0; i < attributesLen; i++) {
+                    if (attributes[i].nodeName.indexOf('src') !== -1) {
+                        $(this).attr('src', attributes[i].nodeValue);
+                    }
+                }
+            }
+        });
     };
 
     this.closeReaderMode = function() {
@@ -163,6 +235,10 @@ App.module.extend('content', function() {
             'method': 'is_open',
             'data': false
         }, function () {});
+    };
+
+    this.processNoScript = function() {
+
     };
 });
 
