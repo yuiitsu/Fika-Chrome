@@ -145,10 +145,16 @@ App.module.extend('content', function() {
             return false;
         }
 
+        if (chileNodesLen === 0 && element.innerText === '') {
+            return false;
+        }
+
         if (nodeName === '#text') {
             articleHtml.push(element.nodeValue);
+            return true;
         } else if (nodeName === 'CODE') {
             articleHtml.push('<code>'+ element.innerHTML +'</code>');
+            return true
         } else if (excludeTags.indexOf(nodeName) !== -1) {
             return false;
         } else if (nodeName === 'IMG') {
@@ -162,12 +168,18 @@ App.module.extend('content', function() {
                 }
             }
             articleHtml.push(element.outerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, ''));
+            return true;
         } else {
             articleHtml.push('<' + nodeName + '>');
+            let articleHtmlLen = articleHtml.length;
             for (let i = 0; i < chileNodesLen; i++) {
                 this.filterElement(element.childNodes[i], articleHtml);
             }
-            articleHtml.push('</' + nodeName + '>');
+            if (articleHtml.length === articleHtmlLen) {
+                articleHtml.pop();
+            } else {
+                articleHtml.push('</' + nodeName + '>');
+            }
         }
     };
 

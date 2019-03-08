@@ -119,12 +119,6 @@ App.module.extend('background', function() {
             return false;
         }
 
-        // if (!self.module.data.is_open(data.url)) {
-        //     self.badge_text.off();
-        //     send_response(false);
-        //     return false;
-        // }
-
         self.badge_text.on();
         send_response(true);
     };
@@ -142,4 +136,23 @@ App.module.extend('background', function() {
             });
         }
     };
+
+    this.setCache = function(data, sendResponse) {
+        let key = data.key,
+            value = data.value;
+        localStorage.setItem(key, value);
+        sendResponse('');
+    };
+
+    this.getCache = function(data, sendResponse) {
+        let result = [];
+        if (Object.prototype.toString.call(data.key) === '[object Array]') {
+            data.key.forEach(function(key) {
+                result.push(localStorage.getItem(key));
+            });
+        } else {
+            result.push(localStorage.getItem(data.key));
+        }
+        sendResponse(result);
+    }
 });

@@ -5,7 +5,12 @@
 App.module.extend('reader', function() {
 
     let self = this,
-        drawer = null;
+        drawer = null,
+        cache = {
+            fontSize: 'medium',
+            theme: 'vanilla',
+            font: ''
+        };
 
     // 字体 metadata
 const fonts = {
@@ -113,27 +118,31 @@ const fonts = {
     };
 
     // language 当前语言，用于字体设置
-    this.appearance = function(language) {
+    this.appearance = function(language, cache) {
+        let cacheFontSize = cache.fontSize,
+            cacheTheme = cache.theme,
+            cacheFont = cache.font;
+
         const settings = {
             fontSize: {
-                activeVal: localStorage.getItem('fontSize') || 'medium',
+                activeVal: cacheFontSize || 'medium',
                 cont: document.querySelector('.f-article'),
                 selects: document.querySelectorAll('.f-select-size'),
                 classPrefix: 'size-'
             },
             theme: {
-                activeVal: localStorage.getItem('theme') || 'vanilla',
+                activeVal: cacheTheme || 'vanilla',
                 cont: document.querySelector('.f-app'),
                 selects: document.querySelectorAll('.f-select-theme'),
                 classPrefix: 'theme-'
             },
             font: {
                 activeVal: (function (){
-                    const fontSettings = localStorage.getItem('font');
+                    const fontSettings = cacheFont;
                     console.log(fontSettings && fontSettings[0] === '{');
                     const defaultFont = language.typeface.fonts[language.typeface.default]['class'];
                     if (fontSettings && fontSettings[0] === '{'){
-                        let fontOfLang = JSON.parse(localStorage.getItem('font'))[language.typeface.script];
+                        let fontOfLang = JSON.parse(cacheFont)[language.typeface.script];
                         return fontOfLang ? fontOfLang : defaultFont
                     } else {
                         return defaultFont
@@ -159,19 +168,22 @@ const fonts = {
             // change state and storage
             settings[prop].activeVal = val;
             if (prop === 'font'){
-                let fontSettings = localStorage.getItem('font');
+                let fontSettings = cacheFont;
                 const script = language.typeface.script;
                 if (fontSettings && fontSettings[0] === '{'){
                     fontSettings = JSON.parse(fontSettings);
                     fontSettings[script] = val;
-                    localStorage.setItem('font', JSON.stringify(fontSettings))
+                    // localStorage.setItem('font', JSON.stringify(fontSettings))
+                    self.module.common.cache.set('font', JSON.stringify(fontSettings));
                 } else {
                     let store = {};
                     store[script] = val;
-                    localStorage.setItem('font', JSON.stringify(store))
+                    // localStorage.setItem('font', JSON.stringify(store))
+                    self.module.common.cache.set('font', JSON.stringify(store));
                 }
             } else {
-                localStorage.setItem(prop, val)
+                // localStorage.setItem(prop, val)
+                self.module.common.cache.set(prop, val);
             }
             // change class name for ctrl btns
             for (let el of settings[prop].selects) {
@@ -354,28 +366,18 @@ const fonts = {
                 $(this).remove();
             });
 
-            self.appearance(mainLang);
+            self.module.common.cache.get(['fontSize', 'theme', 'font'], function(res) {
+                self.appearance(mainLang, {
+                    fontSize: res[0],
+                    theme: res[1],
+                    font: res[2]
+                });
+            });
         });
     };
 
     this.init = function() {
 
-    };
-
-    /**
-     * 关闭reader mode
-     */
-    this.close_reader_mode = function() {
-        // // let target = window.parent.$('#fika-reader');
-        // let target = window.parent.document.getElementById('fika-reader');
-        // console.log(target);
-        // $('html, body').css('overflow-y', 'auto');
-        // target.remove();
-        //
-        chrome.extension.sendMessage({
-            'method': 'close_reader_mode',
-            'data': false
-        }, function () {});
     };
 });
 

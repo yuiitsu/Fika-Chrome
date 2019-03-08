@@ -5,29 +5,24 @@ App.module.extend('common', function() {
     let self = this;
     
     this.cache = {
-        /**
-         * 获取列表数据
-         * @param key
-         * @param default_return
-         * @returns {Array}
-         */
-        getListData: function(key, default_return) {
-            let result = null;
-            try {
-                result =  JSON.parse(localStorage.getItem(key));
-            } catch (e) {
-            }
-
-            return result ? result : default_return ? default_return : [];
+        set: function(key, value) {
+            chrome.extension.sendMessage({
+                'method': 'setCache',
+                'data': {
+                    key: key,
+                    value: value
+                }
+            }, function () {});
         },
-
-        /**
-         * 保存数据
-         * @param key
-         * @param value
-         */
-        save: function(key, value) {
-            localStorage.setItem(key, JSON.stringify(value));
+        get: function(key, callback) {
+            chrome.extension.sendMessage({
+                'method': 'getCache',
+                'data': {
+                    key: key
+                }
+            }, function (res) {
+                callback(res);
+            });
         }
     };
 
