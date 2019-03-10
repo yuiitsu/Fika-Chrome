@@ -4,12 +4,14 @@
 App.module.extend('background', function() {
     //
     let self = this,
-        article_data = {};
+        readerReadyTabId = 0;
 
     this.init = function() {
         // open main screen in new tab.
         chrome.browserAction.onClicked.addListener(function(tab) {
-            self.click_browser_icon({tab: tab, open: true});
+            if (tab.id === readerReadyTabId) {
+                self.click_browser_icon({tab: tab, open: true});
+            }
         });
 
         // // listen content script message.
@@ -37,6 +39,7 @@ App.module.extend('background', function() {
         let is_available = data['is_available'];
         //
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            readerReadyTabId = tabs[0].id;
             if (is_available) {
                 //
                 chrome.browserAction.setIcon({
