@@ -63,7 +63,12 @@ App.module.extend('content', function() {
                             if (articleElementClassName) {
                                 if (topElement.className.indexOf(articleElementClassName) !== -1 ||
                                     articleElementClassName.indexOf(topElement.className) !== -1) {
-                                    topArticleElement.push(articleElements[i]);
+                                    //
+                                    if (topElement.firstElementChild.className !== articleElementClassName &&
+                                        articleElements[i].firstElementChild.className !== topElement.className) {
+
+                                        topArticleElement.push(articleElements[i]);
+                                    }
                                 }
                             } else if (topElement.className === articleElementClassName) {
                                 topArticleElement.push(articleElements[i]);
