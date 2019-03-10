@@ -9,9 +9,11 @@ App.view.extend('content', function() {
                 <div id="fika" class="fika-app theme-vanilla">
                     <!--drawer-->
                     <div class="fika-tool">
-                        <button class="fika-btn fika-btn-icon" id="fika-tool-btn">
+                        <!--open-->
+                        <button class="fika-btn fika-btn-icon mr-1" id="fika-tool-btn">
                             <svg class="fika-icon" viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
                         </button>
+                        <!--toc-->
                         <button class="fika-btn fika-btn-icon" id="fika-toc-btn">
                             <svg class="fika-icon" viewBox="0 0 24 24">
                                 <path d="M4 13c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0-8c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm4 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zm0 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zM7 8c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1zm-3 5c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0-8c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm4 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zm0 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zM7 8c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1z"/>
@@ -44,12 +46,12 @@ App.view.extend('content', function() {
                             </div>
                         </div>
                         <!--print-->
-                        <button class="fika-btn fika-btn-icon" id="fika-print">
-                            <svg class="fika-icon" viewBox="0 0 24 24">
-                                <path d="M19,8H5c-1.7,0-3,1.3-3,3v6h4v4h12v-4h4v-6C22,9.3,20.7,8,19,8z M16,19H8v-5h8V19z M19,12c-0.5,0-1-0.4-1-1s0.5-1,1-1
-                    s1,0.4,1,1S19.5,12,19,12z M18,3H6v4h12V3z"/>
-                            </svg>
-                        </button>
+                        <!--<button class="fika-btn fika-btn-icon" id="fika-print">-->
+                            <!--<svg class="fika-icon" viewBox="0 0 24 24">-->
+                                <!--<path d="M19,8H5c-1.7,0-3,1.3-3,3v6h4v4h12v-4h4v-6C22,9.3,20.7,8,19,8z M16,19H8v-5h8V19z M19,12c-0.5,0-1-0.4-1-1s0.5-1,1-1-->
+                    <!--s1,0.4,1,1S19.5,12,19,12z M18,3H6v4h12V3z"/>-->
+                            <!--</svg>-->
+                        <!--</button>-->
                         <!--fullscreen-->
                         <button class="fika-btn fika-btn-icon" id="fika-fullscreen">
                             <!--exit-->
@@ -116,13 +118,13 @@ App.view.extend('content', function() {
                                 </div>
                             </div>
                             <div class="fika-feedback">
-                                  <div class="fika-feedback-divider"></div>
-                                <p>Is Fika working properly on this site?</p>
+                                <div class="fika-feedback-divider"></div>
+                                <p id="fika-feedback-msg">Is Fika working properly on this site?</p>
                                     <div class="my-3">
                                         <button class="fika-btn fika-btn-icon fika-btn-large fika-btn-depress fika-feedback-button" data-match="1">
                                             <svg class="fika-icon large" viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
                                         </button>
-                                    <button class="fika-btn fika-btn-icon fika-btn-large fika-btn-depress ml-2 fika-feedbak-button" data-match="0">
+                                    <button class="fika-btn fika-btn-icon fika-btn-large fika-btn-depress ml-2 fika-feedback-button" data-match="0">
                                         <svg class="fika-icon large" viewBox="0 0 24 24"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
                                     </button>
                                     </div>
@@ -138,7 +140,7 @@ App.view.extend('content', function() {
                             <div class="fika-footer-share">
                                   Share Fika:
                                 <a href="https://twitter.com/intent/tweet?text=Read a lot of articles? This extension brings a Kindle-like reading experience to your browser&url=https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">
-                                    <svg class="fika-icon large" viewBox="0 0 32 32">
+                                    <svg class="fika-icon fika-icon-large" viewBox="0 0 32 32">
                                         <path class="st0" d="M23.9,11.9c0,0.2,0,0.3,0,0.5c0,5.3-4.1,11.4-11.4,11.4c-2.2,0-4.4-0.7-6.2-1.8c0.3,0.1,0.7,0.1,1,0.1
                     c1.9,0,3.7-0.7,5-1.7c-1.7,0-3.3-1.2-3.8-2.8c0.2,0.1,0.5,0.1,0.7,0.1c0.4,0,0.7,0,1.1-0.1c-1.9-0.4-3.3-2-3.3-3.9v-0.1
                     c0.5,0.3,1.1,0.5,1.8,0.5c-1.1-0.7-1.8-2-1.8-3.3c0-0.7,0.2-1.4,0.6-2c2,2.4,4.9,4,8.4,4.1c0-0.3-0.1-0.6-0.1-0.9c0-2.2,1.8-4,4-4
@@ -147,7 +149,7 @@ App.view.extend('content', function() {
 
                                 </a>
                                 <a href="https://www.facebook.com/sharer/sharer.php?title=Read a lot of articles? This extension brings a Kindle-like reading experience to your browser&u=https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">
-                                    <svg class="fika-icon large" viewBox="0 0 32 32">
+                                    <svg class="fika-icon fika-icon-large" viewBox="0 0 32 32">
                                         <path class="st0" d="M21.2,9.2h-2c-1.5,0-1.9,0.8-1.9,1.8v2.5h3.8l-0.8,3.7h-3l0.1,8.9h-3.7v-8.8h-3v-3.8h3v-3c0-3.1,2-4.6,4.7-4.6
                     C19.9,5.9,21,6,21.2,6V9.2z"/>
                                     </svg>

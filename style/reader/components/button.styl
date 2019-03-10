@@ -4,6 +4,7 @@
 
 btn($theme)
   &:hover
+  &:focus
     background: rgba($theme.text, $hover-opacity)
 
   &.active
@@ -51,10 +52,15 @@ theme(btn, "btn")
 
 
 .fika-app
-  button.fika-btn
-    border: none
-    outline: none
-    text-decoration: none
-    apprearance: none
-    -webkit-appearance: none
-    box-shadow: none
+  button
+    &
+    &:focus
+    &:visited
+    &:hover
+    &:active
+      border: none
+      outline: none
+      text-decoration: none
+      apprearance: none
+      -webkit-appearance: none
+      box-shadow: none

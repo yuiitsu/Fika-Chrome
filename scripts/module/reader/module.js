@@ -249,7 +249,8 @@ const fonts = {
         this.initDrawer()
 
         $('#fika-appearance').click(self.toggleAppearanceMenu);
-        //tools
+
+        //print
         $('#fika-print').click(function(){
             var ifr = document.createElement('iframe');
             ifr.style='height: 0px; width: 0px; position: absolute'
@@ -263,7 +264,7 @@ const fonts = {
             $('#fika-reader').clone().appendTo(ifr.contentDocument.body);
 
             ifr.contentWindow.print();
-            ifr.parentElement.removeChild(ifr);
+            // ifr.parentElement.removeChild(ifr);
         });
 
         $('#fika-fullscreen').click(function() {
@@ -300,6 +301,27 @@ const fonts = {
         });
         toolbar.mouseenter(function () {
             clearTimeout(hoverTimer)
+        })
+
+        //close
+        $('#fika-exit').click(function () {
+            self.module.content.closeReaderMode()
+        })
+
+        //feedback
+        $('.fika-feedback-button').click(function () {
+            let thisBtn =  $(this),
+              attr = thisBtn.attr('data-match'),
+              feedbackBtns = $('.fika-feedback-button'),
+              msg = $('#fika-feedback-msg')
+            feedbackBtns.removeClass('fika-feedback-button-active')
+            thisBtn.addClass('fika-feedback-button-active')
+            if (attr == '1'){
+                msg.html('Thanks for the upvote! <a href="https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">Rate Fika</a>')
+            } else {
+                msg.html('Sorry to hear that! <a href="mailto:hi@fika.io?subject=Fika User Feedback" target="_blank">Help use improve</a>')
+                // window.open(`'}`);
+            }
         })
     };
 
