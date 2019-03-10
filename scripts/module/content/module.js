@@ -53,15 +53,18 @@ App.module.extend('content', function() {
             }
 
             let topElement = articleElements[topElementRate['key']];
-            console.log('character: ', topElement.innerText.length);
             if (topElement.innerText.length > 300) {
                 let articleElementIndexLen = articleElementIndex.length;
                 //
                 for (let i = 0; i < articleElementIndexLen; i++) {
-                    if (articleElements.hasOwnProperty(i) &&
-                        articleElements[i].localName === topElement.localName &&
-                        articleElements[i].className === topElement.className) {
-                        topArticleElement.push(articleElements[i]);
+                    let articleElementClassName = articleElements[i].className;
+                    if (articleElementClassName) {
+                        if (articleElements.hasOwnProperty(i) &&
+                            articleElements[i].localName === topElement.localName &&
+                            (topElement.className.indexOf(articleElementClassName) !== -1 ||
+                                articleElementClassName.indexOf(topElement.className) !== -1)) {
+                            topArticleElement.push(articleElements[i]);
+                        }
                     }
                 }
                 console.log(topArticleElement);
@@ -200,17 +203,22 @@ App.module.extend('content', function() {
 
     this.readerMode = function() {
         let target = $('#fika-reader'),
-            title = articleTitle ? articleTitle : $('head title').text(),
-            html = topArticleElement[0].innerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, '');
+            title = articleTitle ? articleTitle : $('head title').text();
+            //html = topArticleElement[0].innerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, '');
 
-        let articleElementList = $(topArticleElement[0].innerHTML),
-            articleElementListLen = articleElementList.length,
-            articleHtml = [];
+        let articleHtml = [],
+            topArticleElementLen = topArticleElement.length;
 
-        for (let i = 0; i < articleElementListLen; i++) {
-            this.filterElement(articleElementList[i], articleHtml);
+        for (let i = 0; i < topArticleElementLen; i++) {
+            let articleElementList = $(topArticleElement[i].innerHTML),
+                articleElementListLen = articleElementList.length;
+
+            for (let j = 0; j < articleElementListLen; j++) {
+                this.filterElement(articleElementList[j], articleHtml);
+            }
+            console.log(articleElementList);
         }
-        console.log(articleElementList);
+
         console.log(articleHtml);
         // console.log(articleElement.html());
         if (target.length > 0) {
