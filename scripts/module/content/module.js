@@ -71,6 +71,10 @@ App.module.extend('content', function() {
                 isAvailable = true;
             }
         }
+
+        if (isAvailable) {
+            this.readerMode();
+        }
         //
         chrome.extension.sendMessage({
             'method': 'reader_ready',
@@ -224,18 +228,18 @@ App.module.extend('content', function() {
         if (target.length > 0) {
             this.closeReaderMode();
         } else {
-            this.view.append('content', 'layout', {title: title, content: articleHtml.join('')}, $('body'));
+            this.view.append('content', 'layout', {title: title, content: articleHtml.join('')}, $('html'));
             //
             this.extFilter();
             //
             this.module.reader._init(topArticleElement[0].innerText);
             //
-            $('html, body').css('overflow-y', 'hidden');
+            // $('html, body').css('overflow-y', 'hidden');
             //
-            chrome.extension.sendMessage({
-                'method': 'is_open',
-                'data': true
-            }, function () {});
+            // chrome.extension.sendMessage({
+            //     'method': 'is_open',
+            //     'data': true
+            // }, function () {});
         }
     };
 
@@ -261,10 +265,31 @@ App.module.extend('content', function() {
         });
     };
 
+    this.openReaderMode = function() {
+        let target = $('#fika-reader'),
+            display = target.css('display'),
+            overflow = 'hidden',
+            isOpen = false;
+
+        if (display === 'none') {
+            target.show();
+            isOpen = true;
+        } else {
+            target.hide();
+            overflow = 'auto';
+        }
+
+        $('html, body').css('overflow-y', overflow);
+        chrome.extension.sendMessage({
+            'method': 'is_open',
+            'data': isOpen
+        }, function () {});
+    };
+
     this.closeReaderMode = function() {
         let target = $('#fika-reader');
         $('html, body').css('overflow-y', 'auto');
-        target.remove();
+        target.hide();
         //
         chrome.extension.sendMessage({
             'method': 'is_open',

@@ -67,7 +67,7 @@ App.module.extend('background', function() {
             // }
 
             chrome.tabs.sendMessage(tab.id, {
-                'method': 'readerMode'
+                'method': 'openReaderMode'
             }, function (response) {});
         };
         let tab = data.tab,
