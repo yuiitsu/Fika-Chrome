@@ -182,12 +182,12 @@ App.module.extend('content', function() {
             return true;
         } else {
             if (nodeName === 'DIV' || nodeName === 'SECTION') {
-                // if (element.nextElementSibling) {
-                //     console.log(element.nextElementSibling.nodeName);
-                // }
-                // if (element.previousElementSibling) {
-                //     console.log(element.previousElementSibling.nodeName);
-                // }
+                if (element.nextElementSibling) {
+                    console.log(element.nextElementSibling.nodeName);
+                }
+                if (element.previousElementSibling) {
+                    console.log(element.previousElementSibling.nodeName);
+                }
                 if (element.nextElementSibling && tags.indexOf(element.nextElementSibling.nodeName) !== -1 &&
                     element.previousElementSibling && tags.indexOf(element.previousElementSibling.nodeName) !== -1) {
                     return false;
@@ -249,9 +249,9 @@ App.module.extend('content', function() {
     this.extFilter = function() {
         //
         let parent = $('#fika-reader');
-        parent.find('noscript').each(function() {
-            $(this).parent().html($(this).html().replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, ''));
-        });
+        // parent.find('noscript').each(function() {
+        //     $(this).parent().html($(this).html().replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, ''));
+        // });
         //
         parent.find('img').each(function() {
             if (!$(this).attr('src')) {
@@ -264,6 +264,10 @@ App.module.extend('content', function() {
                         $(this).attr('src', attributes[i].nodeValue);
                     }
                 }
+            }
+
+            if ($(this).attr('crossorigin') && $(this).attr('crossorigin') === 'anonymous') {
+                $(this).remove();
             }
         });
     };

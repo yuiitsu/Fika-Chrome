@@ -11,7 +11,7 @@ App.event.extend('content', function() {
             $(document).keydown(function(e) {
                 // 打开reader mode
                 if (e.which === 82 && e.altKey) {
-                    self.module.content.readerMode();
+                    self.module.content.openReaderMode();
                 }
             });
         },
