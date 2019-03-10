@@ -57,13 +57,17 @@ App.module.extend('content', function() {
                 let articleElementIndexLen = articleElementIndex.length;
                 //
                 for (let i = 0; i < articleElementIndexLen; i++) {
-                    let articleElementClassName = articleElements[i].className;
-                    if (articleElementClassName) {
-                        if (articleElements.hasOwnProperty(i) &&
-                            articleElements[i].localName === topElement.localName &&
-                            (topElement.className.indexOf(articleElementClassName) !== -1 ||
-                                articleElementClassName.indexOf(topElement.className) !== -1)) {
-                            topArticleElement.push(articleElements[i]);
+                    if (articleElements.hasOwnProperty(i)) {
+                        if (articleElements[i].localName === topElement.localName) {
+                            let articleElementClassName = articleElements[i].className;
+                            if (articleElementClassName) {
+                                if (topElement.className.indexOf(articleElementClassName) !== -1 ||
+                                    articleElementClassName.indexOf(topElement.className) !== -1) {
+                                    topArticleElement.push(articleElements[i]);
+                                }
+                            } else if (topElement.className === articleElementClassName) {
+                                topArticleElement.push(articleElements[i]);
+                            }
                         }
                     }
                 }
@@ -178,12 +182,12 @@ App.module.extend('content', function() {
             return true;
         } else {
             if (nodeName === 'DIV' || nodeName === 'SECTION') {
-                if (element.nextElementSibling) {
-                    console.log(element.nextElementSibling.nodeName);
-                }
-                if (element.previousElementSibling) {
-                    console.log(element.previousElementSibling.nodeName);
-                }
+                // if (element.nextElementSibling) {
+                //     console.log(element.nextElementSibling.nodeName);
+                // }
+                // if (element.previousElementSibling) {
+                //     console.log(element.previousElementSibling.nodeName);
+                // }
                 if (element.nextElementSibling && tags.indexOf(element.nextElementSibling.nodeName) !== -1 &&
                     element.previousElementSibling && tags.indexOf(element.previousElementSibling.nodeName) !== -1) {
                     return false;
@@ -206,12 +210,12 @@ App.module.extend('content', function() {
     };
 
     this.readerMode = function() {
-        let target = $('#fika-reader'),
-            title = articleTitle ? articleTitle : $('head title').text();
+        let title = articleTitle ? articleTitle : $('head title').text();
             //html = topArticleElement[0].innerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, '');
 
         let articleHtml = [],
-            topArticleElementLen = topArticleElement.length;
+            topArticleElementLen = topArticleElement.length,
+            text = [];
 
         for (let i = 0; i < topArticleElementLen; i++) {
             let articleElementList = $(topArticleElement[i].innerHTML),
@@ -220,27 +224,26 @@ App.module.extend('content', function() {
             for (let j = 0; j < articleElementListLen; j++) {
                 this.filterElement(articleElementList[j], articleHtml);
             }
+            text.push(topArticleElement[i].innerText);
             console.log(articleElementList);
         }
 
         console.log(articleHtml);
         // console.log(articleElement.html());
-        if (target.length > 0) {
-            this.closeReaderMode();
-        } else {
-            this.view.append('content', 'layout', {title: title, content: articleHtml.join('')}, $('html'));
-            //
-            this.extFilter();
-            //
-            this.module.reader._init(topArticleElement[0].innerText);
-            //
-            // $('html, body').css('overflow-y', 'hidden');
-            //
-            // chrome.extension.sendMessage({
-            //     'method': 'is_open',
-            //     'data': true
-            // }, function () {});
+        this.view.append('content', 'layout', {title: title, content: articleHtml.join('')}, $('html'));
+        //
+        this.extFilter();
+        //
+        if (topArticleElementLen > 0) {
+            this.module.reader._init(text.join(""));
         }
+        //
+        // $('html, body').css('overflow-y', 'hidden');
+        //
+        // chrome.extension.sendMessage({
+        //     'method': 'is_open',
+        //     'data': true
+        // }, function () {});
     };
 
     this.extFilter = function() {
