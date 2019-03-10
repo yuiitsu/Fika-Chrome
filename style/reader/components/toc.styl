@@ -18,6 +18,9 @@ toc($theme)
       color: $theme.text
 
 
+  &-static
+    $scroll-bar-color($theme)
+
 theme(toc, "toc")
 
 .fika-app
@@ -25,11 +28,15 @@ theme(toc, "toc")
     sans-serif()
 
     &-static
+      overflow-y: auto;
+      word-break: break-word;
+      height: calc(100vh - 56px);
       position: fixed
       top: 48px
       right: 50%
       width: 240px
       margin-right: 464px
+      $scroll-bar()
       @media screen and (max-width: 1400px)
         display none
 

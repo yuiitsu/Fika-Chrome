@@ -172,6 +172,7 @@ App.module.extend('background', function() {
                 chrome.tabs.sendMessage(tabs[0].id, {
                     'method': 'feedbackResponse',
                     'data': {
+                        is_match: data['is_match'],
                         success: feedbackSuccess
                     }
                 }, function (response) {});
