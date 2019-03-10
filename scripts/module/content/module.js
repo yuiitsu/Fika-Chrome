@@ -4,7 +4,7 @@
 App.module.extend('content', function() {
     //
     let self = this,
-        tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'code'],
+        tags = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'PRE', 'CODE', 'FIGURE'],
         excludeTags = ['BUTTON', 'IFRAME', 'CANVAS', '#comment', 'SCRIPT'],
         topArticleElement = [],
         articleElementIndex = [],
@@ -78,7 +78,7 @@ App.module.extend('content', function() {
     };
 
     this.findNextNode = function(element) {
-        if (tags.indexOf(element.localName) !== -1) {
+        if (tags.indexOf(element.nodeName) !== -1) {
             //
             this.rateToParent(element.localName, element.parentElement, 2);
         } else {
@@ -145,9 +145,11 @@ App.module.extend('content', function() {
             return false;
         }
 
-
-
         if (nodeName === '#text') {
+            let nodeValue = element.nodeValue.replace(/\n/g, '').replace(/\s/g, '');
+            if (!nodeValue) {
+                return false;
+            }
             articleHtml.push(element.nodeValue);
             return true;
         } else if (nodeName === 'CODE') {
@@ -168,6 +170,18 @@ App.module.extend('content', function() {
             articleHtml.push(element.outerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, ''));
             return true;
         } else {
+            if (nodeName === 'DIV' || nodeName === 'SECTION') {
+                if (element.nextElementSibling) {
+                    console.log(element.nextElementSibling.nodeName);
+                }
+                if (element.previousElementSibling) {
+                    console.log(element.previousElementSibling.nodeName);
+                }
+                if (element.nextElementSibling && tags.indexOf(element.nextElementSibling.nodeName) !== -1 &&
+                    element.previousElementSibling && tags.indexOf(element.previousElementSibling.nodeName) !== -1) {
+                    return false;
+                }
+            }
             if (chileNodesLen === 0 && element.innerText === '') {
                 return false;
             }
