@@ -87,9 +87,12 @@ const fonts = {
     this.toggleAppearanceMenu = function(toggle){
         const menu = $('.fika-menu');
         if (toggle !== undefined && !toggle){
-            menu.addClass('fika-menu-on')
+            menu.removeClass('fika-menu-on')
+            drawer.overlay.removeClass('fika-overlay-standby')
+        } else {
+            menu.toggleClass('fika-menu-on')
+            drawer.overlay.toggleClass('fika-overlay-standby')
         }
-        menu.toggleClass('fika-menu-on')
     };
 
     // language 当前语言，用于字体设置
@@ -223,7 +226,7 @@ const fonts = {
         });
         drawer.overlay.click(function(){
             toggleDrawer(false);
-            toggleAppearanceMenu(false);
+            self.toggleAppearanceMenu(false);
             drawer.overlay.removeClass('fika-overlay-active')
         });
 
@@ -268,22 +271,20 @@ const fonts = {
         });
 
         $('#fika-fullscreen').click(function() {
-            console.log(chrome, self)
-            // chrome.windows.get(-2, function(window){
-            //     let fullScreenState = window.state;
-            //     if(fullScreenState === "fullscreen") {
-            //         chrome.windows.update(-2, {state: "normal"});
-            //         $('#fullscreen').removeClass('fs-on')
-            //     } else {
-            //         chrome.windows.update(-2, {state: "fullscreen"});
-            //         $('#fullscreen').addClass('fs-on')
-            //     }
-            // });
+            $(this).toggleClass('fs-on')
             const el = document.documentElement
-            if (el.requestFullscreen){
-                el.requestFullscreen()
-            } else if (el.webkitRequestFullScreen){
-                el.webkitRequestFullScreen()
+            if ( !document.fullscreenElement || !document.webkitIsFullScreen) {
+                if (el.requestFullscreen) {
+                    el.requestFullscreen()
+                } else if (el.webkitRequestFullScreen) {
+                    el.webkitRequestFullScreen()
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
             }
         });
 
@@ -296,7 +297,7 @@ const fonts = {
         toolbar.mouseleave(function () {
             hoverTimer = setTimeout(()=>{
                 $(this).removeClass('fika-tool-on')
-                $('.fika-menu').removeClass('fika-menu-on')
+                self.toggleAppearanceMenu(false);
             }, 1200)
         });
         toolbar.mouseenter(function () {

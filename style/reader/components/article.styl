@@ -18,6 +18,7 @@ article($border-color, $theme)
     background: $theme.bg
     $scroll-bar-color($theme)
 
+  a
   h1
   h2
   h3
@@ -43,7 +44,11 @@ article($border-color, $theme)
 
 
 theme(theme-tinting, "article")
-
+$block-item()
+  $margin(y, 4)
+  display block
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
 
 .fika-app
   .fika-title
@@ -71,22 +76,34 @@ theme(theme-tinting, "article")
       line-height 1.6
       word-break: break-word
 
+    h1
+    h2
+    h3
+    h4
+    h5
+    h6
+      font-weight bold
+      $margin(t, 5)
+      $margin(b, 4)
+      *
+        font-weight bold
+
+
     p
-      display: block;
-      margin-block-start: 1em;
-      margin-block-end: 1em;
-      margin-inline-start: 0px;
-      margin-inline-end: 0px;
+      $block-item()
 
     a
       & ,&:link ,&:visited ,&:active
+        text-decoration underline
+        cursor pointer
+      &:hover
         color:$primary.dark
 
     img
       max-width: 100%
       object-fit: cover
       $margin(x, auto)
-      display: block
+      $block-item()
 
     code
     pre
@@ -96,29 +113,50 @@ theme(theme-tinting, "article")
       overflow: visible
 
     pre
+      $block-item()
       $padding(a, 2)
       line-height: 1.2 !important;
-      overflow-x auto
+      overflow: auto
       $scroll-bar()
 
+    ol
+      display: block;
+      list-style-type: decimal;
+      padding-inline-start: 24px;
+
+    ul
+      display: block;
+      list-style-type: disc;
+      padding-inline-start: 24px;
+
+    li
+      display list-item
+
     figure
-      $margin(y, 3)
+      $block-item()
+      text-align center
       $margin(x, 0)
 
     figcaption
+      sans-serif()
+      font-size: 15px !important
+      opacity: 0.5
+      text-align: center
+      $margin(b, 2)
       *
         font-size: inherit !important
-      sans-serif()
-      font-size: 16px !important
 
     blockquote
+      $block-item()
       font-style: italic;
       $margin(x, 0)
-      $padding(l, 4)
+      padding: 0 0 0 32px;
 
     table
-      border-collapse: collapse;
+      $block-item()
       width: 100%;
+      overflow: auto;
+      border-collapse: collapse;
       text-align: center;
       td, th
         $padding(a, 1)
@@ -127,7 +165,11 @@ theme(theme-tinting, "article")
     sub
       line-height: 1
 
+    video
+      $block-item()
+
     iframe
+      $block-item()
       border:none
       &[src^="https://player.vimeo.com/video"]
       &[src^="https://www.youtube.com/embed"]

@@ -13,7 +13,7 @@ for $name, $theme in $themes
   display: flex
   line-height 1
   font-size 14px
-  san-serif()
+  sans-serif()
 
   div, span, iframe,  h1,  h2,  h3,  h4,  h5,  h6,  p,  blockquote,  pre,  a,  abbr,  acronym,  address,  big,  cite,  code,  del,  dfn,  em,  img,  ins,  kbd,  q,  s,  samp,  small,  strike,  strong,  sub,  sup,  tt,  var,  b,  u,  center,  dl,  dt,  dd,  ol,  ul,  li,  fieldset,  form,  label,  legend,  table,  caption,  tbody,  tfoot,  thead,  tr,  th,  td,  article,  aside,  canvas,  details,  embed,  figure,  figcaption,  footer,  header,  hgroup,  menu,  nav,  output,  ruby,  section,  summary,  time,  mark,  audio,  video
     -webkit-font-smoothing: subpixel-antialiased;
@@ -33,6 +33,7 @@ for $name, $theme in $themes
 .fika-reader-mode
   .fika-app
     a
+      cursor: pointer
       & ,&:link ,&:visited ,&:active
         color:$primary.dark
       &:hover
