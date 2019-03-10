@@ -22,7 +22,7 @@ App.module.extend('content', function() {
         chrome.extension.onMessage.addListener(function(request, _, response) {
             let method = request.method;
             if (self.hasOwnProperty(method)) {
-                self[method]();
+                self[method](request.data);
             } else {
                 self.log('method '+ method +' not exist.');
             }
@@ -250,8 +250,18 @@ App.module.extend('content', function() {
         }, function () {});
     };
 
-    this.processNoScript = function() {
+    this.sendFeedback = function(isMatch) {
+        chrome.extension.sendMessage({
+            'method': 'feedback',
+            'data': {
+                is_match: isMatch, // 是否匹配，1是，0否
+            }
+        }, function () {});
+    };
 
+    this.feedbackResponse = function(data) {
+        let success = data.success;
+        console.log(success);
     };
 });
 

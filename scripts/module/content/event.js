@@ -21,6 +21,13 @@ App.event.extend('content', function() {
                     self.module.content.closeReaderMode();
                 }
             });
+        },
+        feedback: function() {
+            $('body').on('click', '.fika-feedback-button', function(e) {
+                let isMatch = $(this).attr('data-match');
+                self.module.content.sendFeedback(isMatch);
+                e.stopPropagation();
+            });
         }
     }
 });

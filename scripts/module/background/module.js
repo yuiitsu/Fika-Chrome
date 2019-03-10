@@ -154,5 +154,26 @@ App.module.extend('background', function() {
             result.push(localStorage.getItem(data.key));
         }
         sendResponse(result);
-    }
+    };
+
+    this.feedback = function(data, send_response) {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            $.post('http://www.yuiapi.com/api/v1/fika/feedback', {
+                url: tabs[0]['url'],
+                is_match: data['is_match']
+            }, function (res) {
+                let feedbackSuccess = false;
+                if (res && res.code === 0) {
+                    feedbackSuccess = true;
+                }
+                chrome.tabs.sendMessage(tabs[0].id, {
+                    'method': 'feedbackResponse',
+                    'data': {
+                        success: feedbackSuccess
+                    }
+                }, function (response) {});
+            });
+        });
+        send_response('');
+    };
 });
