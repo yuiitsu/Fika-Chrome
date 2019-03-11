@@ -16,9 +16,6 @@ App.module.extend('content', function() {
     this.init = function() {
         //
         this.findArticle();
-        console.log(articleElements);
-        console.log(articleElementRate);
-        //
 
         // listen background script send message.
         chrome.extension.onMessage.addListener(function(request, _, response) {
@@ -86,7 +83,6 @@ App.module.extend('content', function() {
                         }
                     }
                 }
-                console.log(topArticleElement);
                 isAvailable = true;
             }
         }
@@ -287,7 +283,6 @@ App.module.extend('content', function() {
                 let attributes = $(this)[0].attributes,
                     attributesLen = attributes.length;
 
-                console.log(attributes);
                 for (let i = 0; i < attributesLen; i++) {
                     if (attributes[i].nodeName.indexOf('src') !== -1 ||
                         attributes[i].nodeName.indexOf('data-original-src') !== -1 ||
@@ -371,7 +366,6 @@ App.module.extend('content', function() {
 
     this.feedbackResponse = function(data) {
         let success = data.success;
-        console.log('fb', data)
     };
 });
 

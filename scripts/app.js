@@ -267,7 +267,7 @@ let App = {
     //},
 
     log: function(msg) {
-        console.log('[Fika]', msg);
+        // console.log('[Fika]', msg);
     },
 
     run: function() {

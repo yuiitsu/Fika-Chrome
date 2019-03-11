@@ -36,7 +36,7 @@ const Version = {
             chrome.notifications.create(null, {
                 iconUrl: 'images/logo64.png',
                 type: 'basic',
-                title: 'Fika更新啦',
+                title: 'Fika Updated',
                 message: this.updateLogs[this.currentVersion].join('\n'),
                 buttons: [
                     {

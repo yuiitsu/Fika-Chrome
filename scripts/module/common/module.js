@@ -479,7 +479,6 @@ App.module.extend('common', function() {
         chrome.tabs.getCurrent(function(tab) {
             let params = data['data'] ? data['data'] : {};
             data['need_token'] ? params['token'] = localStorage.getItem('token') : '';
-            console.log(params);
             let send_msg = {
                 'tab_id': tab.id,
                 'url': data['url'],
@@ -579,7 +578,7 @@ App.module.extend('common', function() {
 
         // 请求失败
         xhr.addEventListener('error', function() {
-            console.log('request error.');
+            // console.log('request error.');
         });
 
         xhr.send(send_data);

@@ -203,7 +203,7 @@ const fonts = {
             app: $('.fika-app'),
             overlay: $('.fika-overlay'),
             w: null,
-            threshold: 1480,
+            threshold: 1264,
             available:false
         };
 
