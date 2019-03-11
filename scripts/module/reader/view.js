@@ -14,7 +14,7 @@ App.view.extend('reader', function() {
     this.toc = function() {
         return `
             {{ for var i in data }}
-            <a href="#{{ data[i]['id'] }}"><{{ data[i]['tag'] }}>{{ data[i]['text'] }}</{{ data[i]['tag'] }}></a>
+            <a data-id="#{{ data[i]['id'] }}"><{{ data[i]['tag'] }}>{{ data[i]['text'] }}</{{ data[i]['tag'] }}></a>
             {{ end }}
         `;
     };

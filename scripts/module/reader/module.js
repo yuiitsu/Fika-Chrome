@@ -253,22 +253,20 @@ const fonts = {
 
         $('#fika-appearance').click(self.toggleAppearanceMenu);
 
-        //print
-        $('#fika-print').click(function(){
-            var ifr = document.createElement('iframe');
-            ifr.style='height: 0px; width: 0px; position: absolute'
-            document.body.appendChild(ifr);
-
-            var cssLink = document.createElement("link");
-            cssLink.rel = "stylesheet";
-            cssLink.type = "text/css";
-            cssLink.href = "chrome-extension://gbgpnkjlajphppfjolpcpffegigiokii/style/content.css";
-            ifr.contentDocument.head.appendChild(cssLink)
-            $('#fika-reader').clone().appendTo(ifr.contentDocument.body);
-
-            ifr.contentWindow.print();
-            // ifr.parentElement.removeChild(ifr);
-        });
+        // print 暂时砍去打印功能
+        // $('#fika-print').click(function(){
+        //     var ifr = document.createElement('iframe');
+        //     ifr.style='height: 0px; width: 0px; position: absolute'
+        //     document.body.appendChild(ifr);
+        //     var cssLink = document.createElement("link");
+        //     cssLink.rel = "stylesheet";
+        //     cssLink.type = "text/css";
+        //     cssLink.href = "chrome-extension://gbgpnkjlajphppfjolpcpffegigiokii/style/content.css";
+        //     ifr.contentDocument.head.appendChild(cssLink)
+        //     $('#fika-reader').clone().appendTo(ifr.contentDocument.body);
+        //     ifr.contentWindow.print();
+        //     ifr.parentElement.removeChild(ifr);
+        // });
 
         $('#fika-fullscreen').click(function() {
             $(this).toggleClass('fs-on')
@@ -381,7 +379,8 @@ const fonts = {
             if (tocs.length > 1){
                 self.view.display('reader', 'toc', tocs, $('.fika-toc'));
             }
-            //
+
+
             targetContent.find('svg').each(function() {
                 $(this).remove();
             });

@@ -315,6 +315,18 @@ App.module.extend('content', function() {
         });
     };
 
+    // 绑定toc翻页
+    this.tocScroll = function(){
+        $('.fika-toc a').each(function () {
+            let id = $(this).attr('data-id'),
+                header = document.getElementById(id.slice(1)),
+                offsetTop = header.getBoundingClientRect().y
+            $(this).click(function () {
+                document.getElementById('fika-reader').scrollTop = offsetTop
+            })
+        })
+    }
+
     this.openReaderMode = function() {
         if (location.href !== pageUrl) {
             this.findArticle();
@@ -334,6 +346,8 @@ App.module.extend('content', function() {
         }
 
         $('html, body').css('overflow-y', overflow);
+
+        self.tocScroll()
         chrome.extension.sendMessage({
             'method': 'is_open',
             'data': isOpen
