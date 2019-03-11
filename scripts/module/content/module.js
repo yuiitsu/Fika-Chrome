@@ -171,6 +171,11 @@ App.module.extend('content', function() {
                 articleTitle = element.innerText;
                 return false;
             }
+
+            if (element.className.indexOf('title') !== -1) {
+                articleTitle = element.innerText;
+                return false;
+            }
         }
 
         if (nodeName === '#text') {
