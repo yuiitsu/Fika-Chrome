@@ -23,7 +23,8 @@ let excludes = {
         '.idea',
         'node_modules',
         'dist',
-        'style'
+        'style',
+        'icon'
     ],
     'mini': [
         './scripts/lib/reader.js'
