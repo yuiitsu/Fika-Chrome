@@ -13,8 +13,8 @@
             "scripts/lib/jquery-1.11.0.min.js",
             "scripts/model.js",
             "scripts/app.js",
+            "scripts/module/version.js",
             "scripts/module/common/module.js",
-            "scripts/module/data/module.js",
             "scripts/module/background/module.js",
             "scripts/run.js"
         ]
@@ -31,9 +31,6 @@
             "scripts/module/reader/module.js",
             "scripts/module/reader/view.js",
             "scripts/module/common/module.js",
-            "scripts/module/common/view.js",
-            "scripts/module/common/event.js",
-            "scripts/module/data/module.js",
             "scripts/module/content/module.js",
             "scripts/module/content/view.js",
             "scripts/module/content/event.js",
@@ -52,6 +49,7 @@
         "cookies",
         "contextMenus",
         "fontSettings",
+        "notifications",
         "http://*/*",
         "https://*/*"
     ],

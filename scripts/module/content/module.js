@@ -71,8 +71,8 @@ App.module.extend('content', function() {
                         if (articleElements[i].localName === topElement.localName) {
                             let articleElementClassName = articleElements[i].className;
                             if (articleElementClassName) {
-                                if (topElement.className.indexOf(articleElementClassName) !== -1 ||
-                                    articleElementClassName.indexOf(topElement.className) !== -1) {
+                                if (topElement.className.indexOf(articleElementClassName) === 0 ||
+                                    articleElementClassName.indexOf(topElement.className) === 0) {
                                     //
                                     if (topElement.firstElementChild.className !== articleElementClassName &&
                                         articleElements[i].firstElementChild.className !== topElement.className) {
@@ -166,9 +166,11 @@ App.module.extend('content', function() {
             chileNodesLen = element.childNodes.length;
 
         // filter
-        if (nodeName === 'H1' && element.className.indexOf('title') !== -1) {
-            articleTitle = element.innerText;
-            return false;
+        if (nodeName === 'H1') {
+            if ($('head title').text().indexOf(element.innerText) !== -1) {
+                articleTitle = element.innerText;
+                return false;
+            }
         }
 
         if (nodeName === '#text') {
@@ -197,12 +199,12 @@ App.module.extend('content', function() {
             return true;
         } else {
             if (nodeName === 'DIV' || nodeName === 'SECTION') {
-                if (element.nextElementSibling) {
-                    console.log(element.nextElementSibling.nodeName);
-                }
-                if (element.previousElementSibling) {
-                    console.log(element.previousElementSibling.nodeName);
-                }
+                // if (element.nextElementSibling) {
+                //     console.log(element.nextElementSibling.nodeName);
+                // }
+                // if (element.previousElementSibling) {
+                //     console.log(element.previousElementSibling.nodeName);
+                // }
                 if (element.nextElementSibling && tags.indexOf(element.nextElementSibling.nodeName) !== -1 &&
                     element.previousElementSibling && tags.indexOf(element.previousElementSibling.nodeName) !== -1) {
                     //
@@ -238,9 +240,7 @@ App.module.extend('content', function() {
     };
 
     this.readerMode = function() {
-        let title = articleTitle ? articleTitle : $('head title').text();
-            //html = topArticleElement[0].innerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, '');
-
+        //
         let articleHtml = [],
             topArticleElementLen = topArticleElement.length,
             text = [];
@@ -254,6 +254,8 @@ App.module.extend('content', function() {
             }
             text.push(topArticleElement[i].innerText);
         }
+        //
+        let title = articleTitle ? articleTitle : $('head title').text();
 
         // console.log(articleElement.html());
         $('#fika-reader').remove();

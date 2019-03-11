@@ -53,6 +53,9 @@ App.module.extend('background', function() {
             }
         });
 
+        //
+        Version.notice();
+
         send_response('');
     };
 
