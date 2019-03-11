@@ -362,19 +362,6 @@ App.module.extend('content', function() {
 
     this.feedbackResponse = function(data) {
         let success = data.success;
-        let feedbackBtns = $('.fika-feedback-button'),
-          attr = data.is_match,
-          thisBtn = $(`.fika-feedback-button[data-match=${attr}]`),
-          msg = $('#fika-feedback-msg');
-
-        feedbackBtns.removeClass('fika-feedback-button-active')
-        thisBtn.addClass('fika-feedback-button-active')
-        if (attr === '1'){
-            msg.html('Thanks for the upvote! <a href="https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">Rate Fika</a>')
-        } else {
-            msg.html('Sorry to hear that! <a href="mailto:hi@fika.io?subject=Fika User Feedback" target="_blank">Help use improve</a>')
-        }
-
         console.log('fb', data)
     };
 });

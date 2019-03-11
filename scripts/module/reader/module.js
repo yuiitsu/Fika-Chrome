@@ -309,6 +309,19 @@ const fonts = {
             self.module.content.closeReaderMode()
         })
 
+        let feedbackBtns = $('.fika-feedback-button')
+        feedbackBtns.click(function () {
+            let thisBtn = $(this),
+              attr = thisBtn.attr('data-match'),
+              msg = $('#fika-feedback-msg');
+            feedbackBtns.removeClass('fika-feedback-button-active')
+            thisBtn.addClass('fika-feedback-button-active')
+            if (attr === '1'){
+                msg.html('Thanks for the upvote! <a href="https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">Rate Fika</a>')
+            } else {
+                msg.html('Sorry to hear that! <a href="mailto:hi@fika.io?subject=Fika User Feedback" target="_blank">Help use improve</a>')
+            }
+        })
     };
 
     this._init = function(content) {
