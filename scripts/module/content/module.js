@@ -195,7 +195,20 @@ App.module.extend('content', function() {
                 }
                 if (element.nextElementSibling && tags.indexOf(element.nextElementSibling.nodeName) !== -1 &&
                     element.previousElementSibling && tags.indexOf(element.previousElementSibling.nodeName) !== -1) {
-                    return false;
+                    //
+                    let elementAttrs = element.attributes,
+                        elementAttrLen = elementAttrs.length,
+                        isImg = false;
+
+                    for (let i = 0; i < elementAttrLen; i++) {
+                        if (elementAttrs[i].nodeValue.indexOf('img') !== -1 || elementAttrs[i].nodeValue.indexOf('image') !== -1) {
+                            isImg = true;
+                        }
+                    }
+                    //
+                    if (!isImg) {
+                        return false;
+                    }
                 }
             }
             if (chileNodesLen === 0 && element.innerText === '') {
@@ -223,10 +236,11 @@ App.module.extend('content', function() {
             text = [];
 
         for (let i = 0; i < topArticleElementLen; i++) {
-            let articleElementList = $(topArticleElement[i].innerHTML),
+            let articleElementList = topArticleElement[i].childNodes,
                 articleElementListLen = articleElementList.length;
 
             for (let j = 0; j < articleElementListLen; j++) {
+                console.log(articleElementList[j]);
                 this.filterElement(articleElementList[j], articleHtml);
             }
             text.push(topArticleElement[i].innerText);
@@ -266,7 +280,6 @@ App.module.extend('content', function() {
                 console.log(attributes);
                 for (let i = 0; i < attributesLen; i++) {
                     if (attributes[i].nodeName.indexOf('src') !== -1 ||
-                        attributes[i].nodeName.indexOf('data-original') !== -1 ||
                         attributes[i].nodeName.indexOf('data-original-src') !== -1 ||
                         attributes[i].nodeName.indexOf('data-actualsrc') !== -1) {
                         $(this).attr('src', attributes[i].nodeValue);
