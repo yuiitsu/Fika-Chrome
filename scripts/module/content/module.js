@@ -265,7 +265,10 @@ App.module.extend('content', function() {
 
                 console.log(attributes);
                 for (let i = 0; i < attributesLen; i++) {
-                    if (attributes[i].nodeName.indexOf('src') !== -1) {
+                    if (attributes[i].nodeName.indexOf('src') !== -1 ||
+                        attributes[i].nodeName.indexOf('data-original') !== -1 ||
+                        attributes[i].nodeName.indexOf('data-original-src') !== -1 ||
+                        attributes[i].nodeName.indexOf('data-actualsrc') !== -1) {
                         $(this).attr('src', attributes[i].nodeValue);
                     }
                 }
@@ -273,6 +276,13 @@ App.module.extend('content', function() {
 
             if ($(this).attr('crossorigin') && $(this).attr('crossorigin') === 'anonymous') {
                 $(this).remove();
+            }
+        });
+        //
+        parent.find('figure noscript').each(function() {
+            let html = $(this).html();
+            if (html.indexOf('<img ') !== -1) {
+                $(this).parent().html(html);
             }
         });
     };
