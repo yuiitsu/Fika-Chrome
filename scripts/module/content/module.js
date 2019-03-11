@@ -167,12 +167,7 @@ App.module.extend('content', function() {
 
         // filter
         if (nodeName === 'H1') {
-            if ($('head title').text().indexOf(element.innerText) !== -1) {
-                articleTitle = element.innerText;
-                return false;
-            }
-
-            if (element.className.indexOf('title') !== -1) {
+            if ($('head title').text().indexOf(element.innerText) === 0 || element.className.indexOf('title') !== -1) {
                 articleTitle = element.innerText;
                 return false;
             }
