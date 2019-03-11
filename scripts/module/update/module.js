@@ -3,9 +3,7 @@
  */
 App.module.extend('data', function() {
 
-    let self = this;
-
-    this.init = function(url) {
+    this.init = function() {
         let updateLogs = Version.updateLogs[Version.currentVersion];
         this.view.display('update', 'layout', updateLogs, $('#update-log'));
     };
