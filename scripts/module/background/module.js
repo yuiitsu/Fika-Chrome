@@ -3,15 +3,14 @@
  */
 App.module.extend('background', function() {
     //
-    let self = this,
-        readerReadyTabId = 0;
+    let self = this;
 
     this.init = function() {
         // open main screen in new tab.
         chrome.browserAction.onClicked.addListener(function(tab) {
-            if (tab.id === readerReadyTabId) {
-                self.click_browser_icon({tab: tab, open: true});
-            }
+            chrome.tabs.sendMessage(tab.id, {
+                'method': 'openReaderMode'
+            }, function (response) {});
         });
 
         // // listen content script message.
@@ -39,7 +38,7 @@ App.module.extend('background', function() {
         let is_available = data['is_available'];
         //
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            readerReadyTabId = tabs[0].id;
+            // readerReadyTabId = tabs[0].id;
             if (is_available) {
                 //
                 chrome.browserAction.setIcon({
@@ -55,64 +54,6 @@ App.module.extend('background', function() {
         });
 
         send_response('');
-    };
-
-    this.click_browser_icon = function(data, send_response) {
-        let do_function = function(tab) {
-            // let url_hash = self.module.common.md5(tab.url),
-            //     method = 'reader_mode',
-            //     article_data = Model.get('article_data');
-            // if (!article_data || !article_data.hasOwnProperty('url_hash') || article_data['url_hash'] !== url_hash) {
-            //     method = 'reader_article_find';
-            // }
-
-            chrome.tabs.sendMessage(tab.id, {
-                'method': 'openReaderMode'
-            }, function (response) {});
-        };
-        let tab = data.tab,
-            open = data.open;
-
-        if (!tab) {
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                do_function(tabs[0]);
-            });
-        } else {
-            do_function(tab);
-        }
-
-        if (open) {
-            self.badge_text.on();
-        } else {
-            self.badge_text.off();
-        }
-
-        if ($.isFunction(send_response)) {
-            send_response('');
-        }
-    };
-
-    this.close_reader_mode = function(data, send_response) {
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, {
-                'method': 'close_reader_mode'
-            }, function (response) {
-            });
-        });
-        send_response('');
-    };
-
-    this.setBrowserIcon = function(data, send_response) {
-        let is_available = data['is_available'];
-        if (is_available) {
-            chrome.browserAction.setIcon({
-                    path: {'64': 'images/logo64.png'}
-                }, function () {})
-        } else {
-            chrome.browserAction.setIcon({
-                    path: {'64': 'images/logo64-grey.png'}
-                }, function () {})
-        }
     };
 
     this.is_open = function(data, send_response) {
