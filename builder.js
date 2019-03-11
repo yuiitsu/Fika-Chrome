@@ -16,6 +16,7 @@ let excludes = {
         '.gitignore',
         '.DS_Store',
         'builder.js',
+        'dist.zip',
         'package.json',
         'package-lock.json',
         'README.md',

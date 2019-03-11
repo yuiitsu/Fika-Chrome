@@ -11,10 +11,12 @@ const Version = {
      */
     updateLogs: {
         'v0.3.0': [
-            'More advanced content extracting algorithm',
+            'Advanced compatiblility',
             'Refined article styling',
             'Trimmed and lighter table of content',
             'New Layout',
+            'Feedback collection',
+            'Fullscreen mode'
         ],
         'v0.2.0': [
             'More font selections',
