@@ -125,7 +125,7 @@ App.module.extend('content', function() {
         let attributes = parent.attributes,
             attributesLen = attributes.length;
         for (let i = 0; i < attributesLen; i++) {
-            let nodeValue = attributes[i].nodeValue;
+            let nodeValue = attributes[i].nodeValue.toLowerCase();
             if (nodeValue.indexOf('content') !== -1 || nodeValue.indexOf('article') !== -1) {
                 articleElementRate[key] += 20;
             }
