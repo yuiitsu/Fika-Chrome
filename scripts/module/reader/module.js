@@ -317,7 +317,7 @@ const fonts = {
             if (attr === '1'){
                 msg.html('Thanks for the upvote! <a href="https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">Rate Fika</a>')
             } else {
-                msg.html('Sorry to hear that! <a href="mailto:hi@fika.io?subject=Fika User Feedback" target="_blank">Help use improve</a>')
+                msg.html('Sorry to hear that! <a href="mailto:hi@fika.io?subject=Fika User Feedback" target="_blank">Help us improve</a>')
             }
         })
     };
@@ -360,9 +360,18 @@ const fonts = {
             self.view.display('reader', 'fonts', mainLang['typeface']['fonts'], $('.fika-select-fonts'))
 
             // toc
-
             let targetContent = $(".fika-content"),
                 tocs = [];
+            // toc 大标题
+            let title = $('.fika-title'),
+                randomId = Math.random() * 10000
+            title.attr('id', randomId)
+            tocs.push({
+                tag: 'h1',
+                text: title[0].innerText,
+                id: randomId
+            })
+            // toc 其他标题
             targetContent.find(':header').each(function() {
                 let text = $(this)[0].innerText;
                 if (text) {

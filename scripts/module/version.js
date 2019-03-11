@@ -11,11 +11,21 @@ const Version = {
      */
     updateLogs: {
         'v0.3.0': [
-            '1.升级内容获取方法，提高了识别率',
-            '2.更新了UI'
+            'More advanced content extracting algorithm',
+            'Refined article styling',
+            'Trimmed and lighter table of content',
+            'New Layout',
         ],
-        'v0.2.0': [],
-        'v0.1.0': []
+        'v0.2.0': [
+            'More font selections',
+            'New badge status',
+            'Shortcut: Alt+R (Option+R): to open Fika, Esc: to close'
+        ],
+        'v0.1.0': [
+            'Initial release',
+            'Four delightful themes, several font and three text size options',
+            'Auto-generated table of content'
+        ]
     },
 
     notice: function() {
