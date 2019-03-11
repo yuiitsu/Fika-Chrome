@@ -282,7 +282,7 @@ App.module.extend('content', function() {
         parent.find('figure noscript').each(function() {
             let html = $(this).html();
             if (html.indexOf('<img ') !== -1) {
-                $(this).parent().html(html);
+                $(this).parent().html(html.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, ''));
             }
         });
     };
