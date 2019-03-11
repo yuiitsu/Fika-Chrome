@@ -10,13 +10,15 @@ App.module.extend('content', function() {
         articleElementIndex = [],
         articleElements = {},
         articleElementRate = {},
-        articleTitle = '';
+        articleTitle = '',
+        pageUrl = '';
 
     this.init = function() {
         //
         this.findArticle();
         console.log(articleElements);
         console.log(articleElementRate);
+        //
 
         // listen background script send message.
         chrome.extension.onMessage.addListener(function(request, _, response) {
@@ -31,6 +33,14 @@ App.module.extend('content', function() {
     };
 
     this.findArticle = function() {
+        //
+        topArticleElement = [];
+        articleElementIndex = [];
+        articleElements = {};
+        articleElementRate = {};
+        articleTitle = '';
+        pageUrl = location.href;
+        //
         let root = $('body'),
             isAvailable = false;
         if (root.length === 0) {
@@ -240,7 +250,6 @@ App.module.extend('content', function() {
                 articleElementListLen = articleElementList.length;
 
             for (let j = 0; j < articleElementListLen; j++) {
-                console.log(articleElementList[j]);
                 this.filterElement(articleElementList[j], articleHtml);
             }
             text.push(topArticleElement[i].innerText);
@@ -249,6 +258,7 @@ App.module.extend('content', function() {
 
         console.log(articleHtml);
         // console.log(articleElement.html());
+        $('#fika-reader').remove();
         this.view.append('content', 'layout', {title: title, content: articleHtml.join('')}, $('html'));
         //
         this.extFilter();
@@ -301,6 +311,10 @@ App.module.extend('content', function() {
     };
 
     this.openReaderMode = function() {
+        if (location.href !== pageUrl) {
+            this.findArticle();
+        }
+
         let target = $('#fika-reader'),
             display = target.css('display'),
             overflow = 'hidden',
