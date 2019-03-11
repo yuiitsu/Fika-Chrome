@@ -58,5 +58,9 @@
         "48": "images/logo64.png",
         "128": "images/logo128.png"
     },
-    "web_accessible_resources": ["images/logo64.png"]
+    "web_accessible_resources": [
+        "images/logo64.png",
+        "assets/icon/facebook-01.png",
+        "assets/icon/twitter-01.png"
+    ]
 }
