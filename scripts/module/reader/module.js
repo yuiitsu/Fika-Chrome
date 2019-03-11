@@ -197,6 +197,7 @@ const fonts = {
             open: false,
             modal: false,
             close: $('.fika-drawer-close'),
+            toolbar: $('.fika-tool'),
             btn: $('#fika-toc-btn'),
             el: $('.fika-drawer'),
             app: $('.fika-app'),
@@ -234,7 +235,7 @@ const fonts = {
             // current window width
             const w = window.innerWidth;
             drawer.available = w < 1400;
-            drawer.btn.toggleClass('disabled', !drawer.available)
+            drawer.toolbar.toggleClass('fika-tool-toc-disabled', !drawer.available)
             if (drawer.open && !drawer.available){
                 toggleDrawer(false)
             }
@@ -244,7 +245,7 @@ const fonts = {
         // init drawer
         drawer.w = window.innerWidth;
         drawer.available = drawer.w < 1400;
-        drawer.btn.toggleClass('disabled', !drawer.available);
+        drawer.toolbar.toggleClass('fika-tool-toc-disabled', !drawer.available);
     };
 
     this._initTools = function() {
