@@ -203,7 +203,7 @@ const fonts = {
             app: $('.fika-app'),
             overlay: $('.fika-overlay'),
             w: null,
-            threshold: 1552,
+            threshold: 1480,
             available:false
         };
 
@@ -231,21 +231,24 @@ const fonts = {
             drawer.overlay.removeClass('fika-overlay-active')
         });
 
+        function toggleTocDrawer(){
+            drawer.w = window.innerWidth;
+            drawer.available = drawer.w < drawer.threshold;
+            drawer.toolbar.toggleClass('fika-tool-toc-disabled', !drawer.available);
+        }
+
         window.addEventListener('resize', ()=>{
+            console.log( window.innerWidth, drawer.threshold)
             // current window width
             const w = window.innerWidth;
-            drawer.available = w < 1400;
-            drawer.toolbar.toggleClass('fika-tool-toc-disabled', !drawer.available)
+            toggleTocDrawer()
             if (drawer.open && !drawer.available){
                 toggleDrawer(false)
             }
             drawer.w = w;
         });
-
         // init drawer
-        drawer.w = window.innerWidth;
-        drawer.available = drawer.w < 1400;
-        drawer.toolbar.toggleClass('fika-tool-toc-disabled', !drawer.available);
+        toggleTocDrawer()
     };
 
     this._initTools = function() {
