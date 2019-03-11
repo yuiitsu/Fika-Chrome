@@ -253,10 +253,8 @@ App.module.extend('content', function() {
                 this.filterElement(articleElementList[j], articleHtml);
             }
             text.push(topArticleElement[i].innerText);
-            console.log(articleElementList);
         }
 
-        console.log(articleHtml);
         // console.log(articleElement.html());
         $('#fika-reader').remove();
         this.view.append('content', 'layout', {title: title, content: articleHtml.join('')}, $('html'));
