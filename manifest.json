@@ -3,7 +3,7 @@
     "name": "Fika - Reader Mode",
     "short_name": "Fika",
     "version": "0.3.0",
-    "description":"Fika is where you can immerse in reading. It removes all clutters and retrieves the table of content for you. ",
+    "description":"A Kindle-like reading experience for the web.",
     "homepage_url": "http://www.fika.io",
     "author":"Fika",
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
@@ -59,8 +59,6 @@
         "128": "images/logo128.png"
     },
     "web_accessible_resources": [
-        "images/logo64.png",
-        "assets/icon/facebook-01.png",
-        "assets/icon/twitter-01.png"
+        "images/logo64.png"
     ]
 }

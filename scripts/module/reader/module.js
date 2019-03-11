@@ -238,7 +238,6 @@ const fonts = {
         }
 
         window.addEventListener('resize', ()=>{
-            console.log( window.innerWidth, drawer.threshold)
             // current window width
             const w = window.innerWidth;
             toggleTocDrawer()
