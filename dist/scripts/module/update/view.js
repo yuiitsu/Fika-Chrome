@@ -1,0 +1,1 @@
+"use strict";App.view.extend("update",function(){this.layout=function(){return"\n            {{ for var i in data }}\n            <li>{{ data[i] }}</li>\n            {{ end }}\n        "}});
