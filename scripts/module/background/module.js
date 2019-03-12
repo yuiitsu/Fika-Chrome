@@ -3,30 +3,14 @@
  */
 App.module.extend('background', function() {
     //
-    let self = this,
-        article_data = {};
+    let self = this;
 
     this.init = function() {
         // open main screen in new tab.
         chrome.browserAction.onClicked.addListener(function(tab) {
-            // if (self.module.data.highlight_swtich(tab.url)) {
-            //     self.badge_text.on();
-            // } else {
-            //     self.badge_text.off();
-            // }
-            // let url_hash = self.module.common.md5(tab.url),
-            //     method = 'reader_mode',
-            //     article_data = Model.get('article_data');
-            // if (!article_data || !article_data.hasOwnProperty('url_hash') || article_data['url_hash'] !== url_hash) {
-            //     method = 'reader_article_find';
-            // }
-
-            // chrome.tabs.sendMessage(tab.id, {
-            //     'method': method
-            // }, function (response) {
-            // });
-
-            self.click_browser_icon(tab);
+            chrome.tabs.sendMessage(tab.id, {
+                'method': 'openReaderMode'
+            }, function (response) {});
         });
 
         // // listen content script message.
@@ -51,99 +35,28 @@ App.module.extend('background', function() {
     };
 
     this.reader_ready = function(data, send_response) {
-        let is_available = data['is_available'],
-            article_data = data['article_data'],
-            show_reader_page = data['show_reader_page'];
-
+        let is_available = data['is_available'];
+        //
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            // readerReadyTabId = tabs[0].id;
             if (is_available) {
-                article_data['url_hash'] = self.module.common.md5(tabs[0].url);
-                article_data['host'] = self.module.common.getHost(tabs[0].url);
-                Model.set('article_data', article_data);
-
                 //
                 chrome.browserAction.setIcon({
                     path: {'64': 'images/logo64.png'},
                     tabId: tabs[0].id
-                }, function () {
-                });
-
-                if (show_reader_page) {
-                    chrome.tabs.sendMessage(tabs[0].id, {
-                        'method': 'reader_mode'
-                    }, function (response) {
-                    });
-                }
+                }, function () {});
             } else {
                 chrome.browserAction.setIcon({
                     path: {'64': 'images/logo64-grey.png'},
                     tabId: tabs[0].id
-                }, function () {
-                })
+                }, function () {});
             }
         });
 
-        send_response('');
-    };
-
-    this.reader_get_article = function(data, send_response) {
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            //
-            chrome.browserAction.setBadgeText({'text': 'on', 'tabId': tabs[0].id}, function() {});
-        });
         //
-        send_response(Model.get('article_data'));
-    };
+        Version.notice();
 
-    this.click_browser_icon = function(tab, send_response) {
-        let do_function = function(tab) {
-            let url_hash = self.module.common.md5(tab.url),
-                method = 'reader_mode',
-                article_data = Model.get('article_data');
-            if (!article_data || !article_data.hasOwnProperty('url_hash') || article_data['url_hash'] !== url_hash) {
-                method = 'reader_article_find';
-            }
-
-            chrome.tabs.sendMessage(tab.id, {
-                'method': method
-            }, function (response) {
-            });
-        };
-
-        if (!tab) {
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                do_function(tabs[0]);
-            });
-        } else {
-            do_function(tab);
-        }
-
-        if ($.isFunction(send_response)) {
-            send_response('');
-        }
-    };
-
-    this.close_reader_mode = function(data, send_response) {
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, {
-                'method': 'close_reader_mode'
-            }, function (response) {
-            });
-        });
         send_response('');
-    };
-
-    this.set_browser_icon = function(data, send_response) {
-        let is_available = data['is_available'];
-        if (is_available) {
-            chrome.browserAction.setIcon({
-                    path: {'64': 'images/logo64.png'}
-                }, function () {})
-        } else {
-            chrome.browserAction.setIcon({
-                    path: {'64': 'images/logo64-grey.png'}
-                }, function () {})
-        }
     };
 
     this.is_open = function(data, send_response) {
@@ -152,12 +65,6 @@ App.module.extend('background', function() {
             send_response(false);
             return false;
         }
-
-        // if (!self.module.data.is_open(data.url)) {
-        //     self.badge_text.off();
-        //     send_response(false);
-        //     return false;
-        // }
 
         self.badge_text.on();
         send_response(true);
@@ -175,5 +82,46 @@ App.module.extend('background', function() {
                 chrome.browserAction.setBadgeText({'text': text, 'tabId': tabs[0].id}, function () {});
             });
         }
+    };
+
+    this.setCache = function(data, sendResponse) {
+        let key = data.key,
+            value = data.value;
+        localStorage.setItem(key, value);
+        sendResponse('');
+    };
+
+    this.getCache = function(data, sendResponse) {
+        let result = [];
+        if (Object.prototype.toString.call(data.key) === '[object Array]') {
+            data.key.forEach(function(key) {
+                result.push(localStorage.getItem(key));
+            });
+        } else {
+            result.push(localStorage.getItem(data.key));
+        }
+        sendResponse(result);
+    };
+
+    this.feedback = function(data, send_response) {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            $.post('http://www.yuiapi.com/api/v1/fika/feedback', {
+                url: tabs[0]['url'],
+                is_match: data['is_match']
+            }, function (res) {
+                let feedbackSuccess = false;
+                if (res && res.code === 0) {
+                    feedbackSuccess = true;
+                }
+                chrome.tabs.sendMessage(tabs[0].id, {
+                    'method': 'feedbackResponse',
+                    'data': {
+                        is_match: data['is_match'],
+                        success: feedbackSuccess
+                    }
+                }, function (response) {});
+            });
+        });
+        send_response('');
     };
 });

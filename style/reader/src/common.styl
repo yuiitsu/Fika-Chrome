@@ -1,7 +1,11 @@
-prefix := f
+prefix := fika
+
 
 sans-serif()
   font-family: -apple-system,Helvetica,Roboto, Arial, sans-serif
+
+monospace()
+  font-family: Menlo, Monaco, "Courier New", Courier, monospace;
 
 radius(radius = 8px)
   border-radius: radius
@@ -10,8 +14,10 @@ $border-opacity := 68%
 
 $hover-opacity := 0.12
 
-$shadows-opacity := rgba(0,0,0, .06)
-$shadows := 0 8px 16px 0 $shadows-opacity, 0 12px 24px 0 $shadows-opacity
+$shadows-opacity := rgba(0,0,0, .1)
+$shadows := 0 8px 16px 0 rgba(0,0,0, .09),
+            0 12px 24px 0 rgba(0,0,0, .18)
+
 shadow($depth = 1, important = false)
   box-shadow: $shadows[$depth - 1]  (important ? !important : )
 
@@ -37,9 +43,9 @@ $center()
 
 $scroll-bar-color($theme)
   &::-webkit-scrollbar-thumb
-    background: rgba($theme.text, 0.35)
+    background: rgba($theme.text, 0.2)
   &::-webkit-scrollbar-thumb:hover
-    background: rgba($theme.text,0.6)
+    background: rgba($theme.text,0.5)
 
 $scroll-bar()
   &::-webkit-scrollbar

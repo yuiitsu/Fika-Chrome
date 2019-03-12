@@ -1,0 +1,84 @@
+@import '../variables.styl'
+
+/*! Tool Menu */
+
+tool($theme)
+  background: tint($theme.text, 20%)
+  color: $theme.paper
+
+theme(tool, "tool")
+
+.fika-app
+  .fika-tool
+    position: fixed
+    right: -224px;
+    top: 24px
+    height: 48px
+    width: 280px
+    padding: 6px 8px
+    radius(24px)
+    box-shadow 0 2px 12px 0 rgba(0,0,0,.24)
+    short-transition()
+    cursor pointer
+    z-index 50
+    user-select: none;
+    -webkit-user-select: none;
+    @media print
+      display none
+
+    &-on
+      transform translateX(-164px)
+
+      #fika-tool-btn
+        transform rotate(180deg)
+
+    &-toc-disabled
+      #fika-toc-btn
+        display none
+
+      &.fika-tool-on
+        transform translateX(-128px)
+
+
+#fika-fullscreen
+  svg
+    &:first-child
+      display none
+
+    &:nth-child(2)
+      display block
+
+  &.fs-on svg
+    &:first-child
+      display block
+
+    &:nth-child(2)
+      display none
+
+
+//menu
+menu($theme)
+  background: $theme.paper
+  color: $theme.text
+
+theme(menu, "menu")
+
+.fika-app
+  .fika-menu
+    $padding(a, 2)
+    position: absolute
+    top: 48px;
+    left: -92px;
+    z-index: 200
+    radius()
+    shadow(2)
+    transform scale(0.9)
+    transform-origin top right
+    opacity 0
+    transition: 0.2s $transition.fast-in-fast-out
+    pointer-events none
+
+    &-on
+      transform scale(1)
+      opacity 1
+      pointer-events auto

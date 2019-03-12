@@ -1,58 +1,98 @@
 @import "../variables.styl"
 
-f-toc($theme)
+toc($theme)
+  h1
+  h2
+  h3
+  h4
+  h5
+  h6
   a
+    color: $theme.text
+    $margin(a, 0)
+    font-weight normal
+    sans-serif()
+
+
     & ,&:link ,&:visited ,&:active
       color: $theme.text
 
 
-theme(f-toc, 'f-toc')
+  &-static
+    $scroll-bar-color($theme)
 
-.f-toc
-  sans-serif()
+theme(toc, "toc")
 
-  *
-    white-space nowrap
-    text-overflow ellipsis
-    overflow hidden
-    font-weight normal
 
-  &-empty
-    opacity 0.4
-    font-size: 16px
-    $margin(t, 4)
+$toc-h()
+  $padding(a, 0)
+  $margin(y,1)
+  line-height 1.2
+  overflow: hidden
 
-  a
-    display block
-    cursor pointer
-    text-decoration none
-    $padding(y,2)
-    &:hover
-      text-decoration underline
+.fika-app
+  .fika-toc
+    sans-serif()
+
+    &-static
+      overflow-y: auto;
+      word-break: break-word;
+      height: calc(100vh - 120px);
+      position: fixed
+      top: 96px;
+      right: 50%
+      width: 240px
+      margin-right: 432px;
+      $scroll-bar()
+      @media screen and (max-width: 1264px)
+        display none
 
     *
-      $margin(y,0)
-      line-height 1.2
-    h1
+      font-weight normal
+
+    &-empty
+      opacity 0.4
       font-size: 16px
-      opacity 1
-    h2
-      font-size: 15px
-      padding-left:8px
-      opacity 0.9
-    h3
-      font-size: 15px
-      padding-left:16px
-      opacity 0.8
-    h4
-      font-size: 14px
-      padding-left:24px
-      opacity 0.75
-    h5
-      font-size: 14px
-      padding-left:32px
-      opacity 0.75
-    h6
-      font-size: 14px
-      padding-left:40px
-      opacity 0.7
+
+    a
+      display: block
+      cursor: pointer
+      text-decoration: none
+      text-overflow: ellipsis
+      display: -webkit-box
+      -webkit-line-clamp: 2
+      -webkit-box-orient: vertical
+      overflow: hidden
+
+      &:hover
+        text-decoration underline
+
+      h1
+        $toc-h()
+        font-size: 17px !important
+        opacity 1
+      h2
+        $toc-h()
+        font-size: 14px !important
+        opacity 0.7
+        padding-left:12px
+      h3
+        $toc-h()
+        font-size: 14px !important
+        opacity 0.56
+        padding-left:24px
+      h4
+        $toc-h()
+        font-size: 13px !important
+        opacity 0.48
+        padding-left:36px
+      h5
+        $toc-h()
+        font-size: 12px !important
+        opacity 0.40
+        padding-left:44px
+      h6
+        $toc-h()
+        font-size: 12px !important
+        opacity 0.32
+        padding-left:52px

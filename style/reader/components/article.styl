@@ -1,88 +1,11 @@
 @import "../variables.styl"
 
 /*! Article */
-
-
-.f-title
-  $margin(y, 0)
-  font-size: 40px
-  line-height 52px
-  font-weight bold
-
-.f-subtitle
-  $margin(y, 4)
-  font-size: 16px
-  sans-serif()
-
-.f-article
-  $margin(x, auto)
-  width: 100%
-  max-width: 720px
-  position relative
-
-// rich text
-.f-content
-  $margin(t, 5)
-  line-height 1.6
-
-  *
-    word-break: break-word;
-
-  a
-    & ,&:link ,&:visited ,&:active
-      color:$primary.dark
-
-  img
-    max-width: 100%
-    object-fit: cover
-    $margin(x, auto)
-    display: block
-
-  pre
-    $padding(a, 2)
-    line-height: 1 !important;
-    overflow-x auto
-    $scroll-bar()
-
-  figure
-    $margin(y, 3)
-    $margin(x, 0)
-
-  figcaption
-    *
-      font-size: inherit !important
-    sans-serif()
-    font-size: 16px !important
-
-  blockquote
-    font-style: italic;
-    $margin(x, 0)
-    $padding(l, 4)
-
-  table
-    border-collapse: collapse;
-    width: 100%;
-    text-align: center;
-    td, th
-      $padding(a, 1)
-
-  sup
-  sub
-    line-height: 1
-
-  iframe
-    border:none
-    &[src^="https://player.vimeo.com/video"]
-    &[src^="https://www.youtube.com/embed"]
-      width:100%
-      height:394px
-
-
 theme-tinting($theme)
   $border-color = $theme.light ? tint($theme.text, $border-opacity) : shade($theme.text, $border-opacity)
-  f-content($border-color, $theme)
+  article($border-color, $theme)
 
-f-content($border-color, $theme)
+article($border-color, $theme)
   table
     td, th
       border:solid 1px $border-color
@@ -95,5 +18,169 @@ f-content($border-color, $theme)
     background: $theme.bg
     $scroll-bar-color($theme)
 
+  a
+  h1
+  h2
+  h3
+  h4
+  h5
+  h6
+  p
+  li
+  pre
+  code
+  sup
+  sub
+  table
+  blockquote
+    color: $theme.text
 
-theme(theme-tinting, "f-content")
+  pre
+  code
+    *
+    span
+      color: $theme.text !important
+
+
+
+theme(theme-tinting, "article")
+$block-item()
+  $margin(y, 4)
+  display block
+
+.fika-app
+  .fika-title
+    $margin(y, 0)
+    font-size: 40px
+    line-height 52px
+    font-weight bold
+
+  .fika-subtitle
+    $margin(y, 4)
+    font-size: 16px
+    sans-serif()
+
+  .fika-article
+    $margin(a, 4)
+    max-width: 720px
+    position relative
+
+  // rich text
+  .fika-content
+    $margin(t, 5)
+    line-height 1.6
+    word-break: break-word
+
+    *
+      line-height 1.6
+      word-break: break-word
+
+    h1
+    h2
+    h3
+    h4
+    h5
+    h6
+      font-weight bold
+      $margin(t, 5)
+      $margin(b, 4)
+      *
+        font-weight bold
+
+
+    p
+      $block-item()
+
+    a
+      & ,&:link ,&:visited ,&:active
+        text-decoration underline
+        cursor pointer
+      &:hover
+      &:hover *
+        color:$primary.dark !important
+
+    img
+      max-width: 100%
+      object-fit: cover
+      $margin(x, auto)
+      $block-item()
+
+    code
+    pre
+      font-family: monospace
+
+    code
+      overflow: visible
+
+    pre
+      $block-item()
+      $padding(a, 2)
+      line-height: 1.2 !important;
+      overflow: auto
+      $scroll-bar()
+
+    ol
+      display: block;
+      list-style-type: decimal;
+      padding-inline-start: 24px;
+
+    ul
+      display: block;
+      list-style-type: disc;
+      padding-inline-start: 24px;
+
+    li
+      display list-item
+
+    figure
+      $block-item()
+      text-align center
+      $margin(x, 0)
+
+    figcaption
+      sans-serif()
+      font-size: 15px !important
+      opacity: 0.5
+      text-align: center
+      $margin(b, 2)
+      *
+        font-size: inherit !important
+
+    blockquote
+      $block-item()
+      font-style: italic;
+      $margin(x, 0)
+      padding: 0 0 0 32px;
+
+    table
+      $block-item()
+      width: 100%;
+      overflow: auto;
+      border-collapse: collapse;
+      text-align: center;
+      td, th
+        $padding(a, 1)
+
+    sup
+    sub
+      line-height: 1
+
+    video
+      $block-item()
+
+    iframe
+      $block-item()
+      border:none
+      &[src^="https://player.vimeo.com/video"]
+      &[src^="https://www.youtube.com/embed"]
+        width:100%
+        height:394px
+
+    nav
+    button
+      display none
+
+    *
+      &:before
+      &:after
+        display none

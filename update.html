@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Fika</title>
+    <link rel="stylesheet" type="text/css" href="style/content.css">
+    <script src="scripts/lib/jquery-1.11.0.min.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/model.js"></script>
+    <script src="scripts/module/common/module.js"></script>
+    <script src="scripts/module/version.js"></script>
+    <script src="scripts/module/update/module.js"></script>
+    <script src="scripts/module/update/view.js"></script>
+</head>
+<body class="fika-app theme-vanilla">
+    <div class="fika-main-body">
+        <div class="fika-paper">
+            <div class="fika-article size-medium font-openSans">
+                <div style="display: flex;align-items: center">
+                    <img src="images/logo64.png">
+                    <div class="ml-3" style="font-size:32px">
+                        <h1>Fika - Reader Mode</h1>
+                    </div>
+                    <div style="flex:1"></div>
+                    <a href="https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">
+                        <img style="height: 64px" src="images/ChromeWebStore.png">
+                    </a>
+                </div>
+                <div class="fika-content">
+                    <h1>Update Logs</h1>
+                    <ul id="update-log"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="scripts/run.js"></script>
+</body>
+</html>

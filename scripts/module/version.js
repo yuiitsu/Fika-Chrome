@@ -4,34 +4,63 @@
  */
 const Version = {
 
-    current_version: 'v0.2.0',
+    currentVersion: 'v0.3.0',
 
     /**
      * 更新记录
      */
-    update_logs: {
-        'v0.2.0': [],
+    updateLogs: {
+        'v0.3.0': [
+            'Advanced compatiblility',
+            'Refined article styling',
+            'Trimmed and lighter table of content',
+            'New Layout',
+            'Feedback collection',
+            'Fullscreen mode'
+        ],
+        'v0.2.0': [
+            'More font selections',
+            'New badge status',
+            'Shortcut: Alt+R (Option+R): to open Fika, Esc: to close'
+        ],
         'v0.1.0': [
+            'Initial release',
+            'Four delightful themes, several font and three text size options',
+            'Auto-generated table of content'
         ]
     },
 
-    /**
-     * 检查版本，如果缓存中的版本与当前版本不匹配，显示当前版本对应的更新记录
-     */
-    check: function() {
+    notice: function() {
         let version = localStorage.getItem('version');
-        if (version !== this.current_version) {
+        if (version !== this.currentVersion) {
             // 将新版本号写入缓存
-            localStorage.setItem('version', this.current_version);
-            // 显示更新记录
-            // App.module.common.module('Update logs', App.view.get_view('setting', 'version_update_logs', {
-            //     list:this.update_logs[this.current_version],
-            //     current_version: this.current_version
-            // }), '<button class="btn btn-primary module-close js-handler">Close</button>');
+            localStorage.setItem('version', this.currentVersion);
+            chrome.notifications.create(null, {
+                iconUrl: 'images/logo64.png',
+                type: 'basic',
+                title: 'Fika Updated',
+                message: this.updateLogs[this.currentVersion].join('\n'),
+                buttons: [
+                    {
+                        title: 'View detail'
+                    }
+                ]
+            }, function() {
+            });
+
+            //
+            chrome.notifications.onClicked.addListener(function() {
+                chrome.tabs.create({url: chrome.extension.getURL("update.html")});
+            });
+            //
+            chrome.notifications.onButtonClicked.addListener(function() {
+
+                chrome.tabs.create({url: chrome.extension.getURL("update.html")});
+            });
         }
     }
 };
 
-$(function() {
-    Version.check();
-});
+// $(function() {
+//     Version.check();
+// });

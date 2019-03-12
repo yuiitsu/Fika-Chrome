@@ -1,19 +1,52 @@
 @import "../variables.styl"
 /*! App */
 
-f-app($theme)
+app($theme)
   background: $theme.bg
 
 
 for $name, $theme in $themes
-  .f-app.theme-{$name}
-      f-app($theme)
+  .fika-app.theme-{$name}
+      app($theme)
 
-.f-app
+.fika-app
   display: flex
-  min-height: 100vh
-  drawer-transition()
-  &-drawer-on
-    padding-left: 352px
-    @media screen and (max-width: 1280px)
-      padding-left: 0
+  line-height 1
+  font-size 14px
+  sans-serif()
+
+  div, span, iframe,  h1,  h2,  h3,  h4,  h5,  h6,  p,  blockquote,  pre,  a,  abbr,  acronym,  address,  big,  cite,  code,  del,  dfn,  em,  img,  ins,  kbd,  q,  s,  samp,  small,  strike,  strong,  sub,  sup,  tt,  var,  u,  center,  dl,  dt,  dd,  ol,  ul,  li,  fieldset,  form,  label,  legend,  table,  caption,  tbody,  tfoot,  thead,  tr,  th,  td,  article,  aside,  canvas,  details,  embed,  figure,  figcaption,  footer,  header,  hgroup,  menu,  nav,  output,  ruby,  section,  summary,  time,  mark,  audio,  video
+    -webkit-font-smoothing: subpixel-antialiased;
+    line-height 1
+    font-size: 100%;
+    font-weight: normal;
+    vertical-align: baseline;
+    color: unset;
+    box-shadow: initial;
+    float: inherit;
+    letter-spacing: normal;
+    border-width: unset;
+    border-style: initial;
+    border-color: initial;
+    border-image: initial;
+    box-sizing border-box
+
+.fika-reader-mode
+  .fika-app
+    a
+      cursor: pointer
+      & ,&:link ,&:visited ,&:active
+        color:$primary.dark
+      &:hover
+        text-decoration underline
+
+
+.fika-reader-mode
+  position: fixed
+  left:0
+  top:0
+  width:100%
+  height:100%
+  background-color:#fff
+  overflow-y:auto
+  z-index: 2147483647

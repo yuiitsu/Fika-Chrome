@@ -1,0 +1,38 @@
+@import "../variables.styl"
+
+/*! Footer */
+
+footer($theme)
+  color: rgba($theme.text, 0.5);
+
+
+theme(footer, "footer")
+
+
+.fika-app
+  .fika-footer
+    display: flex;
+    justify-content: space-between;
+
+    a
+      & ,&:link ,&:visited ,&:active
+        color currentColor
+        text-decoration none
+
+    &-logo
+      display flex
+      align-items center
+
+      img
+        $margin(r, 2)
+        height 36px
+        width 36px
+
+    &-share
+      display flex
+      align-items center
+      color currentColor
+      text-decoration none
+      @media print
+        display none
+      
