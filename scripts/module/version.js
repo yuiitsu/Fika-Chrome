@@ -11,7 +11,7 @@ const Version = {
      */
     updateLogs: {
         'v0.3.0': [
-            'Advanced compatiblility',
+            'Advanced compatibility',
             'Refined article styling',
             'Trimmed and lighter table of content',
             'New Layout',
