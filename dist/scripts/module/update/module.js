@@ -1,1 +1,0 @@
-"use strict";App.module.extend("data",function(){this.init=function(){var t=Version.updateLogs[Version.currentVersion];this.view.display("update","layout",t,$("#update-log"))}});
