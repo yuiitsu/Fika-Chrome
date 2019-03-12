@@ -2,7 +2,8 @@
 # Fika 
 
 ### Update Logs
-####v0.3.0
+
+#### v0.3.0
 
 - Advanced compatiblility
 - Refined article styling
