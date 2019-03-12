@@ -1,5 +1,5 @@
 ![](images/logo64.png)
-# Fika 
+# Fika - Reader Mode
 
 ### Update Logs
 
