@@ -16,6 +16,8 @@ App.module.extend('content', function() {
     this.init = function() {
         //
         this.findArticle();
+        // console.log(articleElements);
+        // console.log(articleElementRate);
 
         // listen background script send message.
         chrome.extension.onMessage.addListener(function(request, _, response) {
@@ -67,7 +69,7 @@ App.module.extend('content', function() {
                     if (articleElements.hasOwnProperty(i)) {
                         if (articleElements[i].localName === topElement.localName) {
                             let articleElementClassName = articleElements[i].className;
-                            if (articleElementClassName) {
+                            if (articleElementClassName && topElement.className) {
                                 if (topElement.className.indexOf(articleElementClassName) === 0 ||
                                     articleElementClassName.indexOf(topElement.className) === 0) {
                                     //
@@ -84,6 +86,7 @@ App.module.extend('content', function() {
                     }
                 }
                 isAvailable = true;
+                // console.log(topArticleElement);
             }
         }
 
@@ -315,7 +318,7 @@ App.module.extend('content', function() {
                 document.getElementById('fika-reader').scrollTop = offsetTop
             })
         })
-    }
+    };
 
     this.openReaderMode = function() {
         if (location.href !== pageUrl) {
