@@ -86,7 +86,7 @@ App.module.extend('content', function() {
                     }
                 }
                 isAvailable = true;
-                // console.log(topArticleElement);
+                console.log(topArticleElement);
             }
         }
 
@@ -180,7 +180,10 @@ App.module.extend('content', function() {
             articleHtml.push(element.nodeValue);
             return true;
         } else if (nodeName === 'CODE') {
-            articleHtml.push('<code>'+ element.innerHTML +'</code>');
+            articleHtml.push('<code>' + element.innerHTML + '</code>');
+            return true
+        } else if (nodeName === 'PRE') {
+            articleHtml.push('<pre>' + element.innerHTML + '</pre>');
             return true
         } else if (excludeTags.indexOf(nodeName) !== -1) {
             return false;

@@ -4,12 +4,13 @@
  */
 const Version = {
 
-    currentVersion: 'v0.3.0',
+    currentVersion: 'v0.4.0',
 
     /**
      * 更新记录
      */
     updateLogs: {
+        'v0.4.0': [],
         'v0.3.0': [
             'Advanced compatibility',
             'Refined article styling',
