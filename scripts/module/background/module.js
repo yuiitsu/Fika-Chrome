@@ -8,12 +8,13 @@ App.module.extend('background', function() {
     this.init = function() {
         // open main screen in new tab.
         chrome.browserAction.onClicked.addListener(function(tab) {
-            chrome.tabs.sendMessage(tab.id, {
-                'method': 'openReaderMode'
-            }, function (response) {});
+            self.openReaderMode(null, tab);
+            // chrome.tabs.sendMessage(tab.id, {
+            //     'method': 'openReaderMode'
+            // }, function (response) {});
         });
 
-        // // listen content script message.
+        // listen content script message.
         chrome.extension.onMessage.addListener(function(request, _, send_response) {
             let method = request.method;
             if ($.isFunction(self[method])) {
@@ -21,6 +22,16 @@ App.module.extend('background', function() {
             } else {
                 self.log('Background [' + method + '] not exist.')
             }
+        });
+
+        // 右键菜单
+        chrome.contextMenus.create({
+            type: 'normal',
+            title: 'Toggle Fika',
+            id: 'fikaReaderMode',
+            onclick: this.openReaderMode
+        }, function () {
+            self.log('created context menus.');
         });
 
         // 安装完成后，打开网站
@@ -124,4 +135,10 @@ App.module.extend('background', function() {
         });
         send_response('');
     };
+
+    this.openReaderMode = function(info, tab) {
+        chrome.tabs.sendMessage(tab.id, {
+            'method': 'openReaderMode'
+        }, function (response) {});
+    }
 });
