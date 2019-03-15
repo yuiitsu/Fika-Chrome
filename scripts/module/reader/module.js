@@ -311,8 +311,8 @@ const fonts = {
         })
 
         // share
-        $('#fika-twitter-share').attr('href', `https://twitter.com/intent/tweet?text=${document.title} | shared from Fika&url=${window.location.href}`)
-        $('#fika-facebook-share').attr('href', `https://www.facebook.com/sharer/sharer.php?title=${document.title} ${window.location.href} | shared from Fika&u=${window.location.href}`)
+        $('#fika-twitter-share').attr('href', `https://twitter.com/intent/tweet?text=${document.title} shared from Fika&url=${window.location.href}`)
+        $('#fika-facebook-share').attr('href', `https://www.facebook.com/sharer/sharer.php?title=${document.title} ${window.location.href} shared from Fika&u=${window.location.href}`)
 
         //feedback
         // function imageIcon(url){
