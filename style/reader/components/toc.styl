@@ -54,6 +54,7 @@ $toc-h()
       opacity 0.4
       font-size: 16px
 
+
     a
       display: block
       cursor: pointer
@@ -65,6 +66,14 @@ $toc-h()
       -webkit-text-fill-color: inherit
       overflow: hidden
 
+      > *
+        border-left: 2px solid transparent
+
+      &.fika-toc-active
+        > *
+          border-left: 2px solid $primary.dark
+          font-weight bolder
+
       &:hover
         text-decoration underline
 
@@ -72,6 +81,7 @@ $toc-h()
         $toc-h()
         font-size: 17px !important
         opacity 1
+        padding-left:4px
       h2
         $toc-h()
         font-size: 14px !important

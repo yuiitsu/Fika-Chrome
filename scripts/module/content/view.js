@@ -110,35 +110,13 @@ App.view.extend('content', function() {
                                 <h1 class="fika-title">
                                     {{ data['title'] }}
                                 </h1>
-                                <div class="fika-subtitle" style="display: none;">
-                                    By Nick Babich
-                                </div>
                                 <div class="fika-content">
                                     {{ data['content'] }}
                                 </div>
                             </div>
-                            <div class="fika-feedback">
-                                <div class="fika-feedback-divider"></div>
-                                <p id="fika-feedback-msg">Is Fika working properly on this site?</p>
-                                    <div class="my-3">
-                                        <button class="fika-btn fika-btn-icon fika-btn-large fika-btn-depress fika-feedback-button" data-match="1">
-                                            <svg class="fika-icon fika-icon-large" viewBox="0 0 24 24"><circle cx="15.5" cy="9.5" r="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm4.41-6.11c-.35-.22-.82-.11-1.03.24-.74 1.17-2 1.87-3.38 1.87s-2.64-.7-3.38-1.88c-.22-.35-.68-.46-1.03-.24-.35.22-.46.68-.24 1.03C8.37 16.54 10.1 17.5 12 17.5s3.63-.97 4.65-2.58c.22-.35.11-.81-.24-1.03z"/></svg>
-                                        </button>
-                                    <button class="fika-btn fika-btn-icon fika-btn-large fika-btn-depress ml-2 fika-feedback-button" data-match="0">
-                                    <svg class="fika-icon fika-icon-large" viewBox="0 0 24 24"><circle cx="15.5" cy="9.5" r="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-6c-1.9 0-3.63.97-4.65 2.58-.22.35-.11.81.24 1.03.35.22.81.11 1.03-.24.74-1.18 2-1.88 3.38-1.88s2.64.7 3.38 1.88c.14.23.39.35.64.35.14 0 .27-.04.4-.11.35-.22.46-.68.24-1.03C15.63 14.96 13.9 14 12 14z"/></svg>
-                                    </button>
-                                    </div>
-                                    <div class="fika-feedback-inst"><b>Alt+R (Option+R)</b>: to open Fika  <b class="ml-2">Esc</b>: to close reader mode
-                                  </div>
-                            </div>
-                        </div>
-                        <div class="fika-footer mt-3">
-                            <a class="fika-footer-logo" href="https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">
-                                <img style="" src="{{ chrome.runtime.getURL('images/logo64.png') }}">
-                                Made with love by Fika
-                            </a>
-                            <div class="fika-footer-share">
-                                  Share Fika:
+                            <div class="fika-share">
+                                <div class="fika-share-divider"></div>
+                                <div class="fika-share-buttons">
                                 <a id="fika-twitter-share" href="https://twitter.com/intent/tweet?text=Read a lot of articles? This extension brings a Kindle-like reading experience to your browser&url=https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">
                                     <svg class="fika-icon fika-icon-large" viewBox="0 0 32 32">
                                         <path class="st0" d="M23.9,11.9c0,0.2,0,0.3,0,0.5c0,5.3-4.1,11.4-11.4,11.4c-2.2,0-4.4-0.7-6.2-1.8c0.3,0.1,0.7,0.1,1,0.1
@@ -153,6 +131,23 @@ App.view.extend('content', function() {
                     C19.9,5.9,21,6,21.2,6V9.2z"/>
                                     </svg>
                                 </a>
+                            </div>
+                                    <!--<div class="my-3">-->
+                                        <!--<button class="fika-btn fika-btn-icon fika-btn-large fika-btn-depress fika-feedback-button" data-match="1">-->
+                                            <!--<svg class="fika-icon fika-icon-large" viewBox="0 0 24 24"><circle cx="15.5" cy="9.5" r="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm4.41-6.11c-.35-.22-.82-.11-1.03.24-.74 1.17-2 1.87-3.38 1.87s-2.64-.7-3.38-1.88c-.22-.35-.68-.46-1.03-.24-.35.22-.46.68-.24 1.03C8.37 16.54 10.1 17.5 12 17.5s3.63-.97 4.65-2.58c.22-.35.11-.81-.24-1.03z"/></svg>-->
+                                        <!--</button>-->
+                                    <!--<button class="fika-btn fika-btn-icon fika-btn-large fika-btn-depress ml-2 fika-feedback-button" data-match="0">-->
+                                    <!--<svg class="fika-icon fika-icon-large" viewBox="0 0 24 24"><circle cx="15.5" cy="9.5" r="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-6c-1.9 0-3.63.97-4.65 2.58-.22.35-.11.81.24 1.03.35.22.81.11 1.03-.24.74-1.18 2-1.88 3.38-1.88s2.64.7 3.38 1.88c.14.23.39.35.64.35.14 0 .27-.04.4-.11.35-.22.46-.68.24-1.03C15.63 14.96 13.9 14 12 14z"/></svg>-->
+                                    <!--</button>-->
+                                <!--</div>-->
+                            </div>
+                        </div>
+                        <div class="fika-footer mt-3">
+                            <a class="fika-footer-logo" href="https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">
+                                <img style="" src="{{ chrome.runtime.getURL('images/logo64.png') }}">
+                                Made with love by Fika
+                            </a>
+                            <div class="d-flex align-center"><b>Alt+R (Option+R)</b>: to open Fika  <b class="ml-2">Esc</b>: to close reader mode
                             </div>
                         </div>
                     </div>
