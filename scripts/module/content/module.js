@@ -336,7 +336,6 @@ App.module.extend('content', function() {
             tocList[0].el.addClass('fika-toc-active')
             for (let i of tocList){
                 if (scrollTop + 48 >= i.top){
-                    console.log(i)
                     $('.fika-toc a').removeClass('fika-toc-active')
                     i.el.addClass('fika-toc-active')
                 }

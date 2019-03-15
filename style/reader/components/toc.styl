@@ -26,9 +26,25 @@ theme(toc, "toc")
 
 $toc-h()
   $padding(a, 0)
-  $margin(y,1)
+  margin: 6px 0
   line-height 1.2
   overflow: hidden
+  position: relative
+
+$bullet(p)
+  padding-left: p
+  &:before
+    content: ''
+    position:absolute
+    height 4px
+    width 4px
+    border-radius 50%
+    background currentColor
+    opacity 0.8
+    left: p - 12
+    top: 50%
+    margin-top: - 2px
+
 
 .fika-app
   .fika-toc
@@ -44,8 +60,18 @@ $toc-h()
       width: 240px
       margin-right: 432px;
       $scroll-bar()
+
+      //off state
+      opacity 0
+      transform: translateX(-24px)
+      short-transition()
+
       @media screen and (max-width: 1264px)
         display none
+
+      &-active
+        transform: translateX(0)
+        opacity 1
 
     *
       font-weight normal
@@ -79,31 +105,31 @@ $toc-h()
 
       h1
         $toc-h()
-        font-size: 17px !important
+        font-size: 15px !important
         opacity 1
         padding-left:4px
       h2
         $toc-h()
+        padding-left:4px
         font-size: 14px !important
         opacity 0.7
-        padding-left:12px
       h3
         $toc-h()
+        $bullet(16px)
         font-size: 14px !important
         opacity 0.56
-        padding-left:24px
       h4
         $toc-h()
+        $bullet(28px)
         font-size: 13px !important
         opacity 0.48
-        padding-left:36px
       h5
         $toc-h()
+        $bullet(36px)
         font-size: 12px !important
         opacity 0.40
-        padding-left:44px
       h6
         $toc-h()
+        $bullet(44px)
         font-size: 12px !important
         opacity 0.32
-        padding-left:52px
