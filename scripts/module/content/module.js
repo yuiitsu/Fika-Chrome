@@ -228,7 +228,11 @@ App.module.extend('content', function() {
             if (chileNodesLen === 0 && element.innerText === '') {
                 return false;
             }
-            articleHtml.push('<' + nodeName + '>');
+            if (nodeName === 'A') {
+                articleHtml.push('<' + nodeName + ' href="'+ element.href +'">')
+            } else {
+                articleHtml.push('<' + nodeName + '>');
+            }
             let articleHtmlLen = articleHtml.length;
             for (let i = 0; i < chileNodesLen; i++) {
                 this.filterElement(element.childNodes[i], articleHtml);
