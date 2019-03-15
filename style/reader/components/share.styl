@@ -2,14 +2,19 @@
 
 /*! Feedback */
 
-feedback($theme)
+share($theme)
   &-divider
     border-top: 1px solid $theme.text
 
-theme(feedback, "feedback")
+  &-buttons
+    a
+      color: $theme.text
+
+
+theme(share, "share")
 
 .fika-app
-  .fika-feedback
+  .fika-share
     sans-serif()
     text-align: center
     font-size: 16px
@@ -22,9 +27,13 @@ theme(feedback, "feedback")
       $margin(x, auto)
       width: 120px
 
-    &-inst
-      text-align center
-      font-size: 12px
+    &-buttons
+      display flex
+      justify-content center
 
-    .fika-feedback-button.fika-feedback-button-active
-        opacity 1
+      a
+        text-decoration none
+        opacity 0.5
+
+        &:hover
+          opacity 1
