@@ -229,7 +229,7 @@ App.module.extend('content', function() {
                 return false;
             }
             if (nodeName === 'A') {
-                articleHtml.push('<' + nodeName + ' href="'+ element.href +'">')
+                articleHtml.push('<' + nodeName + ' href="'+ element.href +'" target="_blank">')
             } else {
                 articleHtml.push('<' + nodeName + '>');
             }
