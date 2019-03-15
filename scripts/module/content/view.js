@@ -102,9 +102,9 @@ App.view.extend('content', function() {
 
                     <!--paper-->
                     <div class="fika-main-body">
-                            <div class="fika-toc-static fika-toc-static-active">
-                                <div class="fika-toc"></div>
-                            </div>
+                        <div class="fika-toc-static fika-toc-static-active">
+                            <div class="fika-toc"></div>
+                        </div>
                         <div class="fika-paper">
                             <div class="fika-article size-medium font-geogia">
                                 <h1 class="fika-title">
@@ -117,31 +117,34 @@ App.view.extend('content', function() {
                             <div class="fika-share">
                                 <div class="fika-share-divider"></div>
                                 <div class="fika-share-buttons">
-                                <a id="fika-twitter-share" href="" target="_blank">
-                                    <svg class="fika-icon fika-icon-large" viewBox="0 0 32 32">
-                                        <path class="st0" d="M23.9,11.9c0,0.2,0,0.3,0,0.5c0,5.3-4.1,11.4-11.4,11.4c-2.2,0-4.4-0.7-6.2-1.8c0.3,0.1,0.7,0.1,1,0.1
-                    c1.9,0,3.7-0.7,5-1.7c-1.7,0-3.3-1.2-3.8-2.8c0.2,0.1,0.5,0.1,0.7,0.1c0.4,0,0.7,0,1.1-0.1c-1.9-0.4-3.3-2-3.3-3.9v-0.1
-                    c0.5,0.3,1.1,0.5,1.8,0.5c-1.1-0.7-1.8-2-1.8-3.3c0-0.7,0.2-1.4,0.6-2c2,2.4,4.9,4,8.4,4.1c0-0.3-0.1-0.6-0.1-0.9c0-2.2,1.8-4,4-4
-                    C21,8,22,8.5,22.8,9.3c0.9-0.2,1.7-0.5,2.5-1c-0.3,0.9-1,1.7-1.8,2.2c0.8,0,1.5-0.2,2.3-0.6C25.2,10.8,24.6,11.4,23.9,11.9z"/>
-                                    </svg>
-                                </a>
-                                <a id="fika-facebook-share" href="" target="_blank">
-                                    <svg class="fika-icon fika-icon-large" viewBox="0 0 32 32">
-                                        <path class="st0" d="M21.2,9.2h-2c-1.5,0-1.9,0.8-1.9,1.8v2.5h3.8l-0.8,3.7h-3l0.1,8.9h-3.7v-8.8h-3v-3.8h3v-3c0-3.1,2-4.6,4.7-4.6
-                    C19.9,5.9,21,6,21.2,6V9.2z"/>
-                                    </svg>
-                                </a>
-                            </div>
-                            <p class="mt-6" id="fika-feedback-msg">Is Fika working properly on this site?</p>
-                                    <div class="my-3">
-                                        <button class="fika-btn fika-btn-icon fika-btn-large fika-btn-depress fika-feedback-button" data-match="1">
-                                            <svg class="fika-icon fika-icon-large" viewBox="0 0 24 24"><circle cx="15.5" cy="9.5" r="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm4.41-6.11c-.35-.22-.82-.11-1.03.24-.74 1.17-2 1.87-3.38 1.87s-2.64-.7-3.38-1.88c-.22-.35-.68-.46-1.03-.24-.35.22-.46.68-.24 1.03C8.37 16.54 10.1 17.5 12 17.5s3.63-.97 4.65-2.58c.22-.35.11-.81-.24-1.03z"/></svg>
-                                        </button>
-                                    <button class="fika-btn fika-btn-icon fika-btn-large fika-btn-depress ml-2 fika-feedback-button" data-match="0">
-                                    <svg class="fika-icon fika-icon-large" viewBox="0 0 24 24"><circle cx="15.5" cy="9.5" r="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-6c-1.9 0-3.63.97-4.65 2.58-.22.35-.11.81.24 1.03.35.22.81.11 1.03-.24.74-1.18 2-1.88 3.38-1.88s2.64.7 3.38 1.88c.14.23.39.35.64.35.14 0 .27-.04.4-.11.35-.22.46-.68.24-1.03C15.63 14.96 13.9 14 12 14z"/></svg>
-                                    </button>
+                                    <a id="fika-twitter-share" href="" target="_blank">
+                                        <svg class="fika-icon fika-icon-large" viewBox="0 0 32 32">
+                                            <path class="st0" d="M23.9,11.9c0,0.2,0,0.3,0,0.5c0,5.3-4.1,11.4-11.4,11.4c-2.2,0-4.4-0.7-6.2-1.8c0.3,0.1,0.7,0.1,1,0.1
+                        c1.9,0,3.7-0.7,5-1.7c-1.7,0-3.3-1.2-3.8-2.8c0.2,0.1,0.5,0.1,0.7,0.1c0.4,0,0.7,0,1.1-0.1c-1.9-0.4-3.3-2-3.3-3.9v-0.1
+                        c0.5,0.3,1.1,0.5,1.8,0.5c-1.1-0.7-1.8-2-1.8-3.3c0-0.7,0.2-1.4,0.6-2c2,2.4,4.9,4,8.4,4.1c0-0.3-0.1-0.6-0.1-0.9c0-2.2,1.8-4,4-4
+                        C21,8,22,8.5,22.8,9.3c0.9-0.2,1.7-0.5,2.5-1c-0.3,0.9-1,1.7-1.8,2.2c0.8,0,1.5-0.2,2.3-0.6C25.2,10.8,24.6,11.4,23.9,11.9z"/>
+                                        </svg>
+                                    </a>
+                                    <a id="fika-facebook-share" href="" target="_blank">
+                                        <svg class="fika-icon fika-icon-large" viewBox="0 0 32 32">
+                                            <path class="st0" d="M21.2,9.2h-2c-1.5,0-1.9,0.8-1.9,1.8v2.5h3.8l-0.8,3.7h-3l0.1,8.9h-3.7v-8.8h-3v-3.8h3v-3c0-3.1,2-4.6,4.7-4.6
+                        C19.9,5.9,21,6,21.2,6V9.2z"/>
+                                        </svg>
+                                    </a>
                                 </div>
                             </div>
+                            <div class="fika-feedback my-6">
+                                <p id="fika-feedback-msg">Is Fika working properly on this site?</p>
+                                <div class="my-3">
+                                    <button class="fika-btn fika-btn-icon fika-btn-large fika-btn-depress fika-feedback-button" data-match="1">
+                                                <svg class="fika-icon fika-icon-large" viewBox="0 0 24 24"><circle cx="15.5" cy="9.5" r="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm4.41-6.11c-.35-.22-.82-.11-1.03.24-.74 1.17-2 1.87-3.38 1.87s-2.64-.7-3.38-1.88c-.22-.35-.68-.46-1.03-.24-.35.22-.46.68-.24 1.03C8.37 16.54 10.1 17.5 12 17.5s3.63-.97 4.65-2.58c.22-.35.11-.81-.24-1.03z"/></svg>
+                                            </button>
+                                    <button class="fika-btn fika-btn-icon fika-btn-large fika-btn-depress ml-2 fika-feedback-button" data-match="0">
+                                        <svg class="fika-icon fika-icon-large" viewBox="0 0 24 24"><circle cx="15.5" cy="9.5" r="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-6c-1.9 0-3.63.97-4.65 2.58-.22.35-.11.81.24 1.03.35.22.81.11 1.03-.24.74-1.18 2-1.88 3.38-1.88s2.64.7 3.38 1.88c.14.23.39.35.64.35.14 0 .27-.04.4-.11.35-.22.46-.68.24-1.03C15.63 14.96 13.9 14 12 14z"/></svg>
+                                        </button>
+                                </div>
+                            </div>
+   
                         </div>
                         <div class="fika-footer mt-3">
                             <a class="fika-footer-logo" href="https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">
