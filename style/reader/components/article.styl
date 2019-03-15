@@ -92,9 +92,9 @@ $block-item()
       $block-item()
 
     a
+      cursor pointer
       & ,&:link ,&:visited ,&:active
         text-decoration underline
-        cursor pointer
       &:hover
       &:hover *
         color:$primary.dark !important
@@ -103,7 +103,7 @@ $block-item()
       max-width: 100%
       object-fit: cover
       $margin(x, auto)
-      $block-item()
+      $margin(y, 4)
 
     code
     pre
@@ -157,7 +157,6 @@ $block-item()
       width: 100%;
       overflow: auto;
       border-collapse: collapse;
-      text-align: center;
       td, th
         $padding(a, 1)
 
