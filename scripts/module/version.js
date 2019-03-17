@@ -12,9 +12,9 @@ const Version = {
     updateLogs: {
         'v0.4.0': [
             'Fix a bug that the HTML is being rendered in <code>',
-            'Articles opened in Fika can now be shared to twitter and facebook',
+            'Articles opened in Fika can share to twitter and facebook',
             'TOC item will be highlighted while scrolling',
-            'Fika can toggle through Chrome default right click menu',
+            'Fika toggle is available in Chrome default right click menu',
         ],
         'v0.3.0': [
             'Advanced compatibility',
