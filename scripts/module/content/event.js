@@ -23,11 +23,26 @@ App.event.extend('content', function() {
             });
         },
         feedback: function() {
-            $('body').on('click', '.fika-feedback-button', function(e) {
-                let isMatch = $(this).attr('data-match');
-                self.module.content.sendFeedback(isMatch);
-                e.stopPropagation();
-            });
+            let feedbackBtns = $('.fika-feedback-button'),
+                feedbackOldVal ,
+                clickCount = 0
+            feedbackBtns.click(function () {
+                let thisBtn = $(this),
+                    attr = thisBtn.attr('data-match'),
+                    msg = $('#fika-feedback-msg');
+                if (feedbackOldVal !== attr && clickCount <= 1){
+                    feedbackBtns.removeClass('fika-feedback-button-active')
+                    thisBtn.addClass('fika-feedback-button-active')
+                    self.module.content.sendFeedback(attr)
+                    if (attr === '1'){
+                        msg.html('Thanks for the upvote! <a href="https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">Rate Fika</a>')
+                    } else {
+                        msg.html('Sorry to hear that! <a href="mailto:hi@fika.io?subject=Fika User Feedback" target="_blank">Help us improve</a>')
+                    }
+                }
+                clickCount++
+                feedbackOldVal = attr
+            })
         }
     }
 });
