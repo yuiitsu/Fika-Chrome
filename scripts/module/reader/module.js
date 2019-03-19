@@ -322,8 +322,14 @@ const fonts = {
         })
 
         // share
-        $('#fika-twitter-share').attr('href', encodeURI(`https://twitter.com/intent/tweet?text=${document.title} shared from Fika&url=${window.location.href}`))
-        $('#fika-facebook-share').attr('href', encodeURI(`https://www.facebook.com/sharer/sharer.php?title=${document.title} ${window.location.href}  shared from Fika&u=${window.location.href}`))
+        $('#fika-twitter-share').click(function () {
+            const url = encodeURI(`https://twitter.com/intent/tweet?text=${document.title} | shared from Fika&url=${window.location.href}`).replace(/#/g,'%23')
+            window.open(url, '_blank', 'width=720, height=600')
+        })
+        $('#fika-facebook-share').click(function(){
+            const url = encodeURI(`https://www.facebook.com/sharer/sharer.php?title=${document.title} ${window.location.href} | shared from Fika&u=${window.location.href}`).replace(/#/g,'%23')
+            window.open(url, '_blank', 'width=720, height=600')
+        })
 
         //feedback
         // function imageIcon(url){
