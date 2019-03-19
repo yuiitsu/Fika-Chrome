@@ -194,7 +194,7 @@ const fonts = {
     this.initDrawer = function(){
         /* Drawer */
         drawer = {
-            open: false,
+            open: true,
             modal: false,
             close: $('.fika-drawer-close'),
             toolbar: $('.fika-tool'),
@@ -202,16 +202,24 @@ const fonts = {
             el: $('.fika-drawer'),
             app: $('.fika-app'),
             overlay: $('.fika-overlay'),
+            static: $('.fika-toc-static'),
             w: null,
             threshold: 1264,
             available:false
         };
 
-        function toggleDrawer(open){
-            if (open && drawer.available){
-                drawer.el.addClass('fika-drawer-on');
-                drawer.overlay.addClass('fika-overlay-active')
+        function toggleToc(open){
+            console.log(open)
+            // static
+            if (open) {
+                if (drawer.available){
+                    drawer.el.addClass('fika-drawer-on');
+                    drawer.overlay.addClass('fika-overlay-active')
+                } else {
+                    drawer.static.addClass('fika-toc-static-active')
+                }
             } else {
+                drawer.static.removeClass('fika-toc-static-active')
                 drawer.el.removeClass('fika-drawer-on');
                 drawer.overlay.removeClass('fika-overlay-active')
             }
@@ -220,13 +228,13 @@ const fonts = {
 
         // click events
         drawer.btn.click(function(){
-            toggleDrawer(!drawer.open)
+            toggleToc(!drawer.open)
         });
         drawer.close.click(function(){
-            toggleDrawer(false)
+            toggleToc(false)
         });
         drawer.overlay.click(function(){
-            toggleDrawer(false);
+            toggleToc(false);
             self.toggleAppearanceMenu(false);
             drawer.overlay.removeClass('fika-overlay-active')
         });
@@ -234,15 +242,18 @@ const fonts = {
         function toggleTocDrawer(){
             drawer.w = window.innerWidth;
             drawer.available = drawer.w < drawer.threshold;
-            drawer.toolbar.toggleClass('fika-tool-toc-disabled', !drawer.available);
         }
 
         window.addEventListener('resize', ()=>{
             // current window width
             const w = window.innerWidth;
+            const wasAvailabe = drawer.available
             toggleTocDrawer()
-            if (drawer.open && !drawer.available){
-                toggleDrawer(false)
+            if (wasAvailabe && !drawer.available){
+                toggleToc(false)
+                toggleToc(true)
+            } else if (drawer.available){
+                toggleToc(false)
             }
             drawer.w = w;
         });
@@ -311,8 +322,8 @@ const fonts = {
         })
 
         // share
-        $('#fika-twitter-share').attr('href', `https://twitter.com/intent/tweet?text=${document.title} shared from Fika&url=${window.location.href}`)
-        $('#fika-facebook-share').attr('href', `https://www.facebook.com/sharer/sharer.php?title=${document.title} ${window.location.href} shared from Fika&u=${window.location.href}`)
+        $('#fika-twitter-share').attr('href', encodeURI(`https://twitter.com/intent/tweet?text=${document.title} shared from Fika&url=${window.location.href}`))
+        $('#fika-facebook-share').attr('href', encodeURI(`https://www.facebook.com/sharer/sharer.php?title=${document.title} ${window.location.href}  shared from Fika&u=${window.location.href}`))
 
         //feedback
         // function imageIcon(url){
@@ -324,25 +335,7 @@ const fonts = {
         // $('#fika-facebook-share').html(
         //   imageIcon(chrome.extension.getURL("assets/icon/facebook-01.png"))
         // )
-        // let feedbackBtns = $('.fika-feedback-button'),
-        //     feedbackOldVal ,
-        //     clickCount = 0
-        // feedbackBtns.click(function () {
-        //     let thisBtn = $(this),
-        //         attr = thisBtn.attr('data-match'),
-        //         msg = $('#fika-feedback-msg');
-        //     if (feedbackOldVal !== attr && clickCount <= 1){
-        //         feedbackBtns.removeClass('fika-feedback-button-active')
-        //         thisBtn.addClass('fika-feedback-button-active')
-        //         if (attr === '1'){
-        //             msg.html('Thanks for the upvote! <a href="https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">Rate Fika</a>')
-        //         } else {
-        //             msg.html('Sorry to hear that! <a href="mailto:hi@fika.io?subject=Fika User Feedback" target="_blank">Help us improve</a>')
-        //         }
-        //     }
-        //     clickCount++
-        //     feedbackOldVal = attr
-        // })
+
     };
 
     this._init = function(content) {

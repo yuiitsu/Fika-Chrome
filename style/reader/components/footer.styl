@@ -36,4 +36,18 @@ theme(footer, "footer")
       @media print
         display none
 
-      
+
+.fika-feedback
+  text-align center
+
+  &-button-active.fika-feedback-button.fika-btn.fika-btn-depress
+    opacity 1
+
+  #fika-feedback-msg
+    a
+      cursor pointer
+      color: $primary.dark !important;
+      text-decoration underline
+
+      & ,&:link ,&:visited ,&:active
+        text-decoration underline

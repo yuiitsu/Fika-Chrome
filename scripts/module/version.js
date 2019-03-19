@@ -10,7 +10,12 @@ const Version = {
      * 更新记录
      */
     updateLogs: {
-        'v0.4.0': [],
+        'v0.4.0': [
+            'Fix a bug that the HTML is being rendered in <code>',
+            'Articles opened in Fika can share to twitter and facebook',
+            'TOC item will be highlighted while scrolling',
+            'Fika toggle is available in Chrome default right click menu',
+        ],
         'v0.3.0': [
             'Advanced compatibility',
             'Refined article styling',
