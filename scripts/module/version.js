@@ -11,7 +11,7 @@ const Version = {
      */
     updateLogs: {
         'v0.4.0': [
-            'Fix a bug that the HTML is being rendered in <code>',
+            'Fix a bug that the HTML is being rendered in Code elements',
             'Articles opened in Fika can share to twitter and facebook',
             'TOC item will be highlighted while scrolling',
             'Fika toggle is available in Chrome default right click menu',
@@ -36,33 +36,54 @@ const Version = {
         ]
     },
 
+    notify: function(){
+        chrome.notifications.create(null, {
+            iconUrl: 'images/logo64.png',
+            type: 'basic',
+            title: 'Fika Updated',
+            message: this.updateLogs[this.currentVersion].join('\n'),
+            buttons: [
+                {
+                    title: 'View detail'
+                }
+            ]
+        }, function() {
+        });
+        //binding notification clicks
+        chrome.notifications.onClicked.addListener(function() {
+            chrome.tabs.create({url: chrome.extension.getURL("update.html")});
+        });
+        chrome.notifications.onButtonClicked.addListener(function() {
+            chrome.tabs.create({url: chrome.extension.getURL("update.html")});
+        });
+    },
+
     notice: function() {
         let version = localStorage.getItem('version');
+        let self = this
         if (version !== this.currentVersion) {
             // 将新版本号写入缓存
             localStorage.setItem('version', this.currentVersion);
-            chrome.notifications.create(null, {
-                iconUrl: 'images/logo64.png',
-                type: 'basic',
-                title: 'Fika Updated',
-                message: this.updateLogs[this.currentVersion].join('\n'),
-                buttons: [
-                    {
-                        title: 'View detail'
-                    }
-                ]
-            }, function() {
-            });
 
-            //
-            chrome.notifications.onClicked.addListener(function() {
-                chrome.tabs.create({url: chrome.extension.getURL("update.html")});
-            });
-            //
-            chrome.notifications.onButtonClicked.addListener(function() {
-
-                chrome.tabs.create({url: chrome.extension.getURL("update.html")});
-            });
+            chrome.permissions.contains({
+                permissions: ["notifications"],
+                origins: ["http://*/*", "https://*/*"]
+            }, function(result){
+                console.log('permission', result)
+                if (result){
+                    self.notify()
+                } else {
+                    chrome.permissions.request({
+                        permissions:[ "notifications"],
+                        origins:["http://*/*", "https://*/*"]
+                    }, function(granted){
+                        console.log('granted', granted)
+                        if (granted) {
+                            self.notify()
+                        }
+                    })
+                }
+            })
         }
     }
 };
