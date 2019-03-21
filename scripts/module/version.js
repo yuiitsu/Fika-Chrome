@@ -4,12 +4,15 @@
  */
 const Version = {
 
-    currentVersion: 'v0.4.0',
+    currentVersion: 'v0.5.0',
 
     /**
      * 更新记录
      */
     updateLogs: {
+        'v0.5.0': [
+          'Notification permission becomes optional'
+        ],
         'v0.4.0': [
             'Fix a bug that the HTML is being rendered in Code elements',
             'Articles opened in Fika can share to twitter and facebook',
