@@ -27,20 +27,11 @@ article($border-color, $theme)
   h6
   p
   li
-  pre
-  code
   sup
   sub
   table
   blockquote
     color: $theme.text
-
-  pre
-  code
-    *
-    span
-      color: $theme.text !important
-
 
 
 theme(theme-tinting, "article")
@@ -118,6 +109,9 @@ $block-item()
       line-height: 1.2 !important;
       overflow: auto
       $scroll-bar()
+
+      code
+        padding: 0px !important
 
     ol
       display: block;

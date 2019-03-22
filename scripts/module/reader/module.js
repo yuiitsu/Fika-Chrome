@@ -209,7 +209,6 @@ const fonts = {
         };
 
         function toggleToc(open){
-            console.log(open)
             // static
             if (open) {
                 if (drawer.available){

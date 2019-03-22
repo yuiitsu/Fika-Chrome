@@ -183,7 +183,22 @@ App.module.extend('content', function() {
             articleHtml.push('<code>' + element.innerHTML + '</code>');
             return true
         } else if (nodeName === 'PRE') {
-            articleHtml.push('<pre>' + element.innerHTML + '</pre>');
+            // extract nodeValue from the children of <pre>
+            function extract(result, el){
+                let c = el.childNodes
+                for (let i of c){
+                    if (i.nodeType === 3) result += i.nodeValue.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    if (i.nodeType === 1) {
+                        if (i.nodeName === 'BR'){
+                            result += '\n'
+                        } else {
+                            result = extract(result, i)
+                        }
+                    }
+                }
+                return result
+            }
+            articleHtml.push('<pre><code>' + extract('', element) + '</code></pre>');
             return true
         } else if (excludeTags.indexOf(nodeName) !== -1) {
             return false;
@@ -342,6 +357,13 @@ App.module.extend('content', function() {
             }
         })
     };
+    
+    this.highlightCode = function () {
+        let fikaApp = document.getElementById('fika-reader')
+        fikaApp.querySelectorAll('pre').forEach((block) => {
+            hljs.highlightBlock(block);
+        })
+    }
 
     this.openReaderMode = function() {
         if (location.href !== pageUrl) {
@@ -364,6 +386,7 @@ App.module.extend('content', function() {
         $('html, body').css('overflow-y', overflow);
 
         self.tocScroll()
+        self.highlightCode()
         chrome.extension.sendMessage({
             'method': 'is_open',
             'data': isOpen

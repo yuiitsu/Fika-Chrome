@@ -34,7 +34,8 @@
             "scripts/module/content/module.js",
             "scripts/module/content/view.js",
             "scripts/module/content/event.js",
-            "scripts/run.js"
+            "scripts/run.js",
+            "scripts/lib/highlight.min.js"
         ],
         "css": [
             "style/content.css"
