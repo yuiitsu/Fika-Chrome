@@ -11,7 +11,8 @@ const Version = {
      */
     updateLogs: {
         'v0.5.0': [
-          'Notification permission becomes optional'
+            'Highlight code syntax',
+            'More legible text colors in Vanilla & Licorice theme'
         ],
         'v0.4.0': [
             'Fix a bug that the HTML is being rendered in Code elements',
