@@ -360,7 +360,7 @@ App.module.extend('content', function() {
     
     this.highlightCode = function () {
         let fikaApp = document.getElementById('fika-reader')
-        fikaApp.querySelectorAll('pre').forEach((block) => {
+        fikaApp.querySelectorAll('pre code').forEach((block) => {
             hljs.highlightBlock(block);
         })
     }

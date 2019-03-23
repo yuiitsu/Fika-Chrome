@@ -64,8 +64,8 @@ App.module.extend('background', function() {
             }
         });
 
-        //
-        Version.notice();
+        // 更新版本后 推送版本更新消息 （暂时先关闭！！！）
+        // Version.notice();
 
         send_response('');
     };

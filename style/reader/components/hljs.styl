@@ -1,5 +1,66 @@
+@import '../variables.styl'
+
+/*! hightlight js */
+
 .fika-app
-  .fika-article
-    .fika-content
-      pre
-        .hljs{display:block;overflow-x:auto;padding:.5em;color:#abb2bf;background:#282c34}.hljs-comment,.hljs-quote{color:#5c6370;font-style:italic}.hljs-doctag,.hljs-keyword,.hljs-formula{color:#c678dd}.hljs-section,.hljs-name,.hljs-selector-tag,.hljs-deletion,.hljs-subst{color:#e06c75}.hljs-literal{color:#56b6c2}.hljs-string,.hljs-regexp,.hljs-addition,.hljs-attribute,.hljs-meta-string{color:#98c379}.hljs-built_in,.hljs-class .hljs-title{color:#e6c07b}.hljs-attr,.hljs-variable,.hljs-template-variable,.hljs-type,.hljs-selector-class,.hljs-selector-attr,.hljs-selector-pseudo,.hljs-number{color:#d19a66}.hljs-symbol,.hljs-bullet,.hljs-link,.hljs-meta,.hljs-selector-id,.hljs-title{color:#61aeee}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:bold}.hljs-link{text-decoration:underline}
+  .fika-content
+    .hljs
+      .hljs
+        &-comment
+        &-quote
+          color:#5c6370
+          font-style:italic
+
+        &-doctag
+        &-keyword
+        &-formula
+          color:#c678dd
+
+        &-section
+        &-name
+        &-selector-tag
+        &-deletion
+        &-subst
+          color: #e05287
+
+        &-literal
+          color:#56b6c2
+
+        &-string
+        &-regexp
+        &-addition
+        &-attribute
+        &-meta-string
+          color: #98c379
+
+        &-built_in
+        &-class
+        &-title
+          color: #c38d62
+
+        &-attr
+        &-variable
+        &-template-variable
+        &-type
+        &-selector-class
+        &-selector-attr
+        &-selector-pseudo
+        &-number
+          color: #c38d62
+
+        &-symbol
+        &-bullet
+        &-link
+        &-meta
+        &-selector-id
+        &-title
+          color:#61aeee
+
+        &-emphasis
+          font-style:italic
+
+        &-strong
+          font-weight:bold
+
+        &-link
+          text-decoration:underline

@@ -46,7 +46,6 @@
         "default_icon": "images/logo64-grey.png"
     },
     "optional_permissions": [
-        "notifications",
         "http://*/*",
         "https://*/*"
     ],
