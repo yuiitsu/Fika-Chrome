@@ -322,7 +322,7 @@ const fonts = {
 
         // share
         $('#fika-twitter-share').click(function () {
-            const url = encodeURI(`https://twitter.com/intent/tweet?text=${document.title} | shared from Fika&url=${window.location.href}`).replace(/#/g,'%23')
+            const url = encodeURI(`https://twitter.com/intent/tweet?text=${document.title} | #SharedFromFika &url=${window.location.href}`).replace(/#/g,'%23')
             window.open(url, '_blank', 'width=720, height=600')
         })
         $('#fika-facebook-share').click(function(){

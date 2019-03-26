@@ -41,7 +41,7 @@ $bullet(p)
     border-radius 50%
     background currentColor
     opacity 0.8
-    left: p - 12
+    left: p - 12 // 4 content + 8 padding
     top: 50%
     margin-top: - 2px
 
@@ -58,7 +58,8 @@ $bullet(p)
       top: 96px;
       right: 50%
       width: 240px
-      margin-right: 432px;
+      margin-right: 416px;
+      $padding(l, 1)
       $scroll-bar()
 
       //off state
@@ -66,8 +67,12 @@ $bullet(p)
       transform: translateX(-24px)
       short-transition()
 
+      // responsive
       @media screen and (max-width: 1264px)
         display none
+
+      @media screen and (min-width: 1440px)
+        margin-right: 456px
 
       &-active
         transform: translateX(0)
@@ -110,26 +115,26 @@ $bullet(p)
         padding-left:8px
       h2
         $toc-h()
-        padding-left:8px
+        $bullet(20px)
         font-size: 14px !important
         opacity 0.7
       h3
         $toc-h()
-        $bullet(20px)
+        $bullet(28px)
         font-size: 14px !important
         opacity 0.56
       h4
         $toc-h()
-        $bullet(32px)
+        $bullet(36px)
         font-size: 13px !important
         opacity 0.48
       h5
         $toc-h()
-        $bullet(40px)
+        $bullet(44px)
         font-size: 12px !important
         opacity 0.40
       h6
         $toc-h()
-        $bullet(48px)
+        $bullet(52px)
         font-size: 12px !important
         opacity 0.32
