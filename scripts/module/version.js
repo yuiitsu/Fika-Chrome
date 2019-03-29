@@ -4,12 +4,15 @@
  */
 const Version = {
 
-    currentVersion: 'v0.5.0',
+    currentVersion: 'v0.6.0',
 
     /**
      * 更新记录
      */
     updateLogs: {
+        'v0.6.0': [
+            ''
+        ],
         'v0.5.0': [
             'Highlight code syntax',
             'More legible text colors in Vanilla & Licorice theme'
