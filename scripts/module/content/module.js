@@ -454,7 +454,7 @@ App.module.extend('content', function() {
             //
             let img = new Image();
             img.src = $(this).attr('src');
-            if (img.width > 50) {
+            if (img.width > 30) {
                 $(this).attr('style', 'display:block;');
             }
         });
