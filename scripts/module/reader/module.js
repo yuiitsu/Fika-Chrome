@@ -316,9 +316,9 @@ const fonts = {
         })
 
         //close
-        $('#fika-exit').click(function () {
-            self.module.content.closeReaderMode()
-        })
+        // $('#fika-exit').click(function () {
+        //     self.module.content.closeReaderMode()
+        // })
 
         // share
         $('#fika-twitter-share').click(function () {
@@ -330,16 +330,37 @@ const fonts = {
             window.open(url, '_blank', 'width=720, height=600')
         })
 
-        //feedback
-        // function imageIcon(url){
-        //     return ` <img class="fika-icon fika-icon-large" src="${url}">`
-        // }
-        // $('#fika-twitter-share').html(
-        //   imageIcon(chrome.extension.getURL("assets/icon/twitter-01.png"))
-        // )
-        // $('#fika-facebook-share').html(
-        //   imageIcon(chrome.extension.getURL("assets/icon/facebook-01.png"))
-        // )
+        //login
+        $('#fika-login').click(function () {
+            function getUser(){
+                chrome.identity.getProfileUserInfo(function(userInfo) {
+                    console.log(userInfo);
+                });
+            }
+
+            // check identity permission
+            chrome.permissions.contains({
+                permissions: ["identity"],
+                origins: ["http://*/*", "https://*/*"]
+            }, function(result){
+                console.log('identity', result)
+                if (result){
+                    getUser()
+                } else {
+                    // request identity permission
+                    chrome.permissions.request({
+                        permissions:[ "identity"],
+                        origins:["http://*/*", "https://*/*"]
+                    }, function(granted){
+                        console.log('granted', granted)
+                        if (granted) {
+                            getUser()
+                        }
+                    })
+                }
+            })
+        })
+
 
     };
 
@@ -364,10 +385,6 @@ const fonts = {
             }
 
             // 多语言字体  - nil
-            // 检查是否为从"右往左"书写的文字
-            if (fonts.rtl.indexOf(mainLang.code) !== -1){
-                $('.fika-article').addClass('rtl')
-            }
             // 检索相应语言的字体列表
             for (let j = 0; j < fonts.typeface.length; j++){
                 if (fonts.typeface[j]['lang'].indexOf(mainLang.code) !== -1){
@@ -384,7 +401,7 @@ const fonts = {
             let targetContent = $(".fika-content"),
                 tocs = [];
             // toc 大标题
-            let title = $('.fika-title'),
+            let title = $('.fika-article-title'),
                 randomId = Math.random() * 10000
             title.attr('id', randomId)
             tocs.push({
@@ -405,6 +422,7 @@ const fonts = {
                     });
                 }
             });
+            console.log(targetContent, tocs)
             // 如果没有抓到TOC 就不显示 - nil
             if (tocs.length > 1){
                 self.view.display('reader', 'toc', tocs, $('.fika-toc'));
