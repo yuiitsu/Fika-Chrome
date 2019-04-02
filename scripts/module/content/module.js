@@ -6,6 +6,7 @@ App.module.extend('content', function() {
     let self = this,
         tags = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'PRE', 'CODE', 'FIGURE'],
         excludeTags = ['BUTTON', 'IFRAME', 'CANVAS', '#comment', 'SCRIPT', 'INPUT', 'ASIDE'],
+        titleTags = ['H1', 'H2', 'H3', 'DIV'],
         topArticleElement = [],
         articleElementIndex = [],
         articleElements = {},
@@ -264,13 +265,14 @@ App.module.extend('content', function() {
             chileNodesLen = element.childNodes.length;
 
         // filter
-        if (tags.indexOf(nodeName) !== -1) {
+        if (titleTags.indexOf(nodeName) !== -1) {
             if (element.innerText && element.innerText.length > 0) {
                 let pageTitleTarget = $('head title');
                 if ((pageTitleTarget.length > 0 &&
                     pageTitleTarget.text().toLocaleLowerCase().indexOf(element.innerText.toLocaleLowerCase()) !== -1) ||
                     (element.className && element.className.toLocaleLowerCase().indexOf('title') !== -1)) {
                     articleTitle = element.innerText;
+                    console.log(element);
                     return false;
                 }
             }
