@@ -66,17 +66,6 @@ App.view.extend('content', function() {
                     </div>
                     <div class="fika-drawer">
                         <div class="my-2 d-flex align-center justify-space-between">
-                            <!-- ** sign in button-->
-                            <!--
-                            <button class="fika-btn" style="display: none;">Sign in</button>
-                            -->
-                            <!-- ** authorized user avatar & name -->
-                            <!--
-                            <button class="fika-btn fika-avatar">
-                                <img src="https://lh3.googleusercontent.com/-IvSppfPGUEE/AAAAAAAAAAI/AAAAAAAAAAA/ACevoQPWKABIL1pznV_P0TGMb18IA8PXpw/s32-c-mo/photo.jpg">
-                                <span>Username</span>
-                            </button>
-                            -->
                             <div class="fika-select-label" style="margin: 8px">Table of content</div>
                             <div class="flex-fill"></div>
                             <button class="fika-btn fika-btn-icon ml-1 fika-drawer-close">
@@ -88,11 +77,6 @@ App.view.extend('content', function() {
                             <div class="fika-drawer-content-wrap">
                                 <!-- ** toc-->
                                 <div class="fika-toc"></div>
-                                <!-- ** highlights 仅仅是这篇文章中的highlights -->
-                                <!--<div class="fika-hl-list">-->
-                                    <!--<a><span>Details are what keep them there. And details are what actually make our app stand out from our competition.</span></a>-->
-                                    <!--<a><span>As first described in Dan Saffer’s book Microinteractions, these tiny details typically serve these essential functions:</span></a>-->
-                                <!--</div>-->
                             </div>
                         </div>
 
@@ -107,9 +91,14 @@ App.view.extend('content', function() {
                         </div>
                         <div class="fika-paper">
                             <div class="fika-article size-medium font-geogia">
-                                <h1 class="fika-title">
+                                <div class="fika-article-domain">
+                                    <img src="{{ data['favicon'] }}"/>
+                                    {{ data['domain'] }}
+                                </div>
+                                <h1 class="fika-article-title">
                                     {{ data['title'] }}
                                 </h1>
+                                <div class="fika-article-divider"></div>
                                 <div class="fika-content">
                                     {{ data['content'] }}
                                 </div>

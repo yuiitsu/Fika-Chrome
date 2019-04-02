@@ -388,9 +388,23 @@ App.module.extend('content', function() {
         //
         let title = articleTitle ? articleTitle : $('head title').text();
 
+        // get favicon
+        let favicon = '',
+            headLinks = document.getElementsByTagName('link')
+        for (let i of headLinks){
+            if (i.getAttribute('rel') === 'icon' || i.getAttribute('rel') === 'shortcut icon' ){
+                favicon = i.getAttribute('href')
+            }
+        }
+
         // console.log(articleElement.html());
         $('#fika-reader').remove();
-        this.view.append('content', 'layout', {title: title, content: articleHtml.join('')}, $('html'));
+        this.view.append('content', 'layout', {
+            title: title,
+            content: articleHtml.join(''),
+            domain: window.location.hostname,
+            favicon: favicon
+        }, $('html'));
         //
         this.extFilter();
         //
@@ -459,11 +473,13 @@ App.module.extend('content', function() {
         })
         fikaApp.addEventListener('scroll', function (e) {
             let scrollTop = e.target.scrollTop
-            tocList[0].el.addClass('fika-toc-active')
-            for (let i of tocList){
-                if (scrollTop + 48 >= i.top){
-                    $('.fika-toc a').removeClass('fika-toc-active')
-                    i.el.addClass('fika-toc-active')
+            if (tocList.length > 0){
+                tocList[0].el.addClass('fika-toc-active')
+                for (let i of tocList){
+                    if (scrollTop + 48 >= i.top){
+                        $('.fika-toc a').removeClass('fika-toc-active')
+                        i.el.addClass('fika-toc-active')
+                    }
                 }
             }
         })

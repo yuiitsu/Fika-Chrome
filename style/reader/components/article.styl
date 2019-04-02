@@ -6,12 +6,18 @@ theme-tinting($theme)
   article($border-color, $theme)
 
 article($border-color, $theme)
+  &-divider
+    border-bottom-color: $border-color
+
+  &-domain
+    color: $border-color
+
   table
     td, th
-      border:solid 1px $border-color
+      border:1px solid $border-color
 
   blockquote
-    border-left: solid 5px $border-color
+    border-left:5px solid $border-color
 
   pre
   code
@@ -40,22 +46,36 @@ $block-item()
   display block
 
 .fika-app
-  .fika-title
-    $margin(y, 0)
-    font-size: 40px
-    line-height 52px
-    font-weight bold
-    text-align: left
-
-  .fika-subtitle
-    $margin(y, 4)
-    font-size: 16px
-    sans-serif()
-
   .fika-article
     $margin(a, 4)
     max-width: 720px
     position relative
+
+    &-title
+      $margin(t, 0)
+      $margin(b, 5)
+      font-size: 40px
+      line-height 52px
+      font-weight bold
+      text-align: left
+
+    &-divider
+      width:100%
+      $margin(y, 3)
+      border-bottom-width 2px
+      border-bottom-style solid
+
+    &-domain
+      display flex
+      font-size 14px
+      font-weight bolder
+      $margin(b, 2)
+
+      img
+        height 16px
+        width 16px
+        $margin(r, 1)
+
 
   // rich text
   .fika-content
