@@ -5,8 +5,9 @@ App.module.extend('content', function() {
     //
     let self = this,
         tags = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'PRE', 'CODE', 'FIGURE'],
-        excludeTags = ['BUTTON', 'IFRAME', 'CANVAS', '#comment', 'SCRIPT', 'INPUT', 'ASIDE'],
-        titleTags = ['H1', 'H2', 'H3', 'DIV'],
+        excludeTags = ['BUTTON', 'IFRAME', 'CANVAS', '#comment', 'SCRIPT', 'INPUT', 'ASIDE', 'FOOTER'],
+        excludeAttrName = ['share', 'twitter', 'linkedin', 'pinterest', 'thumb', 'author'],
+        titleTags = ['H1', 'H2', 'H3'],
         topArticleElement = [],
         articleElementIndex = [],
         articleElements = {},
@@ -322,29 +323,34 @@ App.module.extend('content', function() {
             articleHtml.push(element.outerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, ''));
             return true;
         } else {
-            if (nodeName === 'DIV' || nodeName === 'SECTION') {
-                // if (element.nextElementSibling) {
-                //     console.log(element.nextElementSibling.nodeName);
-                // }
-                // if (element.previousElementSibling) {
-                //     console.log(element.previousElementSibling.nodeName);
-                // }
-                if (element.nextElementSibling && tags.indexOf(element.nextElementSibling.nodeName) !== -1 &&
-                    element.previousElementSibling && tags.indexOf(element.previousElementSibling.nodeName) !== -1) {
-                    //
-                    let elementAttrs = element.attributes,
-                        elementAttrLen = elementAttrs.length,
-                        isImg = false;
+            // if (nodeName === 'DIV' || nodeName === 'SECTION') {
+            //     // if (element.nextElementSibling) {
+            //     //     console.log(element.nextElementSibling.nodeName);
+            //     // }
+            //     // if (element.previousElementSibling) {
+            //     //     console.log(element.previousElementSibling.nodeName);
+            //     // }
+            //     if (element.nextElementSibling && tags.indexOf(element.nextElementSibling.nodeName) !== -1 &&
+            //         element.previousElementSibling && tags.indexOf(element.previousElementSibling.nodeName) !== -1) {
+            //         //
+            //         let elementAttrs = element.attributes,
+            //             elementAttrLen = elementAttrs.length,
+            //             isImg = false;
 
-                    for (let i = 0; i < elementAttrLen; i++) {
-                        if (elementAttrs[i].nodeValue.indexOf('img') !== -1 || elementAttrs[i].nodeValue.indexOf('image') !== -1) {
-                            isImg = true;
-                        }
-                    }
-                    //
-                    if (!isImg) {
-                        // return false;
-                    }
+            //         for (let i = 0; i < elementAttrLen; i++) {
+            //             if (elementAttrs[i].nodeValue.indexOf('img') !== -1 || elementAttrs[i].nodeValue.indexOf('image') !== -1) {
+            //                 isImg = true;
+            //             }
+            //         }
+            //         //
+            //         if (!isImg) {
+            //             // return false;
+            //         }
+            //     }
+            // }
+            for (var i in excludeAttrName) {
+                if (element.className.indexOf(excludeAttrName[i]) !== -1) {
+                    return false;
                 }
             }
             if (chileNodesLen === 0 && element.innerText === '') {
