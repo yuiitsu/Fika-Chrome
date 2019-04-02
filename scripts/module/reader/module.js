@@ -352,7 +352,7 @@ const fonts = {
             // result.languages[i].language 是语言代码
             // result.languages[i].percentage 是所占比例，比例越高，说明文本所使用的语言越高
             var languages =  "Languages: \n";
-            var mainLang = {code:'', percentage:0}
+            var mainLang = {code:'', percentage:0};
             for (var i = 0; i < result.languages.length; i++) {
                 languages += result.languages[i].language + " ";
                 languages += result.languages[i].percentage + "\n";
@@ -384,14 +384,14 @@ const fonts = {
             let targetContent = $(".fika-content"),
                 tocs = [];
             // toc 大标题
-            let title = $('.fika-title'),
-                randomId = Math.random() * 10000
-            title.attr('id', randomId)
+            let title = $('.fika-article-title'),
+                randomId = Math.random() * 10000;
+            title.attr('id', randomId);
             tocs.push({
-                tag: 'h1',
+                tag: 'H1',
                 text: title[0].innerText,
                 id: randomId
-            })
+            });
             // toc 其他标题
             targetContent.find(':header').each(function() {
                 let text = $(this)[0].innerText;

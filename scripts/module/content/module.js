@@ -463,27 +463,27 @@ App.module.extend('content', function() {
 
     // 绑定toc翻页
     this.tocScroll = function(){
-        const fikaApp = document.getElementById('fika-reader')
-        let tocList = []
+        const fikaApp = document.getElementById('fika-reader');
+        let tocList = [];
         $('.fika-toc a').each(function () {
             let id = $(this).attr('data-id'),
                 header = document.getElementById(id.slice(1)),
-                offsetTop = header.getBoundingClientRect().y
+                offsetTop = header.getBoundingClientRect().y;
             tocList.push({
                 el: $(`a[data-id="${id}"]`),
                 top: offsetTop
-            })
+            });
             $(this).click(function () {
                 fikaApp.scrollTop = offsetTop
             })
-        })
+        });
         fikaApp.addEventListener('scroll', function (e) {
-            let scrollTop = e.target.scrollTop
+            let scrollTop = e.target.scrollTop;
             if (tocList.length > 0){
-                tocList[0].el.addClass('fika-toc-active')
+                tocList[0].el.addClass('fika-toc-active');
                 for (let i of tocList){
                     if (scrollTop + 48 >= i.top){
-                        $('.fika-toc a').removeClass('fika-toc-active')
+                        $('.fika-toc a').removeClass('fika-toc-active');
                         i.el.addClass('fika-toc-active')
                     }
                 }
@@ -492,7 +492,7 @@ App.module.extend('content', function() {
     };
     
     this.highlightCode = function () {
-        let fikaApp = document.getElementById('fika-reader')
+        let fikaApp = document.getElementById('fika-reader');
         fikaApp.querySelectorAll('pre code').forEach((block) => {
             try {
                 hljs.highlightBlock(block);
@@ -500,7 +500,7 @@ App.module.extend('content', function() {
                 console.log(err)
             }
         })
-    }
+    };
 
     this.openReaderMode = function() {
         if (location.href !== pageUrl) {
