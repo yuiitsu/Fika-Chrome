@@ -42,7 +42,11 @@ App.view.extend('content', function() {
                             </div>
                             <!--font selection-->
                             <div class="fika-select-label">Font</div>
-                            <div class="fika-select-fonts">
+                            <div class="fika-select-fonts"></div>
+                            <!--photo background-->
+                            <div class="mt-2">
+                                <input type="checkbox" name="photo-bg">
+                                <label for="photo-bg">Photo Background</label>
                             </div>
                         </div>
                         <!--print-->
@@ -145,6 +149,11 @@ App.view.extend('content', function() {
                             </div>
                         </div>
                     </div>
+                    
+                    <!--background photo-->
+                    <div class="fika-photo-bg">
+                      <img />
+                    <div>
                 </div>
             </div>
         `;

@@ -174,7 +174,6 @@ App.module.extend('background', function() {
                 headers: { Authorization: 'Bearer '+ token},
                 type: "GET",
                 success: function(res) {
-                    console.log(res)
                     chrome.tabs.query({active: true}, function(tabs) {
                         chrome.tabs.sendMessage(tabs[0].id, {
                             'method': 'loginUser',

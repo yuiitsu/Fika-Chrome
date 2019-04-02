@@ -58,3 +58,13 @@ $scroll-bar()
     border-radius: 6px
   &::-webkit-scrollbar-thumb:hover
     opacity 1
+
+$z-index(item)
+  if item == tool
+    z-index 100
+  else if item == menu
+    z-index 50
+  else if item == overlay
+    z-index 10
+  else if item == main
+    z-index: 5
