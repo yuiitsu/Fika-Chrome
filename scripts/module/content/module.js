@@ -266,7 +266,9 @@ App.module.extend('content', function() {
         // filter
         if (tags.indexOf(nodeName) !== -1) {
             if (element.innerText && element.innerText.length > 0) {
-                if ($('head title').text().indexOf(element.innerText) === 0 ||
+                let pageTitleTarget = $('head title');
+                if ((pageTitleTarget.length > 0 &&
+                    pageTitleTarget.text().toLocaleLowerCase().indexOf(element.innerText.toLocaleLowerCase()) !== -1) ||
                     (element.className && element.className.toLocaleLowerCase().indexOf('title') !== -1)) {
                     articleTitle = element.innerText;
                     return false;
