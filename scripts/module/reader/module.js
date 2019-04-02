@@ -167,6 +167,7 @@ const fonts = {
         }
         // toggle photo background
         function togglePhotoBackground(val){
+	          let imgCont = $('.fika-photo-bg')
             if (val){
                 imgCont.addClass('fika-photo-bg-on')
             } else {
