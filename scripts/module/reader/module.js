@@ -332,33 +332,10 @@ const fonts = {
 
         //login
         $('#fika-login').click(function () {
-            function getUser(){
-                chrome.identity.getProfileUserInfo(function(userInfo) {
-                    console.log(userInfo);
-                });
-            }
-
-            // check identity permission
-            chrome.permissions.contains({
-                permissions: ["identity"],
-                origins: ["http://*/*", "https://*/*"]
-            }, function(result){
-                console.log('identity', result)
-                if (result){
-                    getUser()
-                } else {
-                    // request identity permission
-                    chrome.permissions.request({
-                        permissions:[ "identity"],
-                        origins:["http://*/*", "https://*/*"]
-                    }, function(granted){
-                        console.log('granted', granted)
-                        if (granted) {
-                            getUser()
-                        }
-                    })
-                }
-            })
+            chrome.extension.sendMessage({
+                'method': 'oauth',
+                'data':{}
+            }, function () {});
         })
 
 

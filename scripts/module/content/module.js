@@ -565,5 +565,9 @@ App.module.extend('content', function() {
     this.feedbackResponse = function(data) {
         let success = data.success;
     };
+
+    this.loginUser = function(data){
+        console.log(data)
+    };
 });
 
