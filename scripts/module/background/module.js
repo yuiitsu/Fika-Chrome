@@ -168,17 +168,24 @@ App.module.extend('background', function() {
     }
 
     this.getUser = function(){
-        console.log('start auth')
         chrome.identity.getAuthToken({interactive: false}, function(token) {
-            console.log(token);
-            chrome.tabs.query({active: true}, function(tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, {
-                    'method': 'loginUser',
-                    'data': {
-                        token
-                    }
-                }, function (response) {});
-            })
+            $.ajax({
+                url: "https://www.googleapis.com/oauth2/v1/userinfo?fields=email,family_name,gender,given_name,id,locale,name,picture",
+                headers: { Authorization: 'Bearer '+ token},
+                type: "GET",
+                success: function(res) {
+                    console.log(res)
+                    chrome.tabs.query({active: true}, function(tabs) {
+                        chrome.tabs.sendMessage(tabs[0].id, {
+                            'method': 'loginUser',
+                            'data': {
+                                userInfo: res,
+                                accessToken: token
+                            }
+                        }, function (response) {});
+                    })
+                }
+            });
         });
     }
 
