@@ -530,9 +530,11 @@ App.module.extend('content', function() {
         if (display === 'none') {
             target.show();
             isOpen = true;
+            $('body').hide();
         } else {
             target.hide();
             overflow = 'auto';
+            $('body').show();
         }
 
         $('html, body').css('overflow-y', overflow);
@@ -548,6 +550,7 @@ App.module.extend('content', function() {
     this.closeReaderMode = function() {
         let target = $('#fika-reader');
         $('html, body').css('overflow-y', 'auto');
+        $('body').show();
         target.hide();
         //
         chrome.extension.sendMessage({
