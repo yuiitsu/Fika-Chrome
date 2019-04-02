@@ -451,6 +451,12 @@ App.module.extend('content', function() {
             if ($(this).attr('crossorigin') && $(this).attr('crossorigin') === 'anonymous') {
                 $(this).remove();
             }
+            //
+            let img = new Image();
+            img.src = $(this).attr('src');
+            if (img.width > 50) {
+                $(this).attr('style', 'display:block;');
+            }
         });
         //
         parent.find('figure noscript').each(function() {
