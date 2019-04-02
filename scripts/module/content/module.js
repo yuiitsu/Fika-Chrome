@@ -266,14 +266,13 @@ App.module.extend('content', function() {
             chileNodesLen = element.childNodes.length;
 
         // filter
-        if (titleTags.indexOf(nodeName) !== -1) {
+        if (titleTags.indexOf(nodeName) !== -1 && !articleTitle) {
             if (element.innerText && element.innerText.length > 0) {
                 let pageTitleTarget = $('head title');
                 if ((pageTitleTarget.length > 0 &&
                     pageTitleTarget.text().toLocaleLowerCase().indexOf(element.innerText.toLocaleLowerCase()) !== -1) ||
                     (element.className && element.className.toLocaleLowerCase().indexOf('title') !== -1)) {
                     articleTitle = element.innerText;
-                    console.log(element);
                     return false;
                 }
             }
@@ -352,6 +351,10 @@ App.module.extend('content', function() {
                 if (element.className.indexOf(excludeAttrName[i]) !== -1) {
                     return false;
                 }
+            }
+            //
+            if (element.className.toLocaleLowerCase().indexOf('post') !== -1 && element.className.toLocaleLowerCase().indexOf('meta') !== -1) {
+                return false;
             }
             if (chileNodesLen === 0 && element.innerText === '') {
                 return false;
@@ -454,7 +457,7 @@ App.module.extend('content', function() {
             //
             let img = new Image();
             img.src = $(this).attr('src');
-            if (img.width > 30) {
+            if (img.width > 200) {
                 $(this).attr('style', 'display:block;');
             }
         });
@@ -527,9 +530,11 @@ App.module.extend('content', function() {
         if (display === 'none') {
             target.show();
             isOpen = true;
+            $('body').hide();
         } else {
             target.hide();
             overflow = 'auto';
+            $('body').show();
         }
 
         $('html, body').css('overflow-y', overflow);
@@ -545,6 +550,7 @@ App.module.extend('content', function() {
     this.closeReaderMode = function() {
         let target = $('#fika-reader');
         $('html, body').css('overflow-y', 'auto');
+        $('body').show();
         target.hide();
         //
         chrome.extension.sendMessage({
