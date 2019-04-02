@@ -45,10 +45,6 @@
         "default_title": "Fika",
         "default_icon": "images/logo64-grey.png"
     },
-    "optional_permissions": [
-        "http://*/*",
-        "https://*/*"
-    ],
     "permissions": [
         "tabs",
         "cookies",

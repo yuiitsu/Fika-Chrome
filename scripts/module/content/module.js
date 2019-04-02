@@ -5,17 +5,21 @@ App.module.extend('content', function() {
     //
     let self = this,
         tags = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'PRE', 'CODE', 'FIGURE'],
-        excludeTags = ['BUTTON', 'IFRAME', 'CANVAS', '#comment', 'SCRIPT'],
+        excludeTags = ['BUTTON', 'IFRAME', 'CANVAS', '#comment', 'SCRIPT', 'INPUT', 'ASIDE'],
         topArticleElement = [],
         articleElementIndex = [],
         articleElements = {},
         articleElementRate = {},
         articleTitle = '',
-        pageUrl = '';
+        pageUrl = '',
+        dom = '',
+        topElement = null,
+        topPoint = 0;
 
     this.init = function() {
         //
-        this.findArticle();
+        // this.findArticle();
+        this.findArticlePro();
         // console.log(articleElements);
         // console.log(articleElementRate);
 
@@ -29,6 +33,101 @@ App.module.extend('content', function() {
             }
             response('');
         });
+    };
+
+    this.findArticlePro = function() {
+        let root = $('body'),
+            isAvailable = false;
+
+        pageUrl = location.href;
+
+        if (root.length === 0) {
+            return false;
+        }
+
+        this.findNextNodePro(root[0]);
+        //
+        console.log(topPoint);
+        console.log(topElement);
+        if (topElement.innerText.length > 300) {
+            isAvailable = true;
+        }
+        // if (isAvailable) {
+        //   this.readerMode();
+        // }
+        //
+        chrome.extension.sendMessage({
+            'method': 'reader_ready',
+            'data': {
+                is_available: isAvailable
+            }
+        }, function () {});
+    };
+
+    this.findNextNodePro = function(element) {
+        let nodeName = element.nodeName,
+            parent = element.parentElement;
+        if (nodeName === '#text') {
+            let nodeValue = element.nodeValue.replace(/\n|\s|\r/g, '');
+            if (nodeValue) {
+                let fp = 1;
+                if (tags.indexOf(parent.nodeName) !== -1) {
+                    fp = 5;
+                } else if (parent.nodeName === 'DIV') {
+                    fp = 2;
+                }
+                if (!element.parentElement.hasOwnProperty('fp')) {
+                    element.parentElement['fp'] = fp;
+                } else {
+                    element.parentElement['fp'] += fp;
+                }
+                element.parentElement['fl'] = 2;
+            }
+        }
+        //
+        if (excludeTags.indexOf(nodeName) !== -1) {
+            return false;
+        }
+        //
+        let childNodesLen = element.childNodes.length;
+        if (childNodesLen > 0) {
+            for (let i = 0; i < childNodesLen; i++) {
+                if (element.childNodes[i]) {
+                    this.findNextNodePro(element.childNodes[i]);
+                }
+            }
+        }
+        //
+        let fl = element['fl'];
+        if (fl > 0 && fl <= 2) {
+            element.parentElement['fl'] = (element.parentElement.childNodes.length === 1 || tags.indexOf(nodeName) !== -1) && element.parentElement['fl'] > 0 ? 1 : fl - 1;
+        }
+        //
+        if (element['fp'] && element['fp'] > 0) {
+            let point = element.parentElement.childNodes.length === 1 ? element['fp'] : (fl > 0 ? element['fp'] : 1);
+            if (tags.indexOf(element.nodeName) !== -1) {
+                element['fp'] += 10;
+                point += 10;
+            } else if (element.nodeName === 'DIV') {
+                element['fp'] += 5;
+            } else if (element.nodeName === 'LI') {
+                point -= 10;
+            }
+
+            this.pointToParentElement(element.parentElement, point);
+            if (element['fp'] > topPoint) {
+                topPoint = element['fp'];
+                topElement = element;
+            }
+        }
+    };
+
+    this.pointToParentElement = function(parent, point) {
+        if (!parent.hasOwnProperty('fp')) {
+            parent['fp'] = point;
+        } else {
+            parent['fp'] += point;
+        }
     };
 
     this.findArticle = function() {
@@ -165,10 +264,13 @@ App.module.extend('content', function() {
             chileNodesLen = element.childNodes.length;
 
         // filter
-        if (nodeName === 'H1') {
-            if ($('head title').text().indexOf(element.innerText) === 0 || element.className.indexOf('title') !== -1) {
-                articleTitle = element.innerText;
-                return false;
+        if (tags.indexOf(nodeName) !== -1) {
+            if (element.innerText && element.innerText.length > 0) {
+                if ($('head title').text().indexOf(element.innerText) === 0 ||
+                    (element.className && element.className.toLocaleLowerCase().indexOf('title') !== -1)) {
+                    articleTitle = element.innerText;
+                    return false;
+                }
             }
         }
 
@@ -185,7 +287,7 @@ App.module.extend('content', function() {
         } else if (nodeName === 'PRE') {
             // extract nodeValue from the children of <pre>
             function extract(result, el){
-                let c = el.childNodes
+                let c = el.childNodes;
                 for (let i of c){
                     if (i.nodeType === 3) result += i.nodeValue.replace(/</g, '&lt;').replace(/>/g, '&gt;');
                     if (i.nodeType === 1) {
@@ -206,6 +308,7 @@ App.module.extend('content', function() {
             let attributes = element.attributes,
                 attributesLen = attributes.length,
                 src = element.src;
+            console.log(src);
 
             for (let i = 0; i < attributesLen; i++) {
                 if (attributes[i] === 'data-src') {
@@ -236,7 +339,7 @@ App.module.extend('content', function() {
                     }
                     //
                     if (!isImg) {
-                        return false;
+                        // return false;
                     }
                 }
             }
@@ -266,15 +369,18 @@ App.module.extend('content', function() {
             topArticleElementLen = topArticleElement.length,
             text = [];
 
-        for (let i = 0; i < topArticleElementLen; i++) {
-            let articleElementList = topArticleElement[i].childNodes,
-                articleElementListLen = articleElementList.length;
+        //for (let i = 0; i < topArticleElementLen; i++) {
+        //    let articleElementList = topArticleElement[i].childNodes,
+        //        articleElementListLen = articleElementList.length;
 
-            for (let j = 0; j < articleElementListLen; j++) {
-                this.filterElement(articleElementList[j], articleHtml);
-            }
-            text.push(topArticleElement[i].innerText);
-        }
+        //    for (let j = 0; j < articleElementListLen; j++) {
+        //        this.filterElement(articleElementList[j], articleHtml);
+        //    }
+        //    text.push(topArticleElement[i].innerText);
+        //}
+
+        text = topElement.innerText;
+        this.filterElement(topElement, articleHtml);
         //
         let title = articleTitle ? articleTitle : $('head title').text();
 
@@ -284,9 +390,10 @@ App.module.extend('content', function() {
         //
         this.extFilter();
         //
-        if (topArticleElementLen > 0) {
-            this.module.reader._init(text.join(""));
-        }
+        // if (topArticleElementLen > 0) {
+            //this.module.reader._init(text.join(""));
+        // }
+        this.module.reader._init(text);
         //
         // $('html, body').css('overflow-y', 'hidden');
         //
@@ -367,13 +474,18 @@ App.module.extend('content', function() {
 
     this.openReaderMode = function() {
         if (location.href !== pageUrl) {
-            this.findArticle();
+            this.findArticlePro();
         }
 
         let target = $('#fika-reader'),
-            display = target.css('display'),
-            overflow = 'hidden',
             isOpen = false;
+        if (target.length === 0) {
+            this.findArticlePro();
+            this.readerMode();
+            isOpen = true;
+        }
+        let display = target.css('display'),
+            overflow = 'hidden';
 
         if (display === 'none') {
             target.show();
