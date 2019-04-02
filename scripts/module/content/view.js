@@ -5,7 +5,7 @@ App.view.extend('content', function() {
 
     this.layout = function() {
         return `
-            <div class="fika-reader-mode" id="fika-reader" style="display: block;">
+            <div class="fika-reader-mode" id="fika-reader" style="display: none;">
                 <div id="fika" class="fika-app theme-vanilla">
                     <!--drawer-->
                     <div class="fika-tool">

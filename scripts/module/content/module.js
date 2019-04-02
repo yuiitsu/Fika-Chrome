@@ -488,6 +488,7 @@ App.module.extend('content', function() {
         if (target.length === 0) {
             this.findArticlePro();
             this.readerMode();
+            target = $('#fika-reader');
             isOpen = true;
         }
         let display = target.css('display'),
