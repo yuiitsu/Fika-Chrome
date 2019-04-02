@@ -501,8 +501,8 @@ App.module.extend('content', function() {
 
         $('html, body').css('overflow-y', overflow);
 
-        self.tocScroll()
-        self.highlightCode()
+        self.tocScroll();
+        self.highlightCode();
         chrome.extension.sendMessage({
             'method': 'is_open',
             'data': isOpen
