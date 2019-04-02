@@ -174,9 +174,16 @@ const fonts = {
 
         // bind click events
         settings['theme'].selects.click(function(){
-            setAppearance('theme',
-              $(this).attr('class').split(/\s+/)[1].split('-')[1]
-            )
+            const selectTheme = $(this).attr('class').split(/\s+/)[1].split('-')[1]
+            setAppearance('theme', selectTheme)
+            let html = document.documentElement
+            html.classList.forEach(i=>{
+                console.log(i)
+                if (i.startsWith('fika-html-bg-')){
+                    html.classList.remove(i)
+                }
+            })
+            $('html').addClass('fika-html-bg-' + selectTheme)
         });
         settings['fontSize'].selects.click(function(){
             setAppearance('fontSize',

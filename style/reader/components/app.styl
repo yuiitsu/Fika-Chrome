@@ -6,6 +6,9 @@ app($theme)
 
 
 for $name, $theme in $themes
+  .fika-html-bg.fika-html-bg-{$name}
+      app($theme)
+
   .fika-app.theme-{$name}
       app($theme)
 

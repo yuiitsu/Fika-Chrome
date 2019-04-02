@@ -530,10 +530,12 @@ App.module.extend('content', function() {
         if (display === 'none') {
             target.show();
             isOpen = true;
+            $('html').addClass('fika-html-bg')
             $('body').hide();
         } else {
             target.hide();
             overflow = 'auto';
+            $('html').removeClass('fika-html-bg')
             $('body').show();
         }
 
