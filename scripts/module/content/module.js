@@ -353,6 +353,10 @@ App.module.extend('content', function() {
                     return false;
                 }
             }
+            //
+            if (element.className.toLocaleLowerCase().indexOf('post') !== -1 && element.className.toLocaleLowerCase().indexOf('meta') !== -1) {
+                return false;
+            }
             if (chileNodesLen === 0 && element.innerText === '') {
                 return false;
             }
@@ -454,7 +458,7 @@ App.module.extend('content', function() {
             //
             let img = new Image();
             img.src = $(this).attr('src');
-            if (img.width > 30) {
+            if (img.width > 150) {
                 $(this).attr('style', 'display:block;');
             }
         });
