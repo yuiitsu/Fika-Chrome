@@ -93,6 +93,7 @@ App.module.extend('content', function() {
             element['fp'] = 1000;
             topPoint = element['fp'];
             topElement = element;
+            return true;
         } else {
             //
             if (excludeTags.indexOf(nodeName) !== -1) {
@@ -103,7 +104,9 @@ App.module.extend('content', function() {
             if (childNodesLen > 0) {
                 for (let i = 0; i < childNodesLen; i++) {
                     if (element.childNodes[i]) {
-                        this.findNextNodePro(element.childNodes[i]);
+                        if(this.findNextNodePro(element.childNodes[i])) {
+                            return true;
+                        }
                     }
                 }
             }
