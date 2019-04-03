@@ -6,7 +6,7 @@ App.module.extend('content', function() {
     let self = this,
         tags = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'PRE', 'CODE', 'FIGURE'],
         excludeTags = ['BUTTON', 'IFRAME', 'CANVAS', '#comment', 'SCRIPT', 'INPUT', 'ASIDE', 'FOOTER'],
-        excludeAttrName = ['share', 'twitter', 'linkedin', 'pinterest', 'singleadthumbcontainer', 'author'],
+        excludeAttrName = ['share', 'twitter', 'linkedin', 'pinterest', 'singleadthumbcontainer', 'author', 'reward', 'reviewer'],
         titleTags = ['H1', 'H2', 'H3'],
         topArticleElement = [],
         articleElementIndex = [],
@@ -15,7 +15,7 @@ App.module.extend('content', function() {
         articleTitle = '',
         pageUrl = '',
         dom = '',
-        topElement = null,
+        topElement = '',
         topPoint = 0;
 
     this.init = function() {
@@ -42,7 +42,7 @@ App.module.extend('content', function() {
             isAvailable = false;
 
         pageUrl = location.href;
-        topElement = null;
+        topElement = '';
         topPoint = 0;
 
         if (root.length === 0) {
@@ -91,41 +91,44 @@ App.module.extend('content', function() {
         //
         if (nodeName === 'ARTICLE') {
             element['fp'] = 1000;
-        }
-        //
-        if (excludeTags.indexOf(nodeName) !== -1) {
-            return false;
-        }
-        //
-        let childNodesLen = element.childNodes.length;
-        if (childNodesLen > 0) {
-            for (let i = 0; i < childNodesLen; i++) {
-                if (element.childNodes[i]) {
-                    this.findNextNodePro(element.childNodes[i]);
+            topPoint = element['fp'];
+            topElement = element;
+        } else {
+            //
+            if (excludeTags.indexOf(nodeName) !== -1) {
+                return false;
+            }
+            //
+            let childNodesLen = element.childNodes.length;
+            if (childNodesLen > 0) {
+                for (let i = 0; i < childNodesLen; i++) {
+                    if (element.childNodes[i]) {
+                        this.findNextNodePro(element.childNodes[i]);
+                    }
                 }
             }
-        }
-        //
-        let fl = element['fl'];
-        if (fl > 0 && fl <= 2) {
-            element.parentElement['fl'] = (element.parentElement.childNodes.length === 1 || tags.indexOf(nodeName) !== -1) && element.parentElement['fl'] > 0 ? 1 : fl - 1;
-        }
-        //
-        if (element['fp'] && element['fp'] > 0) {
-            let point = element.parentElement.childNodes.length === 1 ? element['fp'] : (fl > 0 ? element['fp'] : 1);
-            if (tags.indexOf(element.nodeName) !== -1) {
-                element['fp'] += 10;
-                point += 10;
-            } else if (element.nodeName === 'DIV') {
-                element['fp'] += 5;
-            } else if (element.nodeName === 'LI') {
-                point -= 10;
+            //
+            let fl = element['fl'];
+            if (fl > 0 && fl <= 2) {
+                element.parentElement['fl'] = (element.parentElement.childNodes.length === 1 || tags.indexOf(nodeName) !== -1) && element.parentElement['fl'] > 0 ? 1 : fl - 1;
             }
+            //
+            if (element['fp'] && element['fp'] > 0) {
+                let point = element.parentElement.childNodes.length === 1 ? element['fp'] : (fl > 0 ? element['fp'] : 1);
+                if (tags.indexOf(element.nodeName) !== -1) {
+                    element['fp'] += 10;
+                    point += 10;
+                } else if (element.nodeName === 'DIV') {
+                    element['fp'] += 5;
+                } else if (element.nodeName === 'LI') {
+                    point -= 10;
+                }
 
-            this.pointToParentElement(element.parentElement, point);
-            if (element['fp'] > topPoint) {
-                topPoint = element['fp'];
-                topElement = element;
+                this.pointToParentElement(element.parentElement, point);
+                if (element['fp'] > topPoint) {
+                    topPoint = element['fp'];
+                    topElement = element;
+                }
             }
         }
     };
@@ -285,17 +288,16 @@ App.module.extend('content', function() {
         }
 
         if (nodeName === '#text') {
-            let nodeValue = element.nodeValue.replace(/\n/g, '').replace(/\s/g, '');
+            let nodeValue = element.nodeValue.replace(/\n|\s/g, '');
             if (!nodeValue) {
                 return false;
             }
-            articleHtml.push('<p>' + element.nodeValue + '</p>');
+            articleHtml.push(element.nodeValue);
             return true;
         } else if (nodeName === 'CODE') {
             articleHtml.push('<code>' + element.innerHTML + '</code>');
-            return true
+            return true;
         } else if (nodeName === 'PRE') {
-            // extract nodeValue from the children of <pre>
             function extract(result, el){
                 let c = el.childNodes;
                 for (let i of c){
@@ -327,49 +329,27 @@ App.module.extend('content', function() {
             articleHtml.push(element.outerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, ''));
             return true;
         } else {
-            // if (nodeName === 'DIV' || nodeName === 'SECTION') {
-            //     // if (element.nextElementSibling) {
-            //     //     console.log(element.nextElementSibling.nodeName);
-            //     // }
-            //     // if (element.previousElementSibling) {
-            //     //     console.log(element.previousElementSibling.nodeName);
-            //     // }
-            //     if (element.nextElementSibling && tags.indexOf(element.nextElementSibling.nodeName) !== -1 &&
-            //         element.previousElementSibling && tags.indexOf(element.previousElementSibling.nodeName) !== -1) {
-            //         //
-            //         let elementAttrs = element.attributes,
-            //             elementAttrLen = elementAttrs.length,
-            //             isImg = false;
-
-            //         for (let i = 0; i < elementAttrLen; i++) {
-            //             if (elementAttrs[i].nodeValue.indexOf('img') !== -1 || elementAttrs[i].nodeValue.indexOf('image') !== -1) {
-            //                 isImg = true;
-            //             }
-            //         }
-            //         //
-            //         if (!isImg) {
-            //             // return false;
-            //         }
-            //     }
-            // }
             for (var i in excludeAttrName) {
                 try {
-                    if (element.className && element.className.indexOf(excludeAttrName[i]) !== -1) {
+                    if (element.className && element.className.toLocaleLowerCase().indexOf(excludeAttrName[i]) !== -1) {
                         return false;
                     }
                 } catch (e) {
-
                 }
             }
             //
             try {
-                if (element.className.toLocaleLowerCase().indexOf('post') !== -1 && element.className.toLocaleLowerCase().indexOf('meta') !== -1) {
+                if (element.className.toLocaleLowerCase().indexOf('post') !== -1
+                    && element.className.toLocaleLowerCase().indexOf('meta') !== -1) {
                     return false;
                 }
-                if (element.className.toLocaleLowerCase().indexOf('post') !== -1 && element.className.toLocaleLowerCase().indexOf('footer') !== -1) {
+                if (element.className.toLocaleLowerCase().indexOf('post') !== -1
+                    && element.className.toLocaleLowerCase().indexOf('footer') !== -1) {
                     return false;
                 }
-
+                if (nodeName === 'BR') {
+                    return 'p';
+                }
                 if (chileNodesLen === 0 && element.innerText === '') {
                     return false;
                 }
@@ -383,7 +363,11 @@ App.module.extend('content', function() {
             }
             let articleHtmlLen = articleHtml.length;
             for (let i = 0; i < chileNodesLen; i++) {
-                this.filterElement(element.childNodes[i], articleHtml);
+                let r = this.filterElement(element.childNodes[i], articleHtml);
+                if (r === 'p') {
+                    let preElement = articleHtml.pop();
+                    articleHtml.push('<p>' + preElement + '</p>');
+                }
             }
             if (articleHtml.length === articleHtmlLen) {
                 articleHtml.pop();
