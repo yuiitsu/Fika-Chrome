@@ -347,17 +347,26 @@ App.module.extend('content', function() {
             //     }
             // }
             for (var i in excludeAttrName) {
-                if (element.className && element.className.indexOf(excludeAttrName[i]) !== -1) {
-                    return false;
+                try {
+                    if (element.className && element.className.indexOf(excludeAttrName[i]) !== -1) {
+                        return false;
+                    }
+                } catch (e) {
+
                 }
             }
             //
-            if (element.className.toLocaleLowerCase().indexOf('post') !== -1 && element.className.toLocaleLowerCase().indexOf('meta') !== -1) {
-                return false;
+            try {
+                if (element.className.toLocaleLowerCase().indexOf('post') !== -1 && element.className.toLocaleLowerCase().indexOf('meta') !== -1) {
+                    return false;
+                }
+
+                if (chileNodesLen === 0 && element.innerText === '') {
+                    return false;
+                }
+            } catch (e) {
             }
-            if (chileNodesLen === 0 && element.innerText === '') {
-                return false;
-            }
+
             if (nodeName === 'A') {
                 articleHtml.push('<' + nodeName + ' href="'+ element.href +'" target="_blank">')
             } else {
