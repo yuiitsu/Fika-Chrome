@@ -89,6 +89,10 @@ App.module.extend('content', function() {
             }
         }
         //
+        if (nodeName === 'ARTICLE') {
+            element['fp'] = 1000;
+        }
+        //
         if (excludeTags.indexOf(nodeName) !== -1) {
             return false;
         }
@@ -285,7 +289,7 @@ App.module.extend('content', function() {
             if (!nodeValue) {
                 return false;
             }
-            articleHtml.push(element.nodeValue);
+            articleHtml.push('<p>' + element.nodeValue + '</p>');
             return true;
         } else if (nodeName === 'CODE') {
             articleHtml.push('<code>' + element.innerHTML + '</code>');
@@ -360,6 +364,9 @@ App.module.extend('content', function() {
             //
             try {
                 if (element.className.toLocaleLowerCase().indexOf('post') !== -1 && element.className.toLocaleLowerCase().indexOf('meta') !== -1) {
+                    return false;
+                }
+                if (element.className.toLocaleLowerCase().indexOf('post') !== -1 && element.className.toLocaleLowerCase().indexOf('footer') !== -1) {
                     return false;
                 }
 
