@@ -140,7 +140,7 @@ App.view.extend('content', function() {
                             </div>
    
                         </div>
-                        <div class="fika-footer mt-3">
+                        <div class="fika-footer">
                             <a class="fika-footer-logo" href="https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">
                                 <img style="" src="{{ chrome.runtime.getURL('images/logo64.png') }}">
                                 Made with love by Fika

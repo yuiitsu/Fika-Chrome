@@ -13,6 +13,10 @@ theme(footer, "footer")
   .fika-footer
     display: flex;
     justify-content: space-between;
+    $margin(t, 3)
+    @media screen and (max-width: 992px) and (min-width: 700px)
+      $margin(x, 5)
+
 
     a
       & ,&:link ,&:visited ,&:active

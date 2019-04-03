@@ -29,11 +29,11 @@ large - 1440px =< | width: 880px
     $margin(t, 4)
     $margin(b, 8)
     $z-index(main)
-    @media screen and (max-width: 700px)
-      margin: 0 0 16px 0
-
     @media screen and (min-width: 1440px)
       max-width: 880px
+
+    @media screen and (max-width: 700px)
+      margin: 0 0 16px 0
 
 
   .fika-paper
@@ -44,7 +44,7 @@ large - 1440px =< | width: 880px
     shadow(1)
 
     @media screen and (max-width: 992px)
-      margin: 0 52px
+      $margin(x, 5)
 
     @media screen and (max-width: 700px)
       margin: 0

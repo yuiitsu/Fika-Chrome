@@ -19,7 +19,6 @@ theme(toc, "toc")
 
 $toc-h()
   $padding(a, 0)
-  margin: 6px 0
   line-height 1.2
   overflow: hidden
   position: relative
@@ -71,14 +70,12 @@ $bullet(p)
         transform: translateX(0)
         opacity 1
 
-    *
-      font-weight normal
-
-
     a
       display: block
+      $margin(y, 1)
       cursor: pointer
       text-decoration: none
+      font-weight normal
       text-overflow: ellipsis
       display: -webkit-box
       -webkit-line-clamp: 2
@@ -124,10 +121,3 @@ $bullet(p)
           $bullet(52px)
           font-size: 12px !important
           opacity 0.32
-
-
-.fika-app.fika-photo-bg-on
-  .fika-toc-static
-    a
-      color: #fff
-      opacity 1 !important
