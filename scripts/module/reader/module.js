@@ -167,11 +167,11 @@ const fonts = {
         }
         // toggle photo background
         function togglePhotoBackground(val){
-	          let imgCont = $('.fika-photo-bg')
+	          let app = $('.fika-app');
             if (val){
-                imgCont.addClass('fika-photo-bg-on')
+	              app.addClass('fika-photo-bg-on')
             } else {
-                imgCont.removeClass('fika-photo-bg-on')
+	              app.removeClass('fika-photo-bg-on')
             }
             self.module.common.cache.set('photoBg', val);
         }
@@ -213,7 +213,8 @@ const fonts = {
 	      // init image load
 		    let imgEl = $('.fika-photo-bg img'),
 			    imgCont = $('.fika-photo-bg'),
-			    photoUrl = 'https://starkovtattoo.spb.ru/images/700/DSC100778640.jpg',
+//			    photoUrl = 'https://starkovtattoo.spb.ru/images/700/DSC100778640.jpg',
+			    photoUrl = 'https://images.unsplash.com/photo-1554176259-aa961fc32671?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2610&q=80',
 			    photo = new Image();
 		    imgCont.hide()
 		    photo.src = photoUrl
