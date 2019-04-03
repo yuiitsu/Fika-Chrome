@@ -51,7 +51,7 @@ App.module.extend('content', function() {
         //
         console.log(topPoint);
         console.log(topElement);
-        if (topElement.innerText.length > 300) {
+        if (topElement && topElement.innerText.length > 300) {
             isAvailable = true;
         }
         // if (isAvailable) {
@@ -312,7 +312,6 @@ App.module.extend('content', function() {
             let attributes = element.attributes,
                 attributesLen = attributes.length,
                 src = element.src;
-            console.log(src);
 
             for (let i = 0; i < attributesLen; i++) {
                 if (attributes[i] === 'data-src') {
@@ -348,12 +347,12 @@ App.module.extend('content', function() {
             //     }
             // }
             for (var i in excludeAttrName) {
-                if (element.hasOwnProperty('className') && element.className.indexOf(excludeAttrName[i]) !== -1) {
+                if (element.className && element.className.indexOf(excludeAttrName[i]) !== -1) {
                     return false;
                 }
             }
             //
-            if (element.hasOwnProperty('className') && element.className.toLocaleLowerCase().indexOf('post') !== -1 && element.className.toLocaleLowerCase().indexOf('meta') !== -1) {
+            if (element.className.toLocaleLowerCase().indexOf('post') !== -1 && element.className.toLocaleLowerCase().indexOf('meta') !== -1) {
                 return false;
             }
             if (chileNodesLen === 0 && element.innerText === '') {
