@@ -403,10 +403,54 @@ const fonts = {
 	    })
     }
 
+    this.toc = function(){
+	    // toc
+	    let targetContent = $(".fika-content"),
+		    title = $('.fika-article-title'),
+		    tocs = [];
+	    // article title headings
+	    let id = Math.random() * 10000
+	    title.attr('id', id)
+	    tocs.push({
+		    class: 'fika-toc-h1',
+		    text: title[0].innerText,
+		    id: id
+	    });
+	    // other headings
+      // compare relatively higher level headings, and filter them
+      let min = 6, d = 0;
+	    targetContent.find(':header').each(function() {
+		    let text = $(this)[0].innerText,
+          tag = $(this)[0].localName;
+		    min = Math.min(min, tag.slice(1))
+		    if (text) {
+			    let id = Math.random() * 10000;
+			    $(this).attr('id', id);
+			    tocs.push({
+				    class: 'fika-toc-' + tag,
+				    text: text.trim(),
+				    id: id
+			    });
+		    }
+	    });
+	    d = min - 2 // at least h2
+      if (d > 0){
+	      for (let i of tocs.slice(1)){
+	          i.class = i.class.slice(0, -1) + d
+	      }
+      }
+	    if (tocs.length > 1){
+		    // 如果没有抓到TOC 就不显示 - nil
+		    console.log(tocs)
+		    self.view.display('reader', 'toc', tocs, $('.fika-toc'));
+	    }
+    }
+
     this._init = function(content) {
         //
         this._initTools();
 	      this.feedback();
+	      this.toc();
         // 处理语言
         chrome.i18n.detectLanguage(content, function(result) {
             // demo
@@ -437,39 +481,7 @@ const fonts = {
             // 加入切换字体的按钮
             self.view.display('reader', 'fonts', mainLang['typeface']['fonts'], $('.fika-select-fonts'))
 
-            // toc
-            let targetContent = $(".fika-content"),
-                tocs = [];
-            // toc 大标题
-            let title = $('.fika-article-title'),
-                randomId = Math.random() * 10000
-            title.attr('id', randomId)
-            tocs.push({
-                tag: 'H1',
-                text: title[0].innerText,
-                id: randomId
-            });
-            // toc 其他标题
-            targetContent.find(':header').each(function() {
-                let text = $(this)[0].innerText;
-                if (text) {
-                    let id = Math.random() * 10000;
-                    $(this).attr('id', id);
-                    tocs.push({
-                        tag: $(this)[0].localName,
-                        text: text.trim(),
-                        id: id
-                    });
-                }
-            });
-            console.log(targetContent, tocs)
-            // 如果没有抓到TOC 就不显示 - nil
-            if (tocs.length > 1){
-                self.view.display('reader', 'toc', tocs, $('.fika-toc'));
-            }
-
-
-            targetContent.find('svg').each(function() {
+	          $(".fika-content").find('svg').each(function() {
                 $(this).remove();
             });
 

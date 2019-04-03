@@ -63,7 +63,8 @@
         "128": "images/logo128.png"
     },
     "web_accessible_resources": [
-        "images/logo64.png"
+        "images/logo64.png",
+        "*.ttf"
     ],
     "oauth2": {
         "client_id": "386130166125-uoa0kfcm866v0k5l2mlddenj5fnpobmu.apps.googleusercontent.com",
