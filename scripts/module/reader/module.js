@@ -88,10 +88,8 @@ const fonts = {
         const menu = $('.fika-menu');
         if (toggle !== undefined && !toggle){
             menu.removeClass('fika-menu-on')
-            drawer.overlay.removeClass('fika-overlay-standby')
         } else {
             menu.toggleClass('fika-menu-on')
-            drawer.overlay.toggleClass('fika-overlay-standby')
         }
     };
 
@@ -99,7 +97,8 @@ const fonts = {
     this.appearance = function(language, cache) {
         let cacheFontSize = cache.fontSize,
             cacheTheme = cache.theme,
-            cacheFont = cache.font;
+            cacheFont = cache.font,
+            cachePhotoBg = cache.photoBg;
 
         const settings = {
             fontSize: {
@@ -166,17 +165,34 @@ const fonts = {
                 if ($(this).hasClass(newVal)) $(this).addClass('active')
             })
         }
+        // toggle photo background
+        function togglePhotoBackground(val){
+	          let imgCont = $('.fika-photo-bg')
+            if (val){
+                imgCont.addClass('fika-photo-bg-on')
+            } else {
+                imgCont.removeClass('fika-photo-bg-on')
+            }
+            self.module.common.cache.set('photoBg', val);
+        }
 
         // set theme from localStorage
         setAppearance('theme', settings['theme'].activeVal);
         setAppearance('fontSize', settings['fontSize'].activeVal);
         setAppearance('font', settings['font'].activeVal);
+        togglePhotoBackground(cachePhotoBg)
 
         // bind click events
         settings['theme'].selects.click(function(){
-            setAppearance('theme',
-              $(this).attr('class').split(/\s+/)[1].split('-')[1]
-            )
+            const selectTheme = $(this).attr('class').split(/\s+/)[1].split('-')[1]
+            setAppearance('theme', selectTheme)
+            let html = document.documentElement
+            html.classList.forEach(i=>{
+                if (i.startsWith('fika-html-bg-')){
+                    html.classList.remove(i)
+                }
+            })
+            $('html').addClass('fika-html-bg-' + selectTheme)
         });
         settings['fontSize'].selects.click(function(){
             setAppearance('fontSize',
@@ -188,6 +204,23 @@ const fonts = {
               $(this).attr('class').split(/\s+/)[1].split('-')[1]
             )
         });
+
+        // set photo background
+        $('input[name="photo-bg"]').change(function(){
+            console.log($(this).is(":checked"))
+            togglePhotoBackground($(this).is(":checked"))
+        })
+	      // init image load
+		    let imgEl = $('.fika-photo-bg img'),
+			    imgCont = $('.fika-photo-bg'),
+			    photoUrl = 'https://starkovtattoo.spb.ru/images/700/DSC100778640.jpg',
+			    photo = new Image();
+		    imgCont.hide()
+		    photo.src = photoUrl
+		    photo.onload = function () {
+			    imgEl.attr('src', this.src)
+			    imgCont.show()
+		    }
 
     };
 
@@ -234,7 +267,6 @@ const fonts = {
         });
         drawer.overlay.click(function(){
             toggleToc(false);
-            self.toggleAppearanceMenu(false);
             drawer.overlay.removeClass('fika-overlay-active')
         });
 
@@ -265,6 +297,12 @@ const fonts = {
         this.initDrawer()
 
         $('#fika-appearance').click(self.toggleAppearanceMenu);
+        $(document).mouseup(function(e) {
+            let container = $(".fika-menu");
+            if (!container.is(e.target) && container.has(e.target).length === 0){
+                container.removeClass('fika-menu-on');
+            }
+        });
 
         // print 暂时砍去打印功能
         // $('#fika-print').click(function(){
@@ -332,41 +370,42 @@ const fonts = {
 
         //login
         $('#fika-login').click(function () {
-            function getUser(){
-                chrome.identity.getProfileUserInfo(function(userInfo) {
-                    console.log(userInfo);
-                });
-            }
-
-            // check identity permission
-            chrome.permissions.contains({
-                permissions: ["identity"],
-                origins: ["http://*/*", "https://*/*"]
-            }, function(result){
-                console.log('identity', result)
-                if (result){
-                    getUser()
-                } else {
-                    // request identity permission
-                    chrome.permissions.request({
-                        permissions:[ "identity"],
-                        origins:["http://*/*", "https://*/*"]
-                    }, function(granted){
-                        console.log('granted', granted)
-                        if (granted) {
-                            getUser()
-                        }
-                    })
-                }
-            })
+            chrome.extension.sendMessage({
+                'method': 'oauth',
+                'data':{}
+            }, function () {});
         })
 
 
     };
 
+    this.feedback = function () {
+	    let feedbackBtns = $('.fika-feedback-button'),
+		    feedbackOldVal ,
+		    clickCount = 0
+	    feedbackBtns.click(function () {
+		    let thisBtn = $(this),
+			    attr = thisBtn.attr('data-match'),
+			    msg = $('#fika-feedback-msg');
+		    if (feedbackOldVal !== attr && clickCount <= 1){
+			    feedbackBtns.removeClass('fika-feedback-button-active')
+			    thisBtn.addClass('fika-feedback-button-active')
+			    self.module.content.sendFeedback(attr)
+			    if (attr === '1'){
+				    msg.html('Thanks for the upvote! <a href="https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">Rate Fika</a>')
+			    } else {
+				    msg.html('Sorry to hear that! <a href="mailto:hi@fika.io?subject=Fika User Feedback" target="_blank">Help us improve</a>')
+			    }
+		    }
+		    clickCount++
+		    feedbackOldVal = attr
+	    })
+    }
+
     this._init = function(content) {
         //
         this._initTools();
+	      this.feedback();
         // 处理语言
         chrome.i18n.detectLanguage(content, function(result) {
             // demo
@@ -433,11 +472,12 @@ const fonts = {
                 $(this).remove();
             });
 
-            self.module.common.cache.get(['fontSize', 'theme', 'font'], function(res) {
+            self.module.common.cache.get(['fontSize', 'theme', 'font', 'photoBg'], function(res) {
                 self.appearance(mainLang, {
                     fontSize: res[0],
                     theme: res[1],
-                    font: res[2]
+                    font: res[2],
+                    photoBg: res[3]
                 });
             });
         });

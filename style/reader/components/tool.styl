@@ -1,4 +1,4 @@
-@import '../variables.styl'
+
 
 /*! Tool Menu */
 
@@ -21,7 +21,7 @@ theme(tool, "tool")
     box-shadow 0 2px 12px 0 rgba(0,0,0,.24)
     short-transition()
     cursor pointer
-    z-index 50
+    $z-index(tool)
     user-select: none;
     -webkit-user-select: none;
     @media print

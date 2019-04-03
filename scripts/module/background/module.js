@@ -141,4 +141,51 @@ App.module.extend('background', function() {
             'method': 'openReaderMode'
         }, function (response) {});
     }
+
+    this.oauth = function(data, send_response){
+        // check identity permission
+        chrome.permissions.contains({
+            permissions: ["identity"],
+            origins: ["http://*/*", "https://*/*"]
+        }, function(result){
+            console.log('identity', result, send_response)
+            if (result){
+                self.getUser()
+            } else {
+                // request identity permission
+                chrome.permissions.request({
+                    permissions:[ "identity"],
+                    origins:["http://*/*", "https://*/*"]
+                }, function(granted){
+                    console.log('granted', granted)
+                    if (granted) {
+                        self.getUser()
+                    }
+                })
+            }
+        })
+        send_response('')
+    }
+
+    this.getUser = function(){
+        chrome.identity.getAuthToken({interactive: false}, function(token) {
+            $.ajax({
+                url: "https://www.googleapis.com/oauth2/v1/userinfo?fields=email,family_name,gender,given_name,id,locale,name,picture",
+                headers: { Authorization: 'Bearer '+ token},
+                type: "GET",
+                success: function(res) {
+                    chrome.tabs.query({active: true}, function(tabs) {
+                        chrome.tabs.sendMessage(tabs[0].id, {
+                            'method': 'loginUser',
+                            'data': {
+                                userInfo: res,
+                                accessToken: token
+                            }
+                        }, function (response) {});
+                    })
+                }
+            });
+        });
+    }
+
 });

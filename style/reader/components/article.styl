@@ -1,4 +1,4 @@
-@import "../variables.styl"
+
 
 /*! Article */
 theme-tinting($theme)
@@ -7,10 +7,10 @@ theme-tinting($theme)
 
 article($border-color, $theme)
   &-divider
-    border-bottom-color: rgba($border-color, 0.4)
+    border-bottom-color: rgba($border-color, 0.7)
 
   &-domain
-    color: $border-color
+    color: rgba($theme.text, 0.7)
 
   table
     td, th
@@ -47,7 +47,7 @@ $block-item()
 
 .fika-app
   .fika-article
-    $margin(a, 4)
+    margin 32px auto
     max-width: 720px
     position relative
 

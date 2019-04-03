@@ -46,6 +46,11 @@
         "default_title": "Fika",
         "default_icon": "images/logo64-grey.png"
     },
+    "optional_permissions": [
+        "identity",
+        "http://*/*",
+        "https://*/*"
+    ],
     "permissions": [
         "tabs",
         "cookies",
@@ -64,6 +69,9 @@
     ],
     "oauth2": {
         "client_id": "386130166125-uoa0kfcm866v0k5l2mlddenj5fnpobmu.apps.googleusercontent.com",
-        "scopes": ["https://www.googleapis.com/auth/userinfo.profile"]
+        "scopes": [
+            "https://www.googleapis.com/auth/userinfo.profile",
+            "https://www.googleapis.com/auth/userinfo.email"
+        ]
     }
 }
