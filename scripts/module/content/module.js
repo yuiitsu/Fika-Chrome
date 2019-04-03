@@ -348,12 +348,12 @@ App.module.extend('content', function() {
             //     }
             // }
             for (var i in excludeAttrName) {
-                if (element.className.indexOf(excludeAttrName[i]) !== -1) {
+                if (element.hasOwnProperty('className') && element.className.indexOf(excludeAttrName[i]) !== -1) {
                     return false;
                 }
             }
             //
-            if (element.className.toLocaleLowerCase().indexOf('post') !== -1 && element.className.toLocaleLowerCase().indexOf('meta') !== -1) {
+            if (element.hasOwnProperty('className') && element.className.toLocaleLowerCase().indexOf('post') !== -1 && element.className.toLocaleLowerCase().indexOf('meta') !== -1) {
                 return false;
             }
             if (chileNodesLen === 0 && element.innerText === '') {
