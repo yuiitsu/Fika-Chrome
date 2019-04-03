@@ -6,7 +6,7 @@ App.module.extend('content', function() {
     let self = this,
         tags = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'PRE', 'CODE', 'FIGURE'],
         excludeTags = ['BUTTON', 'IFRAME', 'CANVAS', '#comment', 'SCRIPT', 'INPUT', 'ASIDE', 'FOOTER'],
-        excludeAttrName = ['share', 'twitter', 'linkedin', 'pinterest', 'thumb', 'author'],
+        excludeAttrName = ['share', 'twitter', 'linkedin', 'pinterest', 'singleadthumbcontainer', 'author'],
         titleTags = ['H1', 'H2', 'H3'],
         topArticleElement = [],
         articleElementIndex = [],
@@ -42,6 +42,8 @@ App.module.extend('content', function() {
             isAvailable = false;
 
         pageUrl = location.href;
+        topElement = null;
+        topPoint = 0;
 
         if (root.length === 0) {
             return false;
