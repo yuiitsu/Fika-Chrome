@@ -16,6 +16,7 @@ App.view.extend('reader', function() {
             {{ for var i in data }}
             <a data-id="#{{ data[i]['id'] }}" class="{{ data[i]['class'] }}">{{ data[i]['text'] }}</a>
             {{ end }}
+            <div class="fika-toc-overlay"></div>
         `;
     };
 

@@ -210,18 +210,23 @@ const fonts = {
             console.log($(this).is(":checked"))
             togglePhotoBackground($(this).is(":checked"))
         })
-	      // init image load
-		    let imgEl = $('.fika-photo-bg img'),
-			    imgCont = $('.fika-photo-bg'),
-//			    photoUrl = 'https://starkovtattoo.spb.ru/images/700/DSC100778640.jpg',
-			    photoUrl = 'https://images.unsplash.com/photo-1554176259-aa961fc32671?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2610&q=80',
-			    photo = new Image();
-		    imgCont.hide()
-		    photo.src = photoUrl
-		    photo.onload = function () {
-			    imgEl.attr('src', this.src)
-			    imgCont.show()
-		    }
+
+         // init image load
+        let imgEl = $('.fika-photo-bg img'),
+            imgCont = $('.fika-photo-bg'),
+            tocOverlay = $('.fika-toc-overlay')
+            // photoUrl = 'https://starkovtattoo.spb.ru/images/700/DSC100778640.jpg',
+            // photoUrl = 'https://images.unsplash.com/photo-1554176259-aa961fc32671?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2610&q=80',
+            photoUrl = 'https://images.unsplash.com/photo-1554068085-2b084ac42ddd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
+            photo = new Image();
+        imgCont.hide()
+        tocOverlay.hide()
+        photo.src = photoUrl
+        photo.onload = function () {
+            imgEl.attr('src', this.src)
+            imgCont.show()
+            tocOverlay.show()
+        }
 
     };
 

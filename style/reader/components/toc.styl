@@ -41,6 +41,22 @@ $bullet(p)
 .fika-app
   .fika-toc
     sans-serif()
+    position relative
+
+    &-overlay
+      position: absolute
+      top: 0
+      z-index: -1
+      height: 100%;
+      width: 100%;
+      background-image url(https://images.unsplash.com/photo-1554068085-2b084ac42ddd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80)
+      background-attachment fixed
+      background-size cover
+      background-position center
+      filter: blur(12px)
+      // photo bg switch
+      opacity 0
+      short-transition()
 
     &-static
       overflow-y: auto;
@@ -50,21 +66,20 @@ $bullet(p)
       top: 96px;
       right: 50%
       width: 240px
-      margin-right: 416px;
-      $padding(l, 1)
+      margin-right: 408px;
+      $padding(r, 1)
       $scroll-bar()
 
       //off state
       opacity 0
       transform: translateX(-24px)
       short-transition()
-
       // responsive
       @media screen and (max-width: 1264px)
         display none
 
       @media screen and (min-width: 1440px)
-        margin-right: 456px
+        margin-right: 448px
 
       &-active
         transform: translateX(0)
@@ -93,7 +108,7 @@ $bullet(p)
       &.fika-toc-
         &h1
           $toc-h()
-          font-size: 15px !important
+          font-size: 16px !important
           opacity 1
           padding-left:8px
         &h2
@@ -104,7 +119,7 @@ $bullet(p)
         &h3
           $toc-h()
           $bullet(28px)
-          font-size: 14px !important
+          font-size: 13px !important
           opacity 0.56
         &h4
           $toc-h()
