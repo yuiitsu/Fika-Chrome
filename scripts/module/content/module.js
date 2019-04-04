@@ -89,12 +89,12 @@ App.module.extend('content', function() {
             }
         }
         //
-        if (nodeName === 'ARTICLE') {
-            element['fp'] = 1000;
-            topPoint = element['fp'];
-            topElement = element;
-            return true;
-        } else {
+        // if (nodeName === 'ARTICLE') {
+        //     element['fp'] = 1000;
+        //     topPoint = element['fp'];
+        //     topElement = element;
+        //     return true;
+        // } else {
             //
             if (excludeTags.indexOf(nodeName) !== -1) {
                 return false;
@@ -133,7 +133,7 @@ App.module.extend('content', function() {
                     topElement = element;
                 }
             }
-        }
+        // }
     };
 
     this.pointToParentElement = function(parent, point) {
