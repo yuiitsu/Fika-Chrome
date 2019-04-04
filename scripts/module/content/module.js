@@ -329,7 +329,8 @@ App.module.extend('content', function() {
                     src = attributes[i].nodeValue;
                 }
             }
-            articleHtml.push(element.outerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, ''));
+            let elSizeStyle = ` style='height:${element.offsetHeight}px;width:${element.offsetWidth}px;'`;
+            articleHtml.push(element.outerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, '').replace(/\s+/, elSizeStyle));
             return true;
         } else {
             for (var i in excludeAttrName) {
