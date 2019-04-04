@@ -463,7 +463,8 @@ App.module.extend('content', function() {
             let img = new Image();
             img.src = $(this).attr('src');
             if (img.width > 200) {
-                $(this).attr('style', 'display:block;');
+                $(this).css('display', 'block;');
+                $(this).css('margin', '32px 0 ');
             }
         });
         //
