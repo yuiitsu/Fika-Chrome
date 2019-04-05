@@ -179,30 +179,37 @@ App.module.extend('reader', function() {
 
     // photos
 	this.initPhotos = async function() {
-		let {photos, photoBg} = await new Promise((resolve)=>{
+		let photoObj = new Image(),
+      {photos, photoBg} = await new Promise((resolve)=>{
 			chrome.storage.sync.get(['photos'], function (res) {
 				self.view.display('reader', 'photos', res['photos'], $('.fika-photo-grid'));
 				resolve({photos:res['photos'], photoBg: res['photoBg']})
 			})
-		})
-		console.log(photos, photoBg)
-		function switchPhoto(){
+		});
+		function switchPhoto(photo){
 			let imgEl = $('.fika-photo-bg img'),
 				imgCont = $('.fika-photo-bg'),
-				tocOverlay = $('.fika-toc-static .fika-toc-overlay')
-			photo = new Image();
-			imgCont.hide()
+				tocOverlay = $('.fika-toc-static .fika-toc-overlay');
+      imgEl.attr('src', photo.small);
+			imgCont.addClass('fika-photo-bg-blur');
 			tocOverlay.hide()
-			photo.src = photoUrl
-			photo.onload = function () {
-				imgEl.attr('src', this.src)
-				imgCont.show()
-				tocOverlay.css('background-image', 'url('+this.src+')')
-				tocOverlay.show()
+
+
+      photoObj.onload = function(){}
+			photoObj.src = photo.full
+			photoObj.onload = function () {
+        loading = false
+        imgEl.attr('src', this.src)
+        imgCont.removeClass('fika-photo-bg-blur')
+        tocOverlay.css('background-image', 'url('+this.src+')')
+        tocOverlay.show()
 			}
 		}
 		$('.fika-photo-grid-item').click(function () {
-			
+      $(this).addClass('active')
+      $('.fika-photo-grid-item.active').removeClass('active')
+      console.log(photos[$(this).attr('data-id')])
+      switchPhoto(photos[$(this).attr('data-id')])
 		})
 	};
 
@@ -213,7 +220,7 @@ App.module.extend('reader', function() {
             close: $('.fika-toc-close'),
 			btn: $('#fika-toc-btn'),
             toolbar: $('.fika-tool'),
-			drawer: $('.fika-toc'),
+			drawer: $('.fika-drawer'),
             overlay: $('.fika-overlay'),
             static: $('.fika-toc-static'),
             w: null,
@@ -223,14 +230,14 @@ App.module.extend('reader', function() {
 		function toggleToc(open){
             if (open) {
                 if (toc.available){
-                    toc.drawer.addClass('fika-toc-on');
+                    toc.drawer.addClass('fika-drawer-on');
                     toc.overlay.addClass('fika-overlay-active')
                 } else {
                     toc.static.addClass('fika-toc-static-active')
                 }
             } else {
                 toc.static.removeClass('fika-toc-static-active')
-                toc.drawer.removeClass('fika-toc-on');
+                toc.drawer.removeClass('fika-drawer-on');
                 toc.overlay.removeClass('fika-overlay-active')
             }
             toc.open = open;
@@ -267,7 +274,7 @@ App.module.extend('reader', function() {
         this.ripple(document.querySelectorAll('.fika-btn'));
         this.initToc();
         this.initMenu();
-		this.initPhotos();
+		    this.initPhotos();
 
         $('#fika-appearance').click(self.toggleMenu);
         $(document).mouseup(function(e) {
@@ -315,16 +322,16 @@ App.module.extend('reader', function() {
             toolbar.toggleClass('fika-tool-on')
             $('.fika-menu').removeClass('fika-menu-on')
         });
-/*        let hoverTimer;
-        toolbar.mouseleave(function () {
+        let hoverTimer;
+/*        toolbar.mouseleave(function () {
             hoverTimer = setTimeout(()=>{
                 $(this).removeClass('fika-tool-on')
                 self.toggleMenu(false);
             }, 1200)
-        });*/
+        });
         toolbar.mouseenter(function () {
             clearTimeout(hoverTimer)
-        })
+        })*/
 
         //close
         // $('#fika-exit').click(function () {

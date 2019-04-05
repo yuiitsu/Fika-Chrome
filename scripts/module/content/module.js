@@ -444,7 +444,7 @@ App.module.extend('content', function() {
 
     this.extFilter = function() {
         //
-        let parent = $('#fika-reader');
+        let parent = $('#fika-content');
         // parent.find('noscript').each(function() {
         //     $(this).parent().html($(this).html().replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, ''));
         // });
