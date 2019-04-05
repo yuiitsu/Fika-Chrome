@@ -5,59 +5,8 @@
 App.module.extend('reader', function() {
 
     let self = this,
-        drawer = null;
-
-    // 字体 metadata
-const fonts = {
-    rtl:['ar','arc','dv', 'fa', 'ha', 'he','khw','ks','ku','ps','ur','yi'],
-    cssPrefix:'font-',
-    typeface:[
-        {
-            lang: ['zh','zh-cn','zh-tw'], // 囊括的语言
-            script:'chinese',
-            default: 0, // 默认的字体index, 如中文的默认为黑体
-            fonts:[ // 字体的名字和相应的css class
-                { name:'黑体', class:'heiti' },
-                { name:'宋体', class:'songti' },
-                { name:'楷体', class:'kaiti'},
-                { name:'圆体', class:'yuanti'},
-            ]
-        },
-        {
-            lang:['jp'],
-            script:'japanese',
-            default: 0,
-            fonts:[
-                { name:'明朝体', class:'mincho'},
-                { name:'ゴシック体', class:'gothic'},
-                { name:'丸ゴシック体', class:'maru'},
-            ]
-        },
-        {
-            lang:[ 'af', 'be', 'bg', 'ca', 'co', 'cs', 'cy', 'da', 'de', 'en', 'eo', 'es', 'et', 'eu', 'fi', 'fr', 'fy', 'ga', 'gl', 'hr', 'hu', 'id', 'ig', 'is', 'it', 'kk', 'ku', 'la', 'lb', 'lt', 'lv', 'mg', 'mk', 'mn', 'ms', 'mt', 'nl', 'no', 'ny', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sm', 'sn', 'so', 'sq', 'sr', 'sv', 'sw', 'tg', 'tl', 'tr', 'uk', 'uz', 'vi', 'xh', 'yo', 'zu' ] , // 62
-            script:'latin',
-            default: 2,
-            fonts:[
-                { name:'Arial', class:'arial'},
-                { name:'Courier', class:'courier'},
-                { name:'Georgia', class:'georgia'},
-                { name:'Merriweather', class:'merriweather'},
-                { name:'Open Sans', class:'openSans'},
-                { name:'Palatino', class:'palatino'},
-            ]
-        },
-        // other languages
-        {
-            lang: [],
-            script:'others',
-            default: 0,
-            fonts:[
-                { name:'Arial', class:'arial'},
-                { name:'Times New Roman', class:'times'},
-            ]
-        }
-    ]
-};
+        toc = null,
+		fikaApp = $('.fika-app');
 
     this.ripple = function(els){
         if (els){
@@ -84,7 +33,7 @@ const fonts = {
         }
     };
 
-    this.toggleAppearanceMenu = function(toggle){
+    this.toggleMenu = function(toggle){
         const menu = $('.fika-menu');
         if (toggle !== undefined && !toggle){
             menu.removeClass('fika-menu-on')
@@ -92,6 +41,21 @@ const fonts = {
             menu.toggleClass('fika-menu-on')
         }
     };
+    
+    this.initMenu = function () {
+    	let menuBtns = $('.fika-menu-nav-item'),
+			menuViews = $('.fika-menu-view');
+		menuBtns.click(function(){
+			$('.fika-menu-nav-item.active').removeClass('active');
+			$(this).addClass('active');
+			let btnIndex = $(this).index();
+			menuViews.hide();
+			menuViews.eq(btnIndex).show();
+		});
+		$('#fika-whatsnew').click(function () {
+			chrome.tabs.create({url: chrome.extension.getURL("update.html")});
+		})
+	};
 
     // language 当前语言，用于字体设置
     this.appearance = function(language, cache) {
@@ -211,98 +175,101 @@ const fonts = {
             togglePhotoBackground($(this).is(":checked"))
         })
 
-         // init image load
-        let imgEl = $('.fika-photo-bg img'),
-            imgCont = $('.fika-photo-bg'),
-            tocOverlay = $('.fika-toc-overlay')
-            // photoUrl = 'https://starkovtattoo.spb.ru/images/700/DSC100778640.jpg',
-            // photoUrl = 'https://images.unsplash.com/photo-1554176259-aa961fc32671?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2610&q=80',
-            photoUrl = 'https://images.unsplash.com/photo-1554068085-2b084ac42ddd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
-            photo = new Image();
-        imgCont.hide()
-        tocOverlay.hide()
-        photo.src = photoUrl
-        photo.onload = function () {
-            imgEl.attr('src', this.src)
-            imgCont.show()
-            tocOverlay.show()
-        }
-
     };
 
-    this.initDrawer = function(){
-        /* Drawer */
-        drawer = {
+    // photos
+	this.initPhotos = async function() {
+		let {photos, photoBg} = await new Promise((resolve)=>{
+			chrome.storage.sync.get(['photos'], function (res) {
+				self.view.display('reader', 'photos', res['photos'], $('.fika-photo-grid'));
+				resolve({photos:res['photos'], photoBg: res['photoBg']})
+			})
+		})
+		console.log(photos, photoBg)
+		function switchPhoto(){
+			let imgEl = $('.fika-photo-bg img'),
+				imgCont = $('.fika-photo-bg'),
+				tocOverlay = $('.fika-toc-static .fika-toc-overlay')
+			photo = new Image();
+			imgCont.hide()
+			tocOverlay.hide()
+			photo.src = photoUrl
+			photo.onload = function () {
+				imgEl.attr('src', this.src)
+				imgCont.show()
+				tocOverlay.css('background-image', 'url('+this.src+')')
+				tocOverlay.show()
+			}
+		}
+		$('.fika-photo-grid-item').click(function () {
+			
+		})
+	};
+
+	// Toc Drawer
+	this.initToc = function(){
+        toc = {
             open: true,
-            modal: false,
-            close: $('.fika-drawer-close'),
+            close: $('.fika-toc-close'),
+			btn: $('#fika-toc-btn'),
             toolbar: $('.fika-tool'),
-            btn: $('#fika-toc-btn'),
-            el: $('.fika-drawer'),
-            app: $('.fika-app'),
+			drawer: $('.fika-toc'),
             overlay: $('.fika-overlay'),
             static: $('.fika-toc-static'),
             w: null,
             threshold: 1264,
             available:false
         };
-
-        function toggleToc(open){
-            // static
+		function toggleToc(open){
             if (open) {
-                if (drawer.available){
-                    drawer.el.addClass('fika-drawer-on');
-                    drawer.overlay.addClass('fika-overlay-active')
+                if (toc.available){
+                    toc.drawer.addClass('fika-toc-on');
+                    toc.overlay.addClass('fika-overlay-active')
                 } else {
-                    drawer.static.addClass('fika-toc-static-active')
+                    toc.static.addClass('fika-toc-static-active')
                 }
             } else {
-                drawer.static.removeClass('fika-toc-static-active')
-                drawer.el.removeClass('fika-drawer-on');
-                drawer.overlay.removeClass('fika-overlay-active')
+                toc.static.removeClass('fika-toc-static-active')
+                toc.drawer.removeClass('fika-toc-on');
+                toc.overlay.removeClass('fika-overlay-active')
             }
-            drawer.open = open;
+            toc.open = open;
         }
-
         // click events
-        drawer.btn.click(function(){
-            toggleToc(!drawer.open)
-        });
-        drawer.close.click(function(){
-            toggleToc(false)
-        });
-        drawer.overlay.click(function(){
-            toggleToc(false);
-            drawer.overlay.removeClass('fika-overlay-active')
-        });
-
-        function toggleTocDrawer(){
-            drawer.w = window.innerWidth;
-            drawer.available = drawer.w < drawer.threshold;
+        toc.btn.click(()=> toggleToc(!toc.open));
+        toc.close.click(()=> toggleToc(false));
+        toc.overlay.click(()=>{
+			toggleToc(false);
+			toc.overlay.removeClass('fika-overlay-active')
+		});
+		// check toc availability
+        function updateTocDrawerAvailability(){
+            toc.w = window.innerWidth;
+			toc.available = toc.w < toc.threshold;
         }
-
-        window.addEventListener('resize', ()=>{
+		updateTocDrawerAvailability();
+		window.addEventListener('resize', ()=>{
             // current window width
             const w = window.innerWidth;
-            const wasAvailabe = drawer.available
-            toggleTocDrawer()
-            if (wasAvailabe && !drawer.available){
+            const wasAvailable = toc.available
+            updateTocDrawerAvailability();
+            if (wasAvailable && !toc.available){
                 toggleToc(false)
                 toggleToc(true)
-            } else if (drawer.available){
+            } else if (toc.available){
                 toggleToc(false)
             }
-            drawer.w = w;
+            toc.w = w;
         });
-        // init drawer
-        toggleTocDrawer()
     };
 
     this._initTools = function() {
         this.ripple(document.querySelectorAll('.fika-btn'));
-        this.initDrawer()
+        this.initToc();
+        this.initMenu();
+		this.initPhotos();
 
-        $('#fika-appearance').click(self.toggleAppearanceMenu);
+        $('#fika-appearance').click(self.toggleMenu);
         $(document).mouseup(function(e) {
             let container = $(".fika-menu");
             if (!container.is(e.target) && container.has(e.target).length === 0){
@@ -348,13 +315,13 @@ const fonts = {
             toolbar.toggleClass('fika-tool-on')
             $('.fika-menu').removeClass('fika-menu-on')
         });
-        let hoverTimer;
+/*        let hoverTimer;
         toolbar.mouseleave(function () {
             hoverTimer = setTimeout(()=>{
                 $(this).removeClass('fika-tool-on')
-                self.toggleAppearanceMenu(false);
+                self.toggleMenu(false);
             }, 1200)
-        });
+        });*/
         toolbar.mouseenter(function () {
             clearTimeout(hoverTimer)
         })
@@ -408,7 +375,7 @@ const fonts = {
 	    })
     }
 
-    this.toc = function(){
+    this.retrieveToc = function(){
 	    // toc
 	    let targetContent = $(".fika-content"),
 		    title = $('.fika-article-title'),
@@ -422,40 +389,39 @@ const fonts = {
 		    id: id
 	    });
 	    // other headings
-      // compare relatively higher level headings, and filter them
-      let min = 6, d = 0;
+      	// compare relatively higher level headings, and filter them
+      	let min = 6, d = 0;
 	    targetContent.find(':header').each(function() {
 		    let text = $(this)[0].innerText,
-          tag = $(this)[0].localName;
-		    min = Math.min(min, tag.slice(1))
-		    if (text) {
-			    let id = Math.random() * 10000;
-			    $(this).attr('id', id);
-			    tocs.push({
-				    class: 'fika-toc-' + tag,
-				    text: text.trim(),
-				    id: id
-			    });
-		    }
+			tag = $(this)[0].localName;
+			min = Math.min(min, tag.slice(1))
+			if (text) {
+				let id = Math.random() * 10000;
+				$(this).attr('id', id);
+				tocs.push({
+					class: 'fika-toc-' + tag,
+					text: text.trim(),
+					id: id
+				});
+			}
 	    });
-	    d = min - 2 // at least h2
-      if (d > 0){
-	      for (let i of tocs.slice(1)){
-	          i.class = i.class.slice(0, -1) + d
-	      }
-      }
-	    if (tocs.length > 1){
-		    // 如果没有抓到TOC 就不显示 - nil
-		    console.log(tocs)
+	    d = min - 2; // at least h2
+		if (d > 0){
+			for (let i of tocs.slice(1)){
+			  i.class = i.class.slice(0, -1) + d
+			}
+		}
+		// 如果没有抓到TOC 就不显示
+		if (tocs.length > 1){
 		    self.view.display('reader', 'toc', tocs, $('.fika-toc'));
 	    }
-    }
+    };
 
     this._init = function(content) {
         //
-        this._initTools();
-	      this.feedback();
-	      this.toc();
+		this._initTools();
+		this.feedback();
+		this.retrieveToc();
         // 处理语言
         chrome.i18n.detectLanguage(content, function(result) {
             // demo
@@ -475,14 +441,14 @@ const fonts = {
 
             // 多语言字体  - nil
             // 检索相应语言的字体列表
-            for (let j = 0; j < fonts.typeface.length; j++){
-                if (fonts.typeface[j]['lang'].indexOf(mainLang.code) !== -1){
-                    mainLang['typeface'] = fonts.typeface[j];
-                    break
-                } else if (j === 3){
-                    mainLang['typeface'] = fonts.typeface[3]
-                }
-            }
+			for (let j = 0; j < Fonts.typeface.length; j++){
+				if (Fonts.typeface[j]['lang'].indexOf(mainLang.code) !== -1){
+					mainLang['typeface'] = Fonts.typeface[j];
+					break
+				} else if (j === 3){
+					mainLang['typeface'] = Fonts.typeface[3]
+				}
+			}
             // 加入切换字体的按钮
             self.view.display('reader', 'fonts', mainLang['typeface']['fonts'], $('.fika-select-fonts'))
 

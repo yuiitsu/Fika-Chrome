@@ -1,0 +1,226 @@
+
+
+/*! Select */
+
+//menu
+menu($theme)
+  background: $theme.paper
+  color: $theme.text
+  &-view-cont
+    border-right: 1px solid $border-color($theme)
+    $scroll-bar-color($theme)
+
+  &-login
+    background: rgba($theme.text, 0.2)
+
+tab($theme)
+  background: $theme.bg
+  &-item
+    &.active
+      background: $theme.accent
+    &:not(.active):hover
+      background: rgba($theme.accent, 0.2)
+
+select($theme)
+  background: $theme.bg
+  &-item
+    &.active
+      background: $theme.accent
+    &:not(.active):hover
+      background: rgba($theme.accent, 0.2)
+
+toggle($theme)
+  background: rgba($theme.text, 0.2)
+
+
+// get colors for fika-select-theme
+for $name, $theme in $themes
+  .fika-select-theme.theme-{$name}
+    background: $theme.bg
+
+theme(menu, "menu")
+theme(tab, "tab")
+theme(select, "select")
+theme(toggle, "toggle")
+
+
+.fika-app
+  .fika-menu
+    position: absolute
+    top: 48px
+    left: -290px
+    radius()
+    shadow(2)
+    transform scale(0.9)
+    transform-origin top right
+    opacity 0
+    fast-transition()
+    pointer-events none
+    cursor auto
+    display flex
+    flex-direction row-reverse
+    height 360px
+    sans-serif()
+    overflow hidden
+    &-on
+      transform scale(1)
+      opacity 1
+      pointer-events auto
+
+    &-nav
+      $padding(t,3)
+      display flex
+      width 200px
+      &-item
+        cursor pointer
+        $padding(x,2)
+        $padding(y,1)
+        font-size: 20px
+        opacity 0.4
+        &:hover
+          opacity 0.7
+        &.active
+          opacity 1
+        &.small
+          font-size: 14px
+
+    &-login
+      $margin(t, 1)
+      $padding(a, 2)
+      font-size: 20px
+      &:hover
+        cursor:pointer
+
+    &-view-cont
+      $scroll-bar()
+      overflow-y: auto
+      width 320px
+    &-view
+      width 100%
+      $padding(a,3)
+      display none
+    &-label
+      $margin(b, 1)
+      font-size: 18px
+      .desc
+        margin-top: 4px
+        font-size: 13px
+        font-weight normal
+        opacity 0.8
+
+
+  .fika-tab
+    height 32px
+    width 100%
+    radius(8px)
+    display flex
+    overflow hidden
+    cursor pointer
+    &-item
+      flex: 1
+      text-align center
+      text-transform uppercase
+      font-weight bold
+      $center()
+      short-transition()
+
+  .fika-select
+    display flex
+    flex-direction column
+    radius(4px)
+    $padding(y, 1)
+    cursor pointer
+    &-item
+      $padding(x, 2)
+      $padding(y, 1)
+      radius(4px)
+      short-transition()
+
+    &-themes
+      display flex
+      & .fika-select-theme
+        box-sizing border-box
+        cursor pointer
+        $margin(r, 1)
+        border-radius 50%
+        height 40px
+        width 40px
+        short-transition()
+        &.active
+          transform scale(1.1)
+          border: solid 4px $primary.dark
+
+
+  input[type="checkbox"]
+    display none
+    &:checked + .fika-toggle
+      background: $primary.dark
+      &:before
+        left: 50%
+  .fika-toggle
+    width 48px
+    height 28px
+    border-radius 16px
+    position relative
+    padding: 4px
+    cursor: pointer
+    &:before
+      content ' '
+      position absolute
+      height 20px
+      width 20px
+      left 4px
+      fast-transition()
+      border-radius 10px
+      background: #fff
+
+
+  .fika-pro:after
+    color: #fff
+    content:'Pro'
+    padding: 2px 4px
+    height 12px
+    border-radius 2px
+    font-size 10px
+    vertical-align super
+    margin-left 4px
+    background: $primary.dark
+
+  .fika-disabled
+    pointer-events none
+    opacity 0.5
+
+  .fika-photo-grid
+    display flex
+    flex-wrap wrap
+    margin: 0 -4px;
+    &-item
+      height: 68px
+      flex-basis: 33.3333%
+      width: 33.3333%
+      padding:4px
+      position: relative
+      cursor pointer
+      img
+        height 100%
+        width 100%
+        object-fit: cover
+        br(2px)
+      svg
+        position absolute
+        bottom 8px
+        right 8px
+        width 24px
+        height 24px
+        display none
+        fill: #fff
+        z-index: 1;
+      &:hover
+        img
+          filter: brightness(0.8)
+      &.active
+        img
+          transform: scale(1.05)
+          border: 4px solid $primary.dark
+        svg
+          display block

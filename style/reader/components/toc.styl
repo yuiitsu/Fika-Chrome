@@ -33,7 +33,7 @@ $bullet(p)
     border-radius 50%
     background currentColor
     opacity 0.8
-    left: p - 12 // 4 content + 8 padding
+    left: p - 14 // 4 content + 8 padding
     top: 50%
     margin-top: - 2px
 
@@ -49,11 +49,10 @@ $bullet(p)
       z-index: -1
       height: 100%;
       width: 100%;
-      background-image url(https://images.unsplash.com/photo-1554068085-2b084ac42ddd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80)
       background-attachment fixed
       background-size cover
       background-position center
-      filter: blur(12px);
+      filter: contrast(0.9) blur(16px);
       // photo bg switch
       opacity 0
       short-transition()
@@ -63,12 +62,12 @@ $bullet(p)
       word-break: break-word;
       height: calc(100vh - 120px);
       position: fixed
-      top: 72px;
+      top: 64px
       right: 50%
       width: 240px
       margin-right: 408px;
-      $padding(a, 1)
-      $padding(l, 2)
+      $padding(a, 2)
+      $padding(r, 1)
       $scroll-bar()
 
       //off state
@@ -102,6 +101,7 @@ $bullet(p)
 
       &.fika-toc-active
         border-left: 2px solid $primary.dark
+        text-decoration: underline
 
       &:hover
         text-decoration underline
@@ -111,7 +111,7 @@ $bullet(p)
           $toc-h()
           font-size: 16px !important
           opacity 1
-          padding-left:8px
+          padding-left:6px
         &h2
           $toc-h()
           $bullet(20px)

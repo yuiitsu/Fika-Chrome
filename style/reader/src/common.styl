@@ -10,8 +10,6 @@ monospace()
 radius(radius = 8px)
   border-radius: radius
 
-$border-opacity := 68%
-
 $hover-opacity := 0.12
 
 $shadows-opacity := rgba(0,0,0, .1)
@@ -33,7 +31,7 @@ $transition := {
 short-transition()
   transition: 0.15s $transition.ease-in-out
 
-drawer-transition()
+fast-transition()
   transition: 0.3s $transition.fast-in-fast-out
 
 $center()
@@ -46,6 +44,11 @@ $scroll-bar-color($theme)
     background: rgba($theme.text, 0.2)
   &::-webkit-scrollbar-thumb:hover
     background: rgba($theme.text,0.5)
+
+$border-opacity := 0.2
+$border-color($theme)
+  return rgba($theme.text, $border-opacity)
+
 
 $scroll-bar()
   &::-webkit-scrollbar

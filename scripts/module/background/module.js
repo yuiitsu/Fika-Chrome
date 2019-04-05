@@ -34,6 +34,7 @@ App.module.extend('background', function() {
             self.log('created context menus.');
         });
 
+        self.fetchData()
         // 安装完成后，打开网站
         // chrome.runtime.onInstalled.addListener(function() {
         //     chrome.tabs.create({
@@ -186,6 +187,52 @@ App.module.extend('background', function() {
                 }
             });
         });
-    }
+    };
 
+    this.fetchData = function (data, send_response) {
+        // photos
+        let photos = [{
+            id: 1,
+            small: "https://images.unsplash.com/photo-1529164114-6b1bd6f5cc91?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjYzODA2fQ",
+            full: "https://images.unsplash.com/photo-1529164114-6b1bd6f5cc91?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjYzODA2fQ",
+            credit: "Jason Leung",
+            source: 'Unsplash',
+            link: "https://unsplash.com/photos/KmKAk86LLgc"
+        },{
+            id: 2,
+            small: "https://images.unsplash.com/photo-1545105511-839f4a45a030?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjYzODA2fQ",
+            full: "https://images.unsplash.com/photo-1545105511-839f4a45a030?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjYzODA2fQ",
+            credit: "Jarrett Kow",
+            source: 'Unsplash',
+            link: "https://unsplash.com/photos/1ZOyYPOBn7I"
+        },{
+            id: 3,
+            small: "https://images.unsplash.com/photo-1554176259-aa961fc32671?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjYzODA2fQ",
+            full: "https://images.unsplash.com/photo-1554176259-aa961fc32671?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjYzODA2fQ",
+            credit: "Tyler Lastovich",
+            source: 'Unsplash',
+            link: "https://unsplash.com/photos/ddLiNMqWAOM"
+        },{
+            id: 4,
+            small: "https://images.unsplash.com/photo-1554068085-2b084ac42ddd?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjYzODA2fQ",
+            full: "https://images.unsplash.com/photo-1554068085-2b084ac42ddd?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjYzODA2fQ",
+            credit: "Ansgar Scheffold",
+            source: 'Unsplash',
+            link: "https://unsplash.com/photos/3ZZdwACexMM"
+        }];
+        chrome.storage.sync.get(['photosLastFetchedDate'], function(res){
+            let lastFetched = res['photosLastFetchedDate'] ? res['photosLastFetchedDate'] : 0,
+                now = new Date().getTime();
+            if (lastFetched < now - (7*24*60*60*1000)){
+                // request photos
+
+                console.log('starts photos fetching')
+                chrome.storage.sync.set({
+                    photosLastFetchedDate: now,
+                    photos: photos
+                }, function(){})
+            }
+        })
+        // autopilot whitelist
+    };
 });

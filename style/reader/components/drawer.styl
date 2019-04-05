@@ -10,10 +10,6 @@ drawer($theme)
   &-tile:hover
     background: rgba($theme.text, $hover-opacity)
 
-  hr
-    $margin(x, 1)
-    border: solid 1px rgba($theme.text, 0.18)
-
 
 theme(drawer, "drawer")
 
@@ -41,7 +37,7 @@ theme(drawer, "drawer")
 
       &-wrap
         display flex
-        transition: 0.3s $transition.fast-in-fast-out
+        transition: fast-transition()
 
         > *
           width 100%

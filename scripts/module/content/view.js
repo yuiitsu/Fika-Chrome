@@ -24,31 +24,7 @@ App.view.extend('content', function() {
                                 <path d="M21.94,18.66l-5-14a1,1,0,0,0-1.88,0L10.48,17.48,7.43,9.64a1,1,0,0,0-1.86,0l-3.5,9a1,1,0,1,0,1.86.72l.66-1.68H8.41l.66,1.68A1,1,0,0,0,10,20a.92.92,0,0,0,.36-.07.67.67,0,0,0,.14-.09.7.7,0,0,0,.16.1,1,1,0,0,0,1.28-.6l1-2.84h6.1l1,2.84A1,1,0,0,0,21,20a1,1,0,0,0,.34-.06A1,1,0,0,0,21.94,18.66Zm-16.58-3L6.5,12.76l1.14,2.92Zm8.31-1.18L16,8l2.33,6.53Z"/></svg>
                         </button>
                         <!--appearance settings-->
-                        <div class="fika-menu">
-                            <!--font size selection-->
-                            <div class="fika-select-label" style="margin-top: 0px">text size</div>
-                            <div class="fika-select-sizes">
-                                <div class="fika-select-size size-small active">small</div>
-                                <div class="fika-select-size size-medium">medium</div>
-                                <div class="fika-select-size size-large">large</div>
-                            </div>
-                            <!--theme selection-->
-                            <div class="fika-select-label">theme</div>
-                            <div class="fika-select-themes">
-                                <div class="fika-select-theme theme-vanilla"></div>
-                                <div class="fika-select-theme theme-latte"></div>
-                                <div class="fika-select-theme theme-blabar"></div>
-                                <div class="fika-select-theme theme-licorice"></div>
-                            </div>
-                            <!--font selection-->
-                            <div class="fika-select-label">Font</div>
-                            <div class="fika-select-fonts"></div>
-                            <!--photo background-->
-                            <div class="mt-2">
-                                <input type="checkbox" name="photo-bg">
-                                <label for="photo-bg">Photo Background</label>
-                            </div>
-                        </div>
+                        <div class="fika-menu"></div>
                         <!--print-->
                         <!--<button class="fika-btn fika-btn-icon" id="fika-print">-->
                             <!--<svg class="fika-icon" viewBox="0 0 24 24">-->
@@ -72,7 +48,6 @@ App.view.extend('content', function() {
                     <div class="fika-drawer">
                         <div class="my-2 d-flex align-center justify-space-between">
                             <div class="fika-select-label" style="margin: 8px">Table of content</div>
-                            <div class="flex-fill"></div>
                             <button class="fika-btn fika-btn-icon ml-1 fika-drawer-close">
                                 <svg class="fika-icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
                             </button>
@@ -84,11 +59,9 @@ App.view.extend('content', function() {
                                 <div class="fika-toc"></div>
                             </div>
                         </div>
-
                     </div>
                     <!--overlay-->
                     <div class="fika-overlay"></div>
-
                     <!--paper-->
                     <div class="fika-main-body">
                         <div class="fika-toc-static fika-toc-static-active">
@@ -149,7 +122,6 @@ App.view.extend('content', function() {
                             </div>
                         </div>
                     </div>
-                    
                     <!--background photo-->
                     <div class="fika-photo-bg">
                       <img />
@@ -158,4 +130,84 @@ App.view.extend('content', function() {
             </div>
         `;
     };
+
+    // settings menu
+    this.menu = function () {
+        return `
+            <div class="fika-menu-nav d-flex column">
+                <div class="fika-menu-nav-item active">Text</div>
+                <div class="fika-menu-nav-item">Theme</div>
+                <div class="fika-menu-nav-item">Autopilot</div>
+                <div class="flex-fill"></div>
+                <a class="fika-menu-nav-item small" href="http://fika.io/updatelog" target="_blank">What's new</a>
+                <a class="fika-menu-nav-item small" href="http://fika.io/pro" target="_blank">Upgrade to Pro</a>
+                <div class="fika-menu-login">
+                    <div class="mb-1">Log in</div>
+                    <div style="font-size:11px">with Google account</div>
+                </div>
+            </div>
+            <div class="fika-menu-view-cont">
+                <!--text-->
+                <div class="fika-menu-view" style="display: block">
+                    <div class="fika-menu-label">Text</div>
+                    <div class="fika-tab">
+                        <div class="fika-tab-item" style="font-size:12px" data-sel="size-small">small</div>
+                        <div class="fika-tab-item" style="font-size:14px" data-sel="size-medium">medium</div>
+                        <div class="fika-tab-item" style="font-size:16px" data-sel="size-large">large</div>
+                    </div>
+                    <div class="fika-menu-label mt-3">Font</div>
+                    <div class="fika-select fika-select-fonts"></div>
+                </div>
+                <!--theme-->
+                <div class="fika-menu-view">
+                    <div class="fika-menu-label">Theme Color</div>
+                    <div class="fika-select-themes">
+                        <div class="fika-select-theme theme-vanilla" data-sel="theme-vanilla"></div>
+                        <div class="fika-select-theme theme-latte" data-sel="theme-latte"></div>
+                        <div class="fika-select-theme theme-blabar" data-sel="theme-blabar"></div>
+                        <div class="fika-select-theme theme-licorice" data-sel="theme-licorice"></div>
+                    </div> 
+                    <div class="mt-3 d-flex justify-space-between">
+                        <div class="fika-menu-label">
+                            <span class="fika-pro">Photo Background</span>
+                            <div class="desc">Use inspiring photos as background</div>
+                        </div>
+                        <input type="checkbox" id="photo-bg">
+                        <label class="fika-toggle" for="photo-bg"></label>
+                    </div>
+                    <div class="fika-photo-grid">
+                        
+                    </div>
+                </div>
+                <div class="fika-menu-view">
+                    autopilot
+                </div>
+            </div>
+        
+        `
+    };
 });
+
+/*<!--font size selection-->
+<div class="fika-select-label" style="margin-top: 0px">text size</div>
+<div class="fika-tab-items">
+    <div class="fika-tab-item size-small active">small</div>
+    <div class="fika-tab-item size-medium">medium</div>
+    <div class="fika-tab-item size-large">large</div>
+    </div>
+    <!--theme selection-->
+    <div class="fika-select-label">theme</div>
+    <div class="fika-select-themes">
+    <div class="fika-select-theme theme-vanilla"></div>
+    <div class="fika-select-theme theme-latte"></div>
+    <div class="fika-select-theme theme-blabar"></div>
+    <div class="fika-select-theme theme-licorice"></div>
+    </div>
+    <!--font selection-->
+    <div class="fika-select-label">Font</div>
+    <div class="fika-select-fonts"></div>
+    <!--photo background-->
+    <div class="mt-2">
+    <input type="checkbox" name="photo-bg">
+    <label for="photo-bg">Photo Background</label>
+</div>*/

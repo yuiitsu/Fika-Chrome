@@ -30,6 +30,7 @@
             "scripts/lib/highlight.min.js",
             "scripts/app.js",
             "scripts/model.js",
+            "scripts/module/fonts.js",
             "scripts/module/reader/module.js",
             "scripts/module/reader/view.js",
             "scripts/module/common/module.js",
@@ -54,6 +55,7 @@
         "cookies",
         "contextMenus",
         "fontSettings",
+        "storage",
         "http://*/*",
         "https://*/*"
     ],

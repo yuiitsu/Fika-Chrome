@@ -423,6 +423,9 @@ App.module.extend('content', function() {
             domain: window.location.hostname,
             favicon: favicon
         }, $('html'));
+        this.view.append('content', 'menu', {
+
+        }, $('.fika-menu'));
         //
         this.extFilter();
         //
