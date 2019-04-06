@@ -29,6 +29,8 @@ select($theme)
     &:not(.active):hover
       background: rgba($theme.accent, 0.2)
 
+
+
 toggle($theme)
   background: rgba($theme.text, 0.2)
 
@@ -198,14 +200,15 @@ theme(toggle, "toggle")
       height: 68px
       flex-basis: 33.3333%
       width: 33.3333%
-      padding:4px
+      border: 4px solid transparent
       position: relative
       cursor pointer
+      radius(6px)
+      overflow hidden
       img
-        height 100%
-        width 100%
+        height 100% !important
+        width 100% !important
         object-fit: cover
-        br(2px)
       svg
         position absolute
         bottom 8px
@@ -219,8 +222,6 @@ theme(toggle, "toggle")
         img
           filter: brightness(0.8)
       &.active
-        img
-          transform: scale(1.05)
-          border: 4px solid $primary.dark
+        border: 4px solid $primary.dark
         svg
           display block

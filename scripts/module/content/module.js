@@ -51,8 +51,8 @@ App.module.extend('content', function() {
 
         this.findNextNodePro(root[0]);
         //
-        console.log(topPoint);
-        console.log(topElement);
+        // console.log(topPoint);
+        // console.log(topElement);
         if (topElement && topElement.innerText.length > 300) {
             isAvailable = true;
         }

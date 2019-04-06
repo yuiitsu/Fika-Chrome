@@ -6,7 +6,8 @@ App.module.extend('reader', function() {
 
     let self = this,
         toc = null,
-		fikaApp = $('.fika-app');
+		fikaApp = $('.fika-app'),
+		store = null;
 
     this.ripple = function(els){
         if (els){
@@ -43,7 +44,7 @@ App.module.extend('reader', function() {
     };
     
     this.initMenu = function () {
-    	let menuBtns = $('.fika-menu-nav-item'),
+    	let menuBtns = $('.fika-menu-nav-item:not(.small)'),
 			menuViews = $('.fika-menu-view');
 		menuBtns.click(function(){
 			$('.fika-menu-nav-item.active').removeClass('active');
@@ -58,96 +59,56 @@ App.module.extend('reader', function() {
 	};
 
     // language 当前语言，用于字体设置
-    this.appearance = function(language, cache) {
+    this.appearance = function(typeface, cache) {
         let cacheFontSize = cache.fontSize,
             cacheTheme = cache.theme,
             cacheFont = cache.font,
             cachePhotoBg = cache.photoBg;
 
-        const settings = {
-            fontSize: {
-                activeVal: cacheFontSize || 'medium',
+        let btns = $("div[data-sel]"),
+			settings = {
+            size: {
+                val: store.size || 'medium',
                 cont: $('.fika-article'),
-                selects: $('.fika-select-size'),
-                classPrefix: 'size-'
             },
             theme: {
-                activeVal: cacheTheme || 'vanilla',
+                val: store.theme || 'vanilla',
                 cont: $('.fika-app'),
-                selects: $('.fika-select-theme'),
-                classPrefix: 'theme-'
             },
             font: {
-                activeVal: (function (){
-                    const fontSettings = cacheFont;
-                    const defaultFont = language.typeface.fonts[language.typeface.default]['class'];
-                    if (fontSettings && fontSettings[0] === '{'){
-                        let fontOfLang = JSON.parse(cacheFont)[language.typeface.script];
-                        return fontOfLang ? fontOfLang : defaultFont
-                    } else {
-                        return defaultFont
-                    }
-                })(),
+                val: store.font ? store.font[typeface.script] ? store.font[typeface.script] : typeface.fonts[typeface.default]['class'] : typeface.fonts[typeface.default]['class'] ,
                 cont: $('.fika-article'),
-                selects: $('.fika-select-font'),
-                classPrefix: 'font-'
             }
         };
 
-        function setAppearance(prop, val) {
-            // change class name (theme) for app
-            let oldVal='', newVal='', cont = settings[prop].cont;
-            cont.attr('class').split(/\s+/).forEach(c => {
-                if (c.startsWith(settings[prop].classPrefix)) oldVal = c
-            });
-            cont.removeClass(oldVal)
-            newVal = `${settings[prop].classPrefix}${val}`
-            cont.addClass(newVal)
+        function setAppearance(data) {
+        	let prop = data.split('-')[0],
+				val = data.split('-')[1];
+            // change class name (theme) for app & cleans old class
+			let oldClass = settings[prop].cont.attr('class').split(' ').filter(c=> c.startsWith(prop)).join(' ');
+			settings[prop].cont.removeClass(oldClass)
+			settings[prop].cont.addClass(data);
             // change state and storage
-            settings[prop].activeVal = val;
-            if (prop === 'font'){
-                let fontSettings = cacheFont;
-                const script = language.typeface.script;
-                if (fontSettings && fontSettings[0] === '{'){
-                    fontSettings = JSON.parse(fontSettings);
-                    fontSettings[script] = val;
-                    // localStorage.setItem('font', JSON.stringify(fontSettings))
-                    self.module.common.cache.set('font', JSON.stringify(fontSettings));
-                } else {
-                    let store = {};
-                    store[script] = val;
-                    // localStorage.setItem('font', JSON.stringify(store))
-                    self.module.common.cache.set('font', JSON.stringify(store));
-                }
-            } else {
-                // localStorage.setItem(prop, val)
-                self.module.common.cache.set(prop, val);
-            }
-            // change class name for ctrl btns
-            settings[prop].selects.removeClass('active');
-            settings[prop].selects.each(function(){
-                if ($(this).hasClass(newVal)) $(this).addClass('active')
-            })
-        }
-        // toggle photo background
-        function togglePhotoBackground(val){
-	          let app = $('.fika-app');
-            if (val){
-	              app.addClass('fika-photo-bg-on')
-            } else {
-	              app.removeClass('fika-photo-bg-on')
-            }
-            self.module.common.cache.set('photoBg', val);
+			const newVal = {};
+			if (prop === 'font'){
+				newVal[typeface.script] = val;
+				chrome.storage.sync.set({font: Object.assign({}, store.font, newVal)});
+			} else {
+				newVal[prop] = val
+				chrome.storage.sync.set(newVal);
+			}
+            // change class name for buttons
+			$(`[data-sel^='${prop}']`).removeClass('active');
+			$(`[data-sel='${data}']`).addClass('active')
         }
 
-        // set theme from localStorage
-        setAppearance('theme', settings['theme'].activeVal);
-        setAppearance('fontSize', settings['fontSize'].activeVal);
-        setAppearance('font', settings['font'].activeVal);
-        togglePhotoBackground(cachePhotoBg)
+		// set theme from storage
+		setAppearance('size-' + settings['size'].val);
+        setAppearance('theme-' + settings['theme'].val);
+        setAppearance('font-' + settings['font'].val);
 
         // bind click events
-        settings['theme'].selects.click(function(){
+/*        settings['theme'].selects.click(function(){
             const selectTheme = $(this).attr('class').split(/\s+/)[1].split('-')[1]
             setAppearance('theme', selectTheme)
             let html = document.documentElement
@@ -157,59 +118,61 @@ App.module.extend('reader', function() {
                 }
             })
             $('html').addClass('fika-html-bg-' + selectTheme)
-        });
-        settings['fontSize'].selects.click(function(){
-            setAppearance('fontSize',
-              $(this).attr('class').split(/\s+/)[1].split('-')[1]
-            )
-        });
-        settings['font'].selects.click(function(){
-            setAppearance('font',
-              $(this).attr('class').split(/\s+/)[1].split('-')[1]
-            )
-        });
-
-        // set photo background
-        $('input[name="photo-bg"]').change(function(){
-            console.log($(this).is(":checked"))
-            togglePhotoBackground($(this).is(":checked"))
-        })
+        });*/
+		btns.click(function () {
+			setAppearance($(this).attr('data-sel'));
+		})
 
     };
 
     // photos
-	this.initPhotos = async function() {
+	this.initPhotos = function() {
+		self.view.display('reader', 'photos', store['photos'], $('.fika-photo-grid'));
 		let photoObj = new Image(),
-      {photos, photoBg} = await new Promise((resolve)=>{
-			chrome.storage.sync.get(['photos'], function (res) {
-				self.view.display('reader', 'photos', res['photos'], $('.fika-photo-grid'));
-				resolve({photos:res['photos'], photoBg: res['photoBg']})
-			})
+			inputCheck = $('#photo-bg'),
+			fikaApp = $('.fika-app');
+		// toggle photo background
+		function togglePhotoBackground(val){
+			if (val) {
+				if (!photoObj.src){
+					let rand = Math.round(Math.random()*(store.photos.length-1));
+					inputCheck.attr('checked', 'checked');
+					switchPhoto(rand);
+				}
+				fikaApp.addClass('fika-photo-bg-on');
+			} else {
+				fikaApp.removeClass('fika-photo-bg-on');
+			}
+			chrome.storage.sync.set({photoBg:val})
+		}
+		// select photos
+		// pick a random photo on opening
+		togglePhotoBackground(store.photoBg || false)
+		inputCheck.change(function(){
+			togglePhotoBackground($(this).is(":checked"))
 		});
-		function switchPhoto(photo){
-			let imgEl = $('.fika-photo-bg img'),
+		function switchPhoto(index){
+			let photo = store.photos[index],
+				imgEl = $('.fika-photo-bg img'),
 				imgCont = $('.fika-photo-bg'),
 				tocOverlay = $('.fika-toc-static .fika-toc-overlay');
-      imgEl.attr('src', photo.small);
+			$('.fika-photo-grid-item.active').removeClass('active');
+			$('.fika-photo-grid-item').eq(index).addClass('active');
+			imgEl.attr('src', photo.small);
 			imgCont.addClass('fika-photo-bg-blur');
 			tocOverlay.hide()
 
-
-      photoObj.onload = function(){}
+			photoObj.onload = function(){}
 			photoObj.src = photo.full
 			photoObj.onload = function () {
-        loading = false
-        imgEl.attr('src', this.src)
-        imgCont.removeClass('fika-photo-bg-blur')
-        tocOverlay.css('background-image', 'url('+this.src+')')
-        tocOverlay.show()
+				imgEl.attr('src', this.src)
+				imgCont.removeClass('fika-photo-bg-blur')
+				tocOverlay.css('background-image', 'url('+this.src+')')
+				tocOverlay.show()
 			}
 		}
 		$('.fika-photo-grid-item').click(function () {
-      $(this).addClass('active')
-      $('.fika-photo-grid-item.active').removeClass('active')
-      console.log(photos[$(this).attr('data-id')])
-      switchPhoto(photos[$(this).attr('data-id')])
+			switchPhoto($(this).index())
 		})
 	};
 
@@ -274,7 +237,7 @@ App.module.extend('reader', function() {
         this.ripple(document.querySelectorAll('.fika-btn'));
         this.initToc();
         this.initMenu();
-		    this.initPhotos();
+		this.initPhotos();
 
         $('#fika-appearance').click(self.toggleMenu);
         $(document).mouseup(function(e) {
@@ -424,8 +387,14 @@ App.module.extend('reader', function() {
 	    }
     };
 
-    this._init = function(content) {
+    this._init = async function(content) {
         //
+		store = await new Promise((resolve)=>{
+			chrome.storage.sync.get(null, function (res) {
+				resolve(res)
+			})
+		});
+		console.log(store)
 		this._initTools();
 		this.feedback();
 		this.retrieveToc();
@@ -464,7 +433,7 @@ App.module.extend('reader', function() {
             });
 
             self.module.common.cache.get(['fontSize', 'theme', 'font', 'photoBg'], function(res) {
-                self.appearance(mainLang, {
+                self.appearance(mainLang['typeface'], {
                     fontSize: res[0],
                     theme: res[1],
                     font: res[2],

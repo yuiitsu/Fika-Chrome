@@ -149,7 +149,6 @@ App.module.extend('background', function() {
             permissions: ["identity"],
             origins: ["http://*/*", "https://*/*"]
         }, function(result){
-            console.log('identity', result, send_response)
             if (result){
                 self.getUser()
             } else {
@@ -158,7 +157,6 @@ App.module.extend('background', function() {
                     permissions:[ "identity"],
                     origins:["http://*/*", "https://*/*"]
                 }, function(granted){
-                    console.log('granted', granted)
                     if (granted) {
                         self.getUser()
                     }
@@ -225,8 +223,6 @@ App.module.extend('background', function() {
                 now = new Date().getTime();
             if (lastFetched < now - (7*24*60*60*1000)){
                 // request photos
-
-                console.log('starts photos fetching')
                 chrome.storage.sync.set({
                     photosLastFetchedDate: now,
                     photos: photos
