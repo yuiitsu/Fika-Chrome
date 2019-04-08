@@ -330,7 +330,7 @@ App.module.extend('content', function() {
                 }
             }
 
-            let htmlString = element.outerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, '');
+            let htmlString = element.outerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, '').replace(/width="(.+?)"/g, '').replace(/height="(.+?)"/g, '');
             if (element.offsetWidth <= 200) {
                 htmlString = htmlString.replace(/\s+/, ` style='height:${element.offsetHeight}px;width:${element.offsetWidth}px;'`);
             }
@@ -444,24 +444,26 @@ App.module.extend('content', function() {
 
     this.extFilter = function() {
         //
-        let parent = $('#fika-content');
+        let parent = $('.fika-content');
         // parent.find('noscript').each(function() {
         //     $(this).parent().html($(this).html().replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, ''));
         // });
         //
         parent.find('img').each(function() {
-            if (!$(this).attr('src')) {
+            // if (!$(this).attr('src')) {
                 let attributes = $(this)[0].attributes,
                     attributesLen = attributes.length;
 
                 for (let i = 0; i < attributesLen; i++) {
-                    if (attributes[i].nodeName.indexOf('src') !== -1 ||
+                    if (attributes[i].nodeName.indexOf('data-src') !== -1 ||
+                        // attributes[i].nodeName.indexOf('src') !== -1 ||
                         attributes[i].nodeName.indexOf('data-original-src') !== -1 ||
                         attributes[i].nodeName.indexOf('data-actualsrc') !== -1) {
+                        console.log(attributes[i].nodeValue);
                         $(this).attr('src', attributes[i].nodeValue);
                     }
                 }
-            }
+            // }
 
             if ($(this).attr('crossorigin') && $(this).attr('crossorigin') === 'anonymous') {
                 $(this).remove();
