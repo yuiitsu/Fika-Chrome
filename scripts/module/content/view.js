@@ -19,9 +19,8 @@ App.view.extend('content', function() {
                                 <path d="M4 13c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0-8c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm4 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zm0 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zM7 8c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1zm-3 5c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0-8c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm4 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zm0 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zM7 8c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1z"/>
                             </svg>
                         </button>
-                        <button class="fika-btn fika-btn-icon" id="fika-appearance">
-                            <svg class="fika-icon" viewBox="0 0 24 24">
-                                <path d="M21.94,18.66l-5-14a1,1,0,0,0-1.88,0L10.48,17.48,7.43,9.64a1,1,0,0,0-1.86,0l-3.5,9a1,1,0,1,0,1.86.72l.66-1.68H8.41l.66,1.68A1,1,0,0,0,10,20a.92.92,0,0,0,.36-.07.67.67,0,0,0,.14-.09.7.7,0,0,0,.16.1,1,1,0,0,0,1.28-.6l1-2.84h6.1l1,2.84A1,1,0,0,0,21,20a1,1,0,0,0,.34-.06A1,1,0,0,0,21.94,18.66Zm-16.58-3L6.5,12.76l1.14,2.92Zm8.31-1.18L16,8l2.33,6.53Z"/></svg>
+                        <button class="fika-btn fika-btn-icon" id="fika-settings">
+                            <svg class="fika-icon" width="20px" height="20px" viewBox="0 0 20 20"><path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/></svg>
                         </button>
                         <!--appearance settings-->
                         <div class="fika-menu"></div>
@@ -40,9 +39,11 @@ App.view.extend('content', function() {
                             <svg class="fika-icon" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
                         </button>
                             <!--exit-->
-                            <button class="fika-btn px-1" id="fika-login">
-                              <span>Login</span>
-                                <!--<svg class="fika-icon" viewBox="0 0 24 24"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>-->
+                            <button class="fika-btn fika-btn-icon" id="fika-autopilot-local">
+                                <!--on-->
+                              <svg class="fika-icon" viewBox="0 0 24 24"><path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1c.61 0 1.1-.49 1.1-1.1s-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z"/></svg>
+                              <!--off-->
+                              <svg class="fika-icon" viewBox="0 0 24 24"><path d="M18 6l-2.91 6.26 5.25 5.25C21.39 15.93 22 14.04 22 12c0-5.52-4.48-10-10-10-2.04 0-3.93.61-5.51 1.66l5.25 5.25L18 6zM2.81 5.64l.85.85c-1.37 2.07-2 4.68-1.48 7.45.75 3.95 3.92 7.13 7.88 7.88 2.77.52 5.38-.1 7.45-1.48l.85.85c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L4.22 4.22c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.03 0 1.42zm6.1 6.1l3.35 3.35L6 18l2.91-6.26z"/></svg>
                             </button>
                     </div>
                     <div class="fika-drawer">
@@ -137,13 +138,15 @@ App.view.extend('content', function() {
             <div class="fika-menu-nav d-flex column">
                 <div class="fika-menu-nav-item active">Text</div>
                 <div class="fika-menu-nav-item">Theme</div>
-                <div class="fika-menu-nav-item">Autopilot</div>
+                <div class="fika-menu-nav-item fika-pro">Autopilot</div>
                 <div class="flex-fill"></div>
                 <a class="fika-menu-nav-item small" href="http://fika.io/updatelog" target="_blank">What's new</a>
                 <a class="fika-menu-nav-item small" href="http://fika.io/pro" target="_blank">Upgrade to Pro</a>
                 <div class="fika-menu-login">
-                    <div class="mb-1">Log in</div>
-                    <div style="font-size:11px">with Google account</div>
+                    <div id="fika-login">
+                        <div class="mb-1">Log in</div>
+                        <div>with Google account</div>
+                    </div>
                 </div>
             </div>
             <div class="fika-menu-view-cont">
@@ -155,7 +158,7 @@ App.view.extend('content', function() {
                         <div class="fika-tab-item" style="font-size:14px" data-sel="size-medium">medium</div>
                         <div class="fika-tab-item" style="font-size:16px" data-sel="size-large">large</div>
                     </div>
-                    <div class="fika-menu-label mt-3">Font</div>
+                    <div class="fika-menu-label mt-4">Font</div>
                     <div class="fika-select fika-select-fonts"></div>
                 </div>
                 <!--theme-->
@@ -167,47 +170,43 @@ App.view.extend('content', function() {
                         <div class="fika-select-theme theme-blabar" data-sel="theme-blabar"></div>
                         <div class="fika-select-theme theme-licorice" data-sel="theme-licorice"></div>
                     </div> 
-                    <div class="mt-3 d-flex justify-space-between">
+                    <div class="mt-4 d-flex justify-space-between">
                         <div class="fika-menu-label">
                             <span class="fika-pro">Photo Background</span>
                             <div class="desc">Use inspiring photos as background</div>
                         </div>
-                        <input type="checkbox" id="photo-bg">
-                        <label class="fika-toggle" for="photo-bg"></label>
+                        <input type="checkbox" id="fika-photo-bg">
+                        <label class="fika-toggle" for="fika-photo-bg"></label>
                     </div>
                     <div class="fika-photo-grid">
                         
                     </div>
                 </div>
                 <div class="fika-menu-view">
-                    autopilot
+                    <div class="d-flex justify-space-between">
+                        <div class="fika-menu-label mt-1">
+                            <div class="fika-pro">Autopilot</div>
+                            <div class="desc">Automatically open Fika reader mode on certain website</div>
+                        </div>
+                        <input type="checkbox" id="fika-autopilot-global">
+                        <label class="fika-toggle" for="fika-autopilot-global"></label>
+                    </div>
+                    <div class="fika-menu-label d-flex">
+                        <svg width="24" height="24" class="fika-icon" style="opacity: 0.7;min-width:24px;" viewBox="0 0 24 24"><path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1c.61 0 1.1-.49 1.1-1.1s-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z"/></svg>
+                        <div class="ml-2 desc" style="margin-top: 0px;">Tip: Add or remove current website to whitelist</div>
+                    </div>
+                    <div class="fika-menu-label mt-5">
+                        Whitelist
+                        <div class="desc">Autopilot will trigger on these websites</div>
+                    </div>
+                    <div class="fika-select">
+                        <input class="fika-input" id="fika-autopilot-input" type="url" placeholder="Add new website URL">
+                        <div class="fika-autopilot-whitelist"></div>
+                    </div>
+                    
                 </div>
             </div>
         
         `
     };
 });
-
-/*<!--font size selection-->
-<div class="fika-select-label" style="margin-top: 0px">text size</div>
-<div class="fika-tab-items">
-    <div class="fika-tab-item size-small active">small</div>
-    <div class="fika-tab-item size-medium">medium</div>
-    <div class="fika-tab-item size-large">large</div>
-    </div>
-    <!--theme selection-->
-    <div class="fika-select-label">theme</div>
-    <div class="fika-select-themes">
-    <div class="fika-select-theme theme-vanilla"></div>
-    <div class="fika-select-theme theme-latte"></div>
-    <div class="fika-select-theme theme-blabar"></div>
-    <div class="fika-select-theme theme-licorice"></div>
-    </div>
-    <!--font selection-->
-    <div class="fika-select-label">Font</div>
-    <div class="fika-select-fonts"></div>
-    <!--photo background-->
-    <div class="mt-2">
-    <input type="checkbox" name="photo-bg">
-    <label for="photo-bg">Photo Background</label>
-</div>*/
