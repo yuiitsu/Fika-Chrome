@@ -6,7 +6,7 @@ App.module.extend('content', function() {
     let self = this,
         tags = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'PRE', 'CODE', 'FIGURE'],
         excludeTags = ['BUTTON', 'IFRAME', 'CANVAS', '#comment', 'SCRIPT', 'INPUT', 'ASIDE', 'FOOTER'],
-        excludeAttrName = ['share', 'twitter', 'linkedin', 'pinterest', 'singleadthumbcontainer', 'author', 'reward', 'reviewer'],
+        excludeAttrName = ['share', 'twitter', 'linkedin', 'pinterest', 'singleadthumbcontainer', 'author', 'reward', 'reviewer', 'bb_iawr', 'bg-food-en-retail'],
         titleTags = ['H1', 'H2', 'H3'],
         topArticleElement = [],
         articleElementIndex = [],
@@ -52,7 +52,7 @@ App.module.extend('content', function() {
         this.findNextNodePro(root[0]);
         //
         // console.log(topPoint);
-        // console.log(topElement);
+        console.log(topElement);
         if (topElement && topElement.innerText.length > 300) {
             isAvailable = true;
         }
@@ -80,12 +80,18 @@ App.module.extend('content', function() {
                 } else if (parent.nodeName === 'DIV') {
                     fp = 2;
                 }
+                //
+                if (nodeValue.length > 300) {
+                    fp = 100;
+                }
+                //
                 if (!element.parentElement.hasOwnProperty('fp')) {
                     element.parentElement['fp'] = fp;
                 } else {
                     element.parentElement['fp'] += fp;
                 }
                 element.parentElement['fl'] = 2;
+
             }
         }
         //
