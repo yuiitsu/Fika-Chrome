@@ -6,8 +6,7 @@ toc($theme)
     $margin(a, 0)
     font-weight normal
     sans-serif()
-
-    & ,&:link ,&:visited ,&:active
+    &:link ,&:visited ,&:active, &:not([href]):not([tabindex])
       color: $theme.text
 
 
@@ -33,7 +32,7 @@ $bullet(p)
     border-radius 50%
     background currentColor
     opacity 0.8
-    left: p - 12 // 4 content + 8 padding
+    left: p - 14 // 4 content + 8 padding
     top: 50%
     margin-top: - 2px
 
@@ -41,30 +40,31 @@ $bullet(p)
 .fika-app
   .fika-toc
     sans-serif()
+    position relative
 
     &-static
       overflow-y: auto;
       word-break: break-word;
       height: calc(100vh - 120px);
       position: fixed
-      top: 96px;
+      top: 64px
       right: 50%
       width: 240px
-      margin-right: 416px;
-      $padding(l, 1)
+      margin-right: 408px;
+      $padding(a, 2)
+      $padding(r, 1)
       $scroll-bar()
 
       //off state
       opacity 0
       transform: translateX(-24px)
       short-transition()
-
       // responsive
       @media screen and (max-width: 1264px)
         display none
 
       @media screen and (min-width: 1440px)
-        margin-right: 456px
+        margin-right: 448px
 
       &-active
         transform: translateX(0)
@@ -86,6 +86,7 @@ $bullet(p)
 
       &.fika-toc-active
         border-left: 2px solid $primary.dark
+        text-decoration: underline
 
       &:hover
         text-decoration underline
@@ -93,9 +94,9 @@ $bullet(p)
       &.fika-toc-
         &h1
           $toc-h()
-          font-size: 15px !important
+          font-size: 16px !important
           opacity 1
-          padding-left:8px
+          padding-left:6px
         &h2
           $toc-h()
           $bullet(20px)
@@ -104,7 +105,7 @@ $bullet(p)
         &h3
           $toc-h()
           $bullet(28px)
-          font-size: 14px !important
+          font-size: 13px !important
           opacity 0.56
         &h4
           $toc-h()

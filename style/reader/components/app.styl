@@ -21,14 +21,12 @@ for $name, $theme in $themes
   div, span, iframe,  h1,  h2,  h3,  h4,  h5,  h6,  p,  blockquote,  pre,  a,  abbr,  acronym,  address,  big,  cite,  code,  del,  dfn,  em,  img,  ins,  kbd,  q,  s,  samp,  small,  strike,  strong,  sub,  sup,  tt,  var,  u,  center,  dl,  dt,  dd,  ol,  ul,  li,  fieldset,  form,  label,  legend,  table,  caption,  tbody,  tfoot,  thead,  tr,  th,  td,  article,  aside,  canvas,  details,  embed,  figure,  figcaption,  footer,  header,  hgroup,  menu,  nav,  output,  ruby,  section,  summary,  mark,  audio,  video
     -webkit-font-smoothing: subpixel-antialiased;
     line-height 1
-    font-size: 100%;
-    font-weight: normal;
     vertical-align: baseline;
     background: unset;
     color: unset;
     text-shadow unset;
-    box-shadow: initial;
-    float: inherit;
+    box-shadow: unset;
+    float: clear;
     letter-spacing: normal;
     border-width: unset;
     border-style: initial;
@@ -36,6 +34,11 @@ for $name, $theme in $themes
     border-image: initial;
     box-sizing border-box
 
+  a
+    cursor pointer
+    & ,&:link ,&:visited ,&:active,&:hover,&:hover *
+      text-decoration none
+      color inherit
 
 
 .fika-reader-mode

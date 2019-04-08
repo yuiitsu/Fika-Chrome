@@ -3,7 +3,7 @@
 /*! Tool Menu */
 
 tool($theme)
-  background: tint($theme.paper, 8%)
+  background: $theme.paper
   color: $theme.text
 
 theme(tool, "tool")
@@ -31,7 +31,7 @@ theme(tool, "tool")
       margin-left 0 !important
 
     &-on
-      transform: translateX(-188px)
+      transform: translateX(-168px)
 
       #fika-tool-btn
         transform rotate(180deg)
@@ -40,41 +40,23 @@ theme(tool, "tool")
   svg
     &:first-child
       display none
-
     &:nth-child(2)
       display block
 
   &.fs-on svg
     &:first-child
       display block
-
     &:nth-child(2)
       display none
 
-
-//menu
-menu($theme)
-  background: $theme.paper
-  color: $theme.text
-
-theme(menu, "menu")
-
-.fika-app
-  .fika-menu
-    $padding(a, 2)
-    position: absolute
-    top: 48px;
-    left: -92px;
-    z-index: 200
-    radius()
-    shadow(2)
-    transform scale(0.9)
-    transform-origin top right
-    opacity 0
-    transition: 0.2s $transition.fast-in-fast-out
-    pointer-events none
-
-    &-on
-      transform scale(1)
-      opacity 1
-      pointer-events auto
+#fika-autopilot-local
+  svg
+    &:first-child
+      display none
+    &:nth-child(2)
+      display block
+  &.on svg
+    &:first-child
+      display block
+    &:nth-child(2)
+      display none

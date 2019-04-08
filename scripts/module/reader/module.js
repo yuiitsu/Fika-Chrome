@@ -5,59 +5,9 @@
 App.module.extend('reader', function() {
 
     let self = this,
-        drawer = null;
-
-    // 字体 metadata
-const fonts = {
-    rtl:['ar','arc','dv', 'fa', 'ha', 'he','khw','ks','ku','ps','ur','yi'],
-    cssPrefix:'font-',
-    typeface:[
-        {
-            lang: ['zh','zh-cn','zh-tw'], // 囊括的语言
-            script:'chinese',
-            default: 0, // 默认的字体index, 如中文的默认为黑体
-            fonts:[ // 字体的名字和相应的css class
-                { name:'黑体', class:'heiti' },
-                { name:'宋体', class:'songti' },
-                { name:'楷体', class:'kaiti'},
-                { name:'圆体', class:'yuanti'},
-            ]
-        },
-        {
-            lang:['jp'],
-            script:'japanese',
-            default: 0,
-            fonts:[
-                { name:'明朝体', class:'mincho'},
-                { name:'ゴシック体', class:'gothic'},
-                { name:'丸ゴシック体', class:'maru'},
-            ]
-        },
-        {
-            lang:[ 'af', 'be', 'bg', 'ca', 'co', 'cs', 'cy', 'da', 'de', 'en', 'eo', 'es', 'et', 'eu', 'fi', 'fr', 'fy', 'ga', 'gl', 'hr', 'hu', 'id', 'ig', 'is', 'it', 'kk', 'ku', 'la', 'lb', 'lt', 'lv', 'mg', 'mk', 'mn', 'ms', 'mt', 'nl', 'no', 'ny', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sm', 'sn', 'so', 'sq', 'sr', 'sv', 'sw', 'tg', 'tl', 'tr', 'uk', 'uz', 'vi', 'xh', 'yo', 'zu' ] , // 62
-            script:'latin',
-            default: 2,
-            fonts:[
-                { name:'Arial', class:'arial'},
-                { name:'Courier', class:'courier'},
-                { name:'Georgia', class:'georgia'},
-                { name:'Merriweather', class:'merriweather'},
-                { name:'Open Sans', class:'openSans'},
-                { name:'Palatino', class:'palatino'},
-            ]
-        },
-        // other languages
-        {
-            lang: [],
-            script:'others',
-            default: 0,
-            fonts:[
-                { name:'Arial', class:'arial'},
-                { name:'Times New Roman', class:'times'},
-            ]
-        }
-    ]
-};
+        toc = null,
+		store = null,
+		isAuth = false;
 
     this.ripple = function(els){
         if (els){
@@ -84,106 +34,74 @@ const fonts = {
         }
     };
 
-    this.toggleAppearanceMenu = function(toggle){
+    this.toggleMenu = function(toggle){
         const menu = $('.fika-menu');
-        if (toggle !== undefined && !toggle){
-            menu.removeClass('fika-menu-on')
-        } else {
-            menu.toggleClass('fika-menu-on')
-        }
+        if (toggle === undefined){
+			menu.toggleClass('fika-menu-on')
+		} else {
+			if (!toggle){
+				menu.removeClass('fika-menu-on')
+			} else {
+				menu.toggleClass('fika-menu-on')
+			}
+		}
     };
+    
+    this.initMenu = function () {
+    	let menuBtns = $('.fika-menu-nav-item:not(.small)'),
+			menuViews = $('.fika-menu-view');
+		menuBtns.click(function(){
+			$('.fika-menu-nav-item.active').removeClass('active');
+			$(this).addClass('active');
+			let btnIndex = $(this).index();
+			menuViews.hide();
+			menuViews.eq(btnIndex).show();
+		});
+	};
 
     // language 当前语言，用于字体设置
-    this.appearance = function(language, cache) {
-        let cacheFontSize = cache.fontSize,
-            cacheTheme = cache.theme,
-            cacheFont = cache.font,
-            cachePhotoBg = cache.photoBg;
-
-        const settings = {
-            fontSize: {
-                activeVal: cacheFontSize || 'medium',
+    this.appearance = function(typeface) {
+        let btns = $("div[data-sel]"),
+			settings = {
+            size: {
+                val: store.size || 'medium',
                 cont: $('.fika-article'),
-                selects: $('.fika-select-size'),
-                classPrefix: 'size-'
             },
             theme: {
-                activeVal: cacheTheme || 'vanilla',
+                val: store.theme || 'vanilla',
                 cont: $('.fika-app'),
-                selects: $('.fika-select-theme'),
-                classPrefix: 'theme-'
             },
             font: {
-                activeVal: (function (){
-                    const fontSettings = cacheFont;
-                    const defaultFont = language.typeface.fonts[language.typeface.default]['class'];
-                    if (fontSettings && fontSettings[0] === '{'){
-                        let fontOfLang = JSON.parse(cacheFont)[language.typeface.script];
-                        return fontOfLang ? fontOfLang : defaultFont
-                    } else {
-                        return defaultFont
-                    }
-                })(),
+                val: store.font ? store.font[typeface.script] ? store.font[typeface.script] : typeface.fonts[typeface.default]['class'] : typeface.fonts[typeface.default]['class'] ,
                 cont: $('.fika-article'),
-                selects: $('.fika-select-font'),
-                classPrefix: 'font-'
             }
         };
 
-        function setAppearance(prop, val) {
-            // change class name (theme) for app
-            let oldVal='', newVal='', cont = settings[prop].cont;
-            cont.attr('class').split(/\s+/).forEach(c => {
-                if (c.startsWith(settings[prop].classPrefix)) oldVal = c
-            });
-            cont.removeClass(oldVal)
-            newVal = `${settings[prop].classPrefix}${val}`
-            cont.addClass(newVal)
+        function setAppearance(data) {
+        	let prop = data.split('-')[0],
+				val = data.split('-')[1];
+            // change class name (theme) for app & cleans old class
+			let oldClass = settings[prop].cont.attr('class').split(' ').filter(c=> c.startsWith(prop)).join(' ');
+			settings[prop].cont.removeClass(oldClass)
+			settings[prop].cont.addClass(data);
             // change state and storage
-            settings[prop].activeVal = val;
-            if (prop === 'font'){
-                let fontSettings = cacheFont;
-                const script = language.typeface.script;
-                if (fontSettings && fontSettings[0] === '{'){
-                    fontSettings = JSON.parse(fontSettings);
-                    fontSettings[script] = val;
-                    // localStorage.setItem('font', JSON.stringify(fontSettings))
-                    self.module.common.cache.set('font', JSON.stringify(fontSettings));
-                } else {
-                    let store = {};
-                    store[script] = val;
-                    // localStorage.setItem('font', JSON.stringify(store))
-                    self.module.common.cache.set('font', JSON.stringify(store));
-                }
-            } else {
-                // localStorage.setItem(prop, val)
-                self.module.common.cache.set(prop, val);
-            }
-            // change class name for ctrl btns
-            settings[prop].selects.removeClass('active');
-            settings[prop].selects.each(function(){
-                if ($(this).hasClass(newVal)) $(this).addClass('active')
-            })
+			const newVal = {};
+			if (prop === 'font'){
+				newVal[typeface.script] = val;
+				chrome.storage.sync.set({font: Object.assign({}, store.font, newVal)});
+			} else {
+				newVal[prop] = val
+				chrome.storage.sync.set(newVal);
+			}
+            // change class name for buttons
+			$(`[data-sel^='${prop}']`).removeClass('active');
+			$(`[data-sel='${data}']`).addClass('active')
         }
-        // toggle photo background
-        function togglePhotoBackground(val){
-	          let app = $('.fika-app');
-            if (val){
-	              app.addClass('fika-photo-bg-on')
-            } else {
-	              app.removeClass('fika-photo-bg-on')
-            }
-            self.module.common.cache.set('photoBg', val);
-        }
-
-        // set theme from localStorage
-        setAppearance('theme', settings['theme'].activeVal);
-        setAppearance('fontSize', settings['fontSize'].activeVal);
-        setAppearance('font', settings['font'].activeVal);
-        togglePhotoBackground(cachePhotoBg)
-
-        // bind click events
-        settings['theme'].selects.click(function(){
+		// set theme from storage
+		setAppearance('size-' + settings['size'].val);
+        setAppearance('theme-' + settings['theme'].val);
+        setAppearance('font-' + settings['font'].val);
+/*        settings['theme'].selects.click(function(){
             const selectTheme = $(this).attr('class').split(/\s+/)[1].split('-')[1]
             setAppearance('theme', selectTheme)
             let html = document.documentElement
@@ -193,111 +111,209 @@ const fonts = {
                 }
             })
             $('html').addClass('fika-html-bg-' + selectTheme)
-        });
-        settings['fontSize'].selects.click(function(){
-            setAppearance('fontSize',
-              $(this).attr('class').split(/\s+/)[1].split('-')[1]
-            )
-        });
-        settings['font'].selects.click(function(){
-            setAppearance('font',
-              $(this).attr('class').split(/\s+/)[1].split('-')[1]
-            )
-        });
-
-        // set photo background
-        $('input[name="photo-bg"]').change(function(){
-            console.log($(this).is(":checked"))
-            togglePhotoBackground($(this).is(":checked"))
-        })
-	      // init image load
-		    let imgEl = $('.fika-photo-bg img'),
-			    imgCont = $('.fika-photo-bg'),
-//			    photoUrl = 'https://starkovtattoo.spb.ru/images/700/DSC100778640.jpg',
-			    photoUrl = 'https://images.unsplash.com/photo-1554176259-aa961fc32671?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2610&q=80',
-			    photo = new Image();
-		    imgCont.hide()
-		    photo.src = photoUrl
-		    photo.onload = function () {
-			    imgEl.attr('src', this.src)
-			    imgCont.show()
-		    }
-
+        });*/
+		// bind click events
+		btns.click(function () {
+			setAppearance($(this).attr('data-sel'));
+		})
     };
 
-    this.initDrawer = function(){
-        /* Drawer */
-        drawer = {
+    // photos
+	this.photos = function() {
+		self.view.display('reader', 'photos', store['photos'], $('.fika-photo-grid'));
+		let photoObj = new Image(),
+			inputCheck = $('#fika-photo-bg'),
+			fikaApp = $('.fika-app');
+		// toggle photo background
+		function togglePhotoBackground(val){
+			if (val) {
+				if (!photoObj.src){
+					let rand = Math.round(Math.random()*(store.photos.length-1));
+					inputCheck.attr('checked', 'checked');
+					switchPhoto(rand);
+				}
+				fikaApp.addClass('fika-photo-bg-on');
+			} else {
+				fikaApp.removeClass('fika-photo-bg-on');
+			}
+			chrome.storage.sync.set({photoBg:val})
+		}
+		// select photos
+		// pick a random photo on opening
+		togglePhotoBackground(store.photoBg || false)
+		inputCheck.change(function(){
+			togglePhotoBackground($(this).is(":checked"))
+		});
+		function switchPhoto(index){
+			let photo = store.photos[index],
+				imgEl = $('.fika-photo-bg img'),
+				imgCont = $('.fika-photo-bg'),
+				tocOverlay = $('.fika-toc-static .fika-toc-overlay');
+			$('.fika-photo-grid-item.active').removeClass('active');
+			$('.fika-photo-grid-item').eq(index).addClass('active');
+			imgEl.attr('src', photo.small);
+			imgCont.addClass('fika-photo-bg-blur');
+			tocOverlay.hide()
+
+			photoObj.onload = function(){}
+			photoObj.src = photo.full
+			photoObj.onload = function () {
+				imgEl.attr('src', this.src)
+				imgCont.removeClass('fika-photo-bg-blur')
+				tocOverlay.css('background-image', 'url('+this.src+')')
+				tocOverlay.show()
+			}
+		}
+		$('.fika-photo-grid-item').click(function () {
+			switchPhoto($(this).index())
+		})
+	};
+
+	// autopilot
+	this.autopilot = function () {
+		let whitelist = store.autopilotWhitelist || [],
+			autopilotOn = store.autopilot || false,
+			globalCheck = $('#fika-autopilot-global'),
+			localCheck = $('#fika-autopilot-local'),
+			whitelistEl = $('.fika-autopilot-whitelist'),
+			currentDomain = window.location.hostname.replace(/^www\./, '');
+		// mount whitelists UI
+		self.view.display('reader', 'autopilot', store['autopilotWhitelist'], whitelistEl);
+		// toggle autopilot globally
+		if (autopilotOn){
+			globalCheck.attr('checked', 'checked');
+		}
+		globalCheck.change(function(){
+			chrome.storage.sync.set({autopilot:$(this).is(":checked")})
+		});
+		// add & remove domain to whitelist
+		function add(domain){
+			if (whitelist.indexOf(domain) === -1){
+				whitelistEl.prepend(`
+					<div class="fika-select-item fika-autopilot-whitelist-item"  data-domain="${domain}">
+						<span>${domain}</span>
+						<div class="fika-autopilot-delete">
+							<svg class="fika-icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+						</div>
+					</div>
+				`);
+				whitelist.unshift(domain);
+				chrome.storage.sync.set({autopilotWhitelist: whitelist})
+				bindRemove();
+				updateLocalCheck()
+			}
+		}
+		function remove(domain){
+			$('.fika-autopilot-whitelist-item[data-domain="'+domain+'"]').remove();
+			whitelist.splice(whitelist.indexOf(domain), 1)
+			chrome.storage.sync.set({autopilotWhitelist: whitelist})
+			updateLocalCheck()
+		}
+		// bind input or button
+		$('#fika-autopilot-input').keydown(function(e) {
+			if (e.which === 13){
+				try{
+					let url = $(this).val(),
+						regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,10}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+					if (regex.test(url)){
+						url = url.startsWith('http') ? url : 'http://' + url;
+						let domain = new URL(url).hostname.replace(/^www\./, '')
+						add(domain);
+						$(this).val('')
+					}
+				} catch {}
+			}
+		});
+		bindRemove();
+		function bindRemove(){
+			$('.fika-autopilot-delete').click(function () {
+				remove($(this).parent().attr('data-domain'))
+			})
+		}
+		// local toggle
+		function updateLocalCheck(){
+			if (whitelist.indexOf(currentDomain) === -1) {
+				localCheck.addClass('on')
+			} else {
+				localCheck.removeClass('on')
+			}
+		}
+		updateLocalCheck();
+		localCheck.click(function () {
+			if (whitelist.indexOf(currentDomain) === -1){
+				add(currentDomain)
+			} else {
+				remove(currentDomain)
+			}
+		});
+	};
+
+
+	// Toc Drawer
+	this.initToc = function(){
+        toc = {
             open: true,
-            modal: false,
-            close: $('.fika-drawer-close'),
+            close: $('.fika-toc-close'),
+			btn: $('#fika-toc-btn'),
             toolbar: $('.fika-tool'),
-            btn: $('#fika-toc-btn'),
-            el: $('.fika-drawer'),
-            app: $('.fika-app'),
+			drawer: $('.fika-drawer'),
             overlay: $('.fika-overlay'),
             static: $('.fika-toc-static'),
             w: null,
             threshold: 1264,
             available:false
         };
-
-        function toggleToc(open){
-            // static
+		function toggleToc(open){
             if (open) {
-                if (drawer.available){
-                    drawer.el.addClass('fika-drawer-on');
-                    drawer.overlay.addClass('fika-overlay-active')
+                if (toc.available){
+                    toc.drawer.addClass('fika-drawer-on');
+                    toc.overlay.addClass('fika-overlay-active')
                 } else {
-                    drawer.static.addClass('fika-toc-static-active')
+                    toc.static.addClass('fika-toc-static-active')
                 }
             } else {
-                drawer.static.removeClass('fika-toc-static-active')
-                drawer.el.removeClass('fika-drawer-on');
-                drawer.overlay.removeClass('fika-overlay-active')
+                toc.static.removeClass('fika-toc-static-active')
+                toc.drawer.removeClass('fika-drawer-on');
+                toc.overlay.removeClass('fika-overlay-active')
             }
-            drawer.open = open;
+            toc.open = open;
         }
-
         // click events
-        drawer.btn.click(function(){
-            toggleToc(!drawer.open)
-        });
-        drawer.close.click(function(){
-            toggleToc(false)
-        });
-        drawer.overlay.click(function(){
-            toggleToc(false);
-            drawer.overlay.removeClass('fika-overlay-active')
-        });
-
-        function toggleTocDrawer(){
-            drawer.w = window.innerWidth;
-            drawer.available = drawer.w < drawer.threshold;
+        toc.btn.click(()=> toggleToc(!toc.open));
+        toc.close.click(()=> toggleToc(false));
+        toc.overlay.click(()=>{
+			toggleToc(false);
+			toc.overlay.removeClass('fika-overlay-active')
+		});
+		// check toc availability
+        function updateTocDrawerAvailability(){
+            toc.w = window.innerWidth;
+			toc.available = toc.w < toc.threshold;
         }
-
-        window.addEventListener('resize', ()=>{
+		updateTocDrawerAvailability();
+		window.addEventListener('resize', ()=>{
             // current window width
             const w = window.innerWidth;
-            const wasAvailabe = drawer.available
-            toggleTocDrawer()
-            if (wasAvailabe && !drawer.available){
+            const wasAvailable = toc.available
+            updateTocDrawerAvailability();
+            if (wasAvailable && !toc.available){
                 toggleToc(false)
                 toggleToc(true)
-            } else if (drawer.available){
+            } else if (toc.available){
                 toggleToc(false)
             }
-            drawer.w = w;
+            toc.w = w;
         });
-        // init drawer
-        toggleTocDrawer()
     };
 
     this._initTools = function() {
         this.ripple(document.querySelectorAll('.fika-btn'));
-        this.initDrawer()
+        this.initToc();
+        this.initMenu();
+		this.photos();
+		this.autopilot();
 
-        $('#fika-appearance').click(self.toggleAppearanceMenu);
+        $('#fika-settings').click(self.toggleMenu);
         $(document).mouseup(function(e) {
             let container = $(".fika-menu");
             if (!container.is(e.target) && container.has(e.target).length === 0){
@@ -344,15 +360,15 @@ const fonts = {
             $('.fika-menu').removeClass('fika-menu-on')
         });
         let hoverTimer;
-        toolbar.mouseleave(function () {
+/*        toolbar.mouseleave(function () {
             hoverTimer = setTimeout(()=>{
                 $(this).removeClass('fika-tool-on')
-                self.toggleAppearanceMenu(false);
+                self.toggleMenu(false);
             }, 1200)
         });
         toolbar.mouseenter(function () {
             clearTimeout(hoverTimer)
-        })
+        })*/
 
         //close
         // $('#fika-exit').click(function () {
@@ -376,8 +392,6 @@ const fonts = {
                 'data':{}
             }, function () {});
         })
-
-
     };
 
     this.feedback = function () {
@@ -401,9 +415,9 @@ const fonts = {
 		    clickCount++
 		    feedbackOldVal = attr
 	    })
-    }
+    };
 
-    this.toc = function(){
+    this.retrieveToc = function(){
 	    // toc
 	    let targetContent = $(".fika-content"),
 		    title = $('.fika-article-title'),
@@ -417,40 +431,45 @@ const fonts = {
 		    id: id
 	    });
 	    // other headings
-      // compare relatively higher level headings, and filter them
-      let min = 6, d = 0;
+      	// compare relatively higher level headings, and filter them
+      	let min = 6, d = 0;
 	    targetContent.find(':header').each(function() {
 		    let text = $(this)[0].innerText,
-          tag = $(this)[0].localName;
-		    min = Math.min(min, tag.slice(1))
-		    if (text) {
-			    let id = Math.random() * 10000;
-			    $(this).attr('id', id);
-			    tocs.push({
-				    class: 'fika-toc-' + tag,
-				    text: text.trim(),
-				    id: id
-			    });
-		    }
+			tag = $(this)[0].localName;
+			min = Math.min(min, tag.slice(1))
+			if (text) {
+				let id = Math.random() * 10000;
+				$(this).attr('id', id);
+				tocs.push({
+					class: 'fika-toc-' + tag,
+					text: text.trim(),
+					id: id
+				});
+			}
 	    });
-	    d = min - 2 // at least h2
-      if (d > 0){
-	      for (let i of tocs.slice(1)){
-	          i.class = i.class.slice(0, -1) + d
-	      }
-      }
-	    if (tocs.length > 1){
-		    // 如果没有抓到TOC 就不显示 - nil
-		    console.log(tocs)
+	    d = min - 2; // at least h2
+		if (d > 0){
+			for (let i of tocs.slice(1)){
+			  i.class = i.class.slice(0, -1) + d
+			}
+		}
+		// 如果没有抓到TOC 就不显示
+		if (tocs.length > 1){
 		    self.view.display('reader', 'toc', tocs, $('.fika-toc'));
 	    }
-    }
+    };
 
-    this._init = function(content) {
+    this._init = async function(content) {
         //
-        this._initTools();
-	      this.feedback();
-	      this.toc();
+		store = await new Promise((resolve)=>{
+			chrome.storage.sync.get(null, function (res) {
+				resolve(res)
+			})
+		});
+		console.log(store)
+		this._initTools();
+		this.feedback();
+		this.retrieveToc();
         // 处理语言
         chrome.i18n.detectLanguage(content, function(result) {
             // demo
@@ -470,14 +489,14 @@ const fonts = {
 
             // 多语言字体  - nil
             // 检索相应语言的字体列表
-            for (let j = 0; j < fonts.typeface.length; j++){
-                if (fonts.typeface[j]['lang'].indexOf(mainLang.code) !== -1){
-                    mainLang['typeface'] = fonts.typeface[j];
-                    break
-                } else if (j === 3){
-                    mainLang['typeface'] = fonts.typeface[3]
-                }
-            }
+			for (let j = 0; j < Fonts.typeface.length; j++){
+				if (Fonts.typeface[j]['lang'].indexOf(mainLang.code) !== -1){
+					mainLang['typeface'] = Fonts.typeface[j];
+					break
+				} else if (j === 3){
+					mainLang['typeface'] = Fonts.typeface[3]
+				}
+			}
             // 加入切换字体的按钮
             self.view.display('reader', 'fonts', mainLang['typeface']['fonts'], $('.fika-select-fonts'))
 
@@ -486,7 +505,7 @@ const fonts = {
             });
 
             self.module.common.cache.get(['fontSize', 'theme', 'font', 'photoBg'], function(res) {
-                self.appearance(mainLang, {
+                self.appearance(mainLang['typeface'], {
                     fontSize: res[0],
                     theme: res[1],
                     font: res[2],
@@ -499,5 +518,13 @@ const fonts = {
     this.init = function() {
 
     };
+
+    // auth
+	this.login = function (data) {
+		isAuth = true;
+		console.log(data);
+		self.view.display('reader', 'userProfile', Object.assign({isAuth: true}, data) , $('.fika-menu-login'));
+
+	}
 });
 

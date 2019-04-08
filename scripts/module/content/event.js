@@ -16,7 +16,6 @@ App.event.extend('content', function() {
             });
         },
         close_reader_mode: function() {
-            console.log('close_reader_mode')
             $(document).keydown(function(e) {
                 if (e.which === 27) {
                     self.module.content.closeReaderMode();

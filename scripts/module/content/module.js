@@ -6,7 +6,7 @@ App.module.extend('content', function() {
     let self = this,
         tags = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'PRE', 'CODE', 'FIGURE'],
         excludeTags = ['BUTTON', 'IFRAME', 'CANVAS', '#comment', 'SCRIPT', 'INPUT', 'ASIDE', 'FOOTER', 'PERSONALIZATION-PLACEMENT'],
-        excludeAttrName = ['share', 'twitter', 'linkedin', 'pinterest', 'singleadthumbcontainer', 'author', 'reward', 'reviewer'],
+        excludeAttrName = ['share', 'twitter', 'linkedin', 'pinterest', 'singleadthumbcontainer', 'author', 'reward', 'reviewer', 'bb_iawr', 'bg-food-en-retail'],
         titleTags = ['H1', 'H2', 'H3'],
         topArticleElement = [],
         articleElementIndex = [],
@@ -16,15 +16,22 @@ App.module.extend('content', function() {
         pageUrl = '',
         dom = '',
         topElement = '',
-        topPoint = 0;
+        topPoint = 0,
+        isOpen = false,
+		store;
 
-    this.init = function() {
-        //
-        // this.findArticle();
+	this.init = async function() {
+		//
+		store = await new Promise((resolve)=>{
+			chrome.storage.sync.get(null, function (res) {
+				resolve(res)
+			})
+		});
+		// this.findArticle();
         this.findArticlePro();
+
         // console.log(articleElements);
         // console.log(articleElementRate);
-
         // listen background script send message.
         chrome.extension.onMessage.addListener(function(request, _, response) {
             let method = request.method;
@@ -51,10 +58,12 @@ App.module.extend('content', function() {
 
         this.findNextNodePro(root[0]);
         //
-        console.log(topPoint);
+        // console.log(topPoint);
         console.log(topElement);
         if (topElement && topElement.innerText.length > 300) {
             isAvailable = true;
+            // if is available trigger autopilot
+			this.autopilot();
         }
         // if (isAvailable) {
         //   this.readerMode();
@@ -80,21 +89,27 @@ App.module.extend('content', function() {
                 } else if (parent.nodeName === 'DIV') {
                     fp = 2;
                 }
+                //
+                if (nodeValue.length > 300) {
+                    fp = 100;
+                }
+                //
                 if (!element.parentElement.hasOwnProperty('fp')) {
                     element.parentElement['fp'] = fp;
                 } else {
                     element.parentElement['fp'] += fp;
                 }
                 element.parentElement['fl'] = 2;
+
             }
         }
         //
-        if (nodeName === 'ARTICLE') {
-            element['fp'] = 1000;
-            topPoint = element['fp'];
-            topElement = element;
-            return true;
-        } else {
+        // if (nodeName === 'ARTICLE') {
+        //     element['fp'] = 1000;
+        //     topPoint = element['fp'];
+        //     topElement = element;
+        //     return true;
+        // } else {
             //
             if (excludeTags.indexOf(nodeName) !== -1) {
                 return false;
@@ -133,7 +148,7 @@ App.module.extend('content', function() {
                     topElement = element;
                 }
             }
-        }
+        // }
     };
 
     this.pointToParentElement = function(parent, point) {
@@ -329,7 +344,12 @@ App.module.extend('content', function() {
                     src = attributes[i].nodeValue;
                 }
             }
-            articleHtml.push(element.outerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, ''));
+
+            let htmlString = element.outerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, '').replace(/width="(.+?)"/g, '').replace(/height="(.+?)"/g, '');
+            if (element.offsetWidth <= 200) {
+                htmlString = htmlString.replace(/\s+/, ` style='height:${element.offsetHeight}px;width:${element.offsetWidth}px;'`);
+            }
+            articleHtml.push(htmlString);
             return true;
         } else {
             for (var i in excludeAttrName) {
@@ -418,6 +438,9 @@ App.module.extend('content', function() {
             domain: window.location.hostname,
             favicon: favicon
         }, $('html'));
+        this.view.append('content', 'menu', {
+
+        }, $('.fika-menu'));
         //
         this.extFilter();
         //
@@ -436,24 +459,26 @@ App.module.extend('content', function() {
 
     this.extFilter = function() {
         //
-        let parent = $('#fika-reader');
+        let parent = $('.fika-content');
         // parent.find('noscript').each(function() {
         //     $(this).parent().html($(this).html().replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, ''));
         // });
         //
         parent.find('img').each(function() {
-            if (!$(this).attr('src')) {
+            // if (!$(this).attr('src')) {
                 let attributes = $(this)[0].attributes,
                     attributesLen = attributes.length;
 
                 for (let i = 0; i < attributesLen; i++) {
-                    if (attributes[i].nodeName.indexOf('src') !== -1 ||
+                    if (attributes[i].nodeName.indexOf('data-src') !== -1 ||
+                        // attributes[i].nodeName.indexOf('src') !== -1 ||
                         attributes[i].nodeName.indexOf('data-original-src') !== -1 ||
                         attributes[i].nodeName.indexOf('data-actualsrc') !== -1) {
+                        console.log(attributes[i].nodeValue);
                         $(this).attr('src', attributes[i].nodeValue);
                     }
                 }
-            }
+            // }
 
             if ($(this).attr('crossorigin') && $(this).attr('crossorigin') === 'anonymous') {
                 $(this).remove();
@@ -462,7 +487,8 @@ App.module.extend('content', function() {
             let img = new Image();
             img.src = $(this).attr('src');
             if (img.width > 200) {
-                $(this).attr('style', 'display:block;');
+                $(this).css('display', 'block');
+                $(this).css('margin', '32px auto');
             }
         });
         //
@@ -515,14 +541,22 @@ App.module.extend('content', function() {
         })
     };
 
-    this.openReaderMode = function() {
-        if (location.href !== pageUrl) {
-            this.findArticlePro();
-        }
+    this.autopilot = function () {
+    	if (store.autopilot && !isOpen){
+			let currentDomain = window.location.hostname.replace(/^www\./, '');
+			if (store.autopilotWhitelist.indexOf(currentDomain) !== -1){
+				this.readerMode()
+				this.openReaderMode()
+			}
+		}
+    };
 
-        let target = $('#fika-reader'),
-            isOpen = false;
-        if (target.length === 0) {
+    this.openReaderMode = function() {
+		if (location.href !== pageUrl) {
+			this.findArticlePro();
+		}
+        let target = $('#fika-reader');
+		if (target.length === 0) {
             this.findArticlePro();
             this.readerMode();
             target = $('#fika-reader');
@@ -534,12 +568,11 @@ App.module.extend('content', function() {
         if (display === 'none') {
             target.show();
             isOpen = true;
-            $('html').addClass('fika-html-bg')
             $('body').hide();
         } else {
             target.hide();
+            isOpen = false;
             overflow = 'auto';
-            $('html').removeClass('fika-html-bg')
             $('body').show();
         }
 
@@ -579,7 +612,7 @@ App.module.extend('content', function() {
     };
 
     this.loginUser = function(data){
-        console.log(data)
+		this.module.reader.login(data);
     };
 });
 

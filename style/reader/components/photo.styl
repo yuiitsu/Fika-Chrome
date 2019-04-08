@@ -6,24 +6,44 @@
     width 100%
     height 100%
     pointer-events none
+    // photo bg switch
     opacity: 0
     short-transition()
-    background #000
 
     img
-      opacity 0.84
-      width 100%
-      height 100%
+      //opacity 0.84
+      width 100% !important
+      height 100% !important
       object-fit cover
 
+    &-blur
+      filter: blur(5px)
+
+  .fika-toc-overlay
+    position: absolute
+    top: 0
+    z-index: -1
+    height: 100%;
+    width: 100%;
+    background-attachment fixed
+    background-size cover
+    background-position center
+    filter: contrast(0.9) blur(12px);
+    br(60px)
+    // photo bg switch
+    opacity 0
+    short-transition()
 
 // adjust color when photo bg is turned on
 .fika-app.fika-photo-bg-on
-  .fika-photo-bg
-    opacity 1
-  .fika-toc-static
-    a
+  .fika
+    &-photo-bg
+      opacity 1
+    &-toc-static
+      a
+        &:link ,&:visited ,&:active, &:not([href]):not([tabindex])
+          color: #eee
+    &-footer
       color: #fff
-      opacity 1 !important
-  .fika-footer
-    color: #fff
+    &-toc-overlay
+      opacity 1

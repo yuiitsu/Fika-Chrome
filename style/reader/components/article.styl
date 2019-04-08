@@ -1,23 +1,19 @@
 
 
 /*! Article */
-theme-tinting($theme)
-  $border-color = $theme.light ? tint($theme.text, $border-opacity) : shade($theme.text, $border-opacity)
-  article($border-color, $theme)
-
-article($border-color, $theme)
+article($theme)
   &-divider
-    border-bottom-color: rgba($border-color, 0.7)
+    border-bottom-color: $border-color($theme)
 
   &-domain
     color: rgba($theme.text, 0.7)
 
   table
     td, th
-      border:1px solid $border-color
+      border:1px solid $border-color($theme)
 
   blockquote
-    border-left:5px solid $border-color
+    border-left:5px solid $border-color($theme)
 
   pre
   code
@@ -40,7 +36,8 @@ article($border-color, $theme)
     color: $theme.text !important
 
 
-theme(theme-tinting, "article")
+theme(article, "article")
+
 $block-item()
   $margin(y, 4)
   display block
@@ -59,6 +56,10 @@ $block-item()
       font-weight bold
       text-align: left
 
+      &::before
+      &::after
+        display none
+
     &-divider
       width:100%
       $margin(y, 3)
@@ -72,8 +73,8 @@ $block-item()
       $margin(b, 2)
 
       img
-        height 16px
-        width 16px
+        height 16px !important
+        width 16px !important
         $margin(r, 1)
 
 
@@ -115,7 +116,6 @@ $block-item()
       max-width: 100%
       object-fit: cover
       $margin(x, auto)
-      $margin(y, 4)
 
     code
     pre
@@ -176,6 +176,7 @@ $block-item()
       border-collapse: collapse;
       td, th
         $padding(a, 1)
+        font-size: 75%
 
     sup
     sub
