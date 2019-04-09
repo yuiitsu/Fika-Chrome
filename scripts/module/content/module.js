@@ -56,9 +56,9 @@ App.module.extend('content', function() {
         if (topElement && topElement.innerText.length > 300) {
             isAvailable = true;
         }
-        // if (isAvailable) {
-        //   this.readerMode();
-        // }
+        if (isAvailable) {
+          this.readerMode();
+        }
         //
         chrome.extension.sendMessage({
             'method': 'reader_ready',
