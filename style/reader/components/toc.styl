@@ -6,8 +6,7 @@ toc($theme)
     $margin(a, 0)
     font-weight normal
     sans-serif()
-
-    & ,&:link ,&:visited ,&:active
+    &:link ,&:visited ,&:active, &:not([href]):not([tabindex])
       color: $theme.text
 
 
@@ -42,21 +41,6 @@ $bullet(p)
   .fika-toc
     sans-serif()
     position relative
-
-    &-overlay
-      position: absolute
-      top: 0
-      z-index: -1
-      height: 100%;
-      width: 100%;
-      background-attachment fixed
-      background-size cover
-      background-position center
-      filter: contrast(0.8) blur(5px);
-      br(60px)
-      // photo bg switch
-      opacity 0
-      short-transition()
 
     &-static
       overflow-y: auto;

@@ -28,11 +28,17 @@ select($theme)
       background: $theme.accent
     &:not(.active):hover
       background: rgba($theme.accent, 0.2)
-
-
+  &-theme
+    border: 1px solid $theme.text
 
 toggle($theme)
   background: rgba($theme.text, 0.2)
+
+input($theme)
+  border-bottom-color: $border-color($theme)
+  color: $theme.text
+  &::placeholder
+    color: rgba($theme.text, 0.4)
 
 
 // get colors for fika-select-theme
@@ -44,13 +50,14 @@ theme(menu, "menu")
 theme(tab, "tab")
 theme(select, "select")
 theme(toggle, "toggle")
+theme(input, 'input')
 
 
 .fika-app
   .fika-menu
     position: absolute
     top: 48px
-    left: -290px
+    left: -316px
     radius()
     shadow(2)
     transform scale(0.9)
@@ -131,12 +138,16 @@ theme(toggle, "toggle")
     flex-direction column
     radius(4px)
     $padding(y, 1)
-    cursor pointer
     &-item
+      cursor pointer
+      height: 32px;
       $padding(x, 2)
-      $padding(y, 1)
+      display: flex;
+      align-items: center;
       radius(4px)
       short-transition()
+      & .fika-autopilot-delete
+        margin-right:-8px
 
     &-themes
       display flex
@@ -160,6 +171,8 @@ theme(toggle, "toggle")
       &:before
         left: 50%
   .fika-toggle
+    $margin(l, 1)
+    min-width 48px
     width 48px
     height 28px
     border-radius 16px
@@ -225,3 +238,39 @@ theme(toggle, "toggle")
         border: 4px solid $primary.dark
         svg
           display block
+
+  .fika-autopilot-whitelist-item
+    display flex
+    justify-content space-between
+    span
+      line-height: 32px
+      white-space nowrap
+      text-overflow ellipsis
+      overflow hidden
+    &:hover
+      .fika-autopilot-delete
+        display block
+    .fika-autopilot-delete
+      display none
+      svg
+        height 16px
+        width 16px
+
+  .fika-input
+    -webkit-appearance: none
+    outline: none
+    border-width: 0px
+    border-bottom-width 2px
+    border-bottom-style solid
+    font-size: 16px
+    $padding(a, 2)
+    $padding(t, 1)
+    $margin(b, 1)
+    background: transparent
+    slow-transition()
+    &:focus
+      border-bottom-color: $primary.dark !important
+
+  #fika-login
+    div + div
+      font-size: 11px

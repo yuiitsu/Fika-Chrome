@@ -5,7 +5,7 @@ App.module.extend('content', function() {
     //
     let self = this,
         tags = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'PRE', 'CODE', 'FIGURE'],
-        excludeTags = ['BUTTON', 'IFRAME', 'CANVAS', '#comment', 'SCRIPT', 'INPUT', 'ASIDE', 'FOOTER'],
+        excludeTags = ['BUTTON', 'IFRAME', 'CANVAS', '#comment', 'SCRIPT', 'INPUT', 'ASIDE', 'FOOTER', 'PERSONALIZATION-PLACEMENT'],
         excludeAttrName = ['share', 'twitter', 'linkedin', 'pinterest', 'singleadthumbcontainer', 'author', 'reward', 'reviewer', 'bb_iawr', 'bg-food-en-retail'],
         titleTags = ['H1', 'H2', 'H3'],
         topArticleElement = [],
@@ -16,15 +16,22 @@ App.module.extend('content', function() {
         pageUrl = '',
         dom = '',
         topElement = '',
-        topPoint = 0;
+        topPoint = 0,
+        isOpen = false,
+		store;
 
-    this.init = function() {
-        //
-        // this.findArticle();
+	this.init = async function() {
+		//
+		store = await new Promise((resolve)=>{
+			chrome.storage.sync.get(null, function (res) {
+				resolve(res)
+			})
+		});
+		// this.findArticle();
         this.findArticlePro();
+
         // console.log(articleElements);
         // console.log(articleElementRate);
-
         // listen background script send message.
         chrome.extension.onMessage.addListener(function(request, _, response) {
             let method = request.method;
@@ -55,6 +62,8 @@ App.module.extend('content', function() {
         console.log(topElement);
         if (topElement && topElement.innerText.length > 300) {
             isAvailable = true;
+            // if is available trigger autopilot
+			this.autopilot();
         }
         if (isAvailable) {
           this.readerMode();
@@ -532,14 +541,22 @@ App.module.extend('content', function() {
         })
     };
 
-    this.openReaderMode = function() {
-        if (location.href !== pageUrl) {
-            this.findArticlePro();
-        }
+    this.autopilot = function () {
+    	if (store.autopilot && !isOpen){
+			let currentDomain = window.location.hostname.replace(/^www\./, '');
+			if (store.autopilotWhitelist.indexOf(currentDomain) !== -1){
+				this.readerMode()
+				this.openReaderMode()
+			}
+		}
+    };
 
-        let target = $('#fika-reader'),
-            isOpen = false;
-        if (target.length === 0) {
+    this.openReaderMode = function() {
+		if (location.href !== pageUrl) {
+			this.findArticlePro();
+		}
+        let target = $('#fika-reader');
+		if (target.length === 0) {
             this.findArticlePro();
             this.readerMode();
             target = $('#fika-reader');
@@ -551,12 +568,11 @@ App.module.extend('content', function() {
         if (display === 'none') {
             target.show();
             isOpen = true;
-            $('html').addClass('fika-html-bg')
             $('body').hide();
         } else {
             target.hide();
+            isOpen = false;
             overflow = 'auto';
-            $('html').removeClass('fika-html-bg')
             $('body').show();
         }
 
@@ -596,7 +612,7 @@ App.module.extend('content', function() {
     };
 
     this.loginUser = function(data){
-        console.log(data)
+		this.module.reader.login(data);
     };
 });
 

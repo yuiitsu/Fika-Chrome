@@ -6,8 +6,8 @@ App.module.extend('reader', function() {
 
     let self = this,
         toc = null,
-		fikaApp = $('.fika-app'),
-		store = null;
+		store = null,
+		isAuth = false;
 
     this.ripple = function(els){
         if (els){
@@ -36,11 +36,15 @@ App.module.extend('reader', function() {
 
     this.toggleMenu = function(toggle){
         const menu = $('.fika-menu');
-        if (toggle !== undefined && !toggle){
-            menu.removeClass('fika-menu-on')
-        } else {
-            menu.toggleClass('fika-menu-on')
-        }
+        if (toggle === undefined){
+			menu.toggleClass('fika-menu-on')
+		} else {
+			if (!toggle){
+				menu.removeClass('fika-menu-on')
+			} else {
+				menu.toggleClass('fika-menu-on')
+			}
+		}
     };
     
     this.initMenu = function () {
@@ -53,18 +57,10 @@ App.module.extend('reader', function() {
 			menuViews.hide();
 			menuViews.eq(btnIndex).show();
 		});
-		$('#fika-whatsnew').click(function () {
-			chrome.tabs.create({url: chrome.extension.getURL("update.html")});
-		})
 	};
 
     // language 当前语言，用于字体设置
-    this.appearance = function(typeface, cache) {
-        let cacheFontSize = cache.fontSize,
-            cacheTheme = cache.theme,
-            cacheFont = cache.font,
-            cachePhotoBg = cache.photoBg;
-
+    this.appearance = function(typeface) {
         let btns = $("div[data-sel]"),
 			settings = {
             size: {
@@ -101,13 +97,10 @@ App.module.extend('reader', function() {
 			$(`[data-sel^='${prop}']`).removeClass('active');
 			$(`[data-sel='${data}']`).addClass('active')
         }
-
 		// set theme from storage
 		setAppearance('size-' + settings['size'].val);
         setAppearance('theme-' + settings['theme'].val);
         setAppearance('font-' + settings['font'].val);
-
-        // bind click events
 /*        settings['theme'].selects.click(function(){
             const selectTheme = $(this).attr('class').split(/\s+/)[1].split('-')[1]
             setAppearance('theme', selectTheme)
@@ -119,17 +112,17 @@ App.module.extend('reader', function() {
             })
             $('html').addClass('fika-html-bg-' + selectTheme)
         });*/
+		// bind click events
 		btns.click(function () {
 			setAppearance($(this).attr('data-sel'));
 		})
-
     };
 
     // photos
-	this.initPhotos = function() {
+	this.photos = function() {
 		self.view.display('reader', 'photos', store['photos'], $('.fika-photo-grid'));
 		let photoObj = new Image(),
-			inputCheck = $('#photo-bg'),
+			inputCheck = $('#fika-photo-bg'),
 			fikaApp = $('.fika-app');
 		// toggle photo background
 		function togglePhotoBackground(val){
@@ -175,6 +168,86 @@ App.module.extend('reader', function() {
 			switchPhoto($(this).index())
 		})
 	};
+
+	// autopilot
+	this.autopilot = function () {
+		let whitelist = store.autopilotWhitelist || [],
+			autopilotOn = store.autopilot || false,
+			globalCheck = $('#fika-autopilot-global'),
+			localCheck = $('#fika-autopilot-local'),
+			whitelistEl = $('.fika-autopilot-whitelist'),
+			currentDomain = window.location.hostname.replace(/^www\./, '');
+		// mount whitelists UI
+		self.view.display('reader', 'autopilot', store['autopilotWhitelist'], whitelistEl);
+		// toggle autopilot globally
+		if (autopilotOn){
+			globalCheck.attr('checked', 'checked');
+		}
+		globalCheck.change(function(){
+			chrome.storage.sync.set({autopilot:$(this).is(":checked")})
+		});
+		// add & remove domain to whitelist
+		function add(domain){
+			if (whitelist.indexOf(domain) === -1){
+				whitelistEl.prepend(`
+					<div class="fika-select-item fika-autopilot-whitelist-item"  data-domain="${domain}">
+						<span>${domain}</span>
+						<div class="fika-autopilot-delete">
+							<svg class="fika-icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+						</div>
+					</div>
+				`);
+				whitelist.unshift(domain);
+				chrome.storage.sync.set({autopilotWhitelist: whitelist})
+				bindRemove();
+				updateLocalCheck()
+			}
+		}
+		function remove(domain){
+			$('.fika-autopilot-whitelist-item[data-domain="'+domain+'"]').remove();
+			whitelist.splice(whitelist.indexOf(domain), 1)
+			chrome.storage.sync.set({autopilotWhitelist: whitelist})
+			updateLocalCheck()
+		}
+		// bind input or button
+		$('#fika-autopilot-input').keydown(function(e) {
+			if (e.which === 13){
+				try{
+					let url = $(this).val(),
+						regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,10}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+					if (regex.test(url)){
+						url = url.startsWith('http') ? url : 'http://' + url;
+						let domain = new URL(url).hostname.replace(/^www\./, '')
+						add(domain);
+						$(this).val('')
+					}
+				} catch {}
+			}
+		});
+		bindRemove();
+		function bindRemove(){
+			$('.fika-autopilot-delete').click(function () {
+				remove($(this).parent().attr('data-domain'))
+			})
+		}
+		// local toggle
+		function updateLocalCheck(){
+			if (whitelist.indexOf(currentDomain) === -1) {
+				localCheck.addClass('on')
+			} else {
+				localCheck.removeClass('on')
+			}
+		}
+		updateLocalCheck();
+		localCheck.click(function () {
+			if (whitelist.indexOf(currentDomain) === -1){
+				add(currentDomain)
+			} else {
+				remove(currentDomain)
+			}
+		});
+	};
+
 
 	// Toc Drawer
 	this.initToc = function(){
@@ -237,9 +310,10 @@ App.module.extend('reader', function() {
         this.ripple(document.querySelectorAll('.fika-btn'));
         this.initToc();
         this.initMenu();
-		this.initPhotos();
+		this.photos();
+		this.autopilot();
 
-        $('#fika-appearance').click(self.toggleMenu);
+        $('#fika-settings').click(self.toggleMenu);
         $(document).mouseup(function(e) {
             let container = $(".fika-menu");
             if (!container.is(e.target) && container.has(e.target).length === 0){
@@ -318,8 +392,6 @@ App.module.extend('reader', function() {
                 'data':{}
             }, function () {});
         })
-
-
     };
 
     this.feedback = function () {
@@ -343,7 +415,7 @@ App.module.extend('reader', function() {
 		    clickCount++
 		    feedbackOldVal = attr
 	    })
-    }
+    };
 
     this.retrieveToc = function(){
 	    // toc
@@ -446,5 +518,13 @@ App.module.extend('reader', function() {
     this.init = function() {
 
     };
+
+    // auth
+	this.login = function (data) {
+		isAuth = true;
+		console.log(data);
+		self.view.display('reader', 'userProfile', Object.assign({isAuth: true}, data) , $('.fika-menu-login'));
+
+	}
 });
 

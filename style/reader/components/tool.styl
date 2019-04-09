@@ -31,7 +31,7 @@ theme(tool, "tool")
       margin-left 0 !important
 
     &-on
-      transform: translateX(-188px)
+      transform: translateX(-168px)
 
       #fika-tool-btn
         transform rotate(180deg)
@@ -40,13 +40,23 @@ theme(tool, "tool")
   svg
     &:first-child
       display none
-
     &:nth-child(2)
       display block
 
   &.fs-on svg
     &:first-child
       display block
+    &:nth-child(2)
+      display none
 
+#fika-autopilot-local
+  svg
+    &:first-child
+      display none
+    &:nth-child(2)
+      display block
+  &.on svg
+    &:first-child
+      display block
     &:nth-child(2)
       display none
