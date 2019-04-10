@@ -114,6 +114,7 @@ App.module.extend('reader', function() {
         });*/
 		// bind click events
 		btns.click(function () {
+			console.log($(this).attr('data-sel'))
 			setAppearance($(this).attr('data-sel'));
 		})
     };
@@ -465,6 +466,7 @@ App.module.extend('reader', function() {
 		//
 		chrome.storage.sync.get(null, function (res) {
 			store = res;
+			console.log(store)
 			self._initTools();
 			self.feedback();
 			self.retrieveToc();
@@ -503,14 +505,14 @@ App.module.extend('reader', function() {
                 $(this).remove();
             });
 
-/*            self.module.common.cache.get(['fontSize', 'theme', 'font', 'photoBg'], function(res) {
+            self.module.common.cache.get(['fontSize', 'theme', 'font', 'photoBg'], function(res) {
                 self.appearance(mainLang['typeface'], {
                     fontSize: res[0],
                     theme: res[1],
                     font: res[2],
                     photoBg: res[3]
                 });
-            });*/
+            });
         });
     };
 

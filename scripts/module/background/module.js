@@ -140,10 +140,8 @@ App.module.extend('background', function() {
     };
 
     this.openReaderMode = function(info, tab) {
-        console.log(tab)
         chrome.tabs.sendMessage(tab.id, {
-            'method': 'openReaderMode',
-            'data':{}
+            'method': 'openReaderMode'
         }, function (response) {});
     };
 
