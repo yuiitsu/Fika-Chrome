@@ -63,9 +63,9 @@ App.module.extend('content', function() {
             // if is available trigger autopilot
 			this.autopilot();
         }
-        // if (isAvailable) {
-        //   this.readerMode();
-        // }
+        if (isAvailable) {
+          this.readerMode();
+        }
         //
         chrome.extension.sendMessage({
             'method': 'reader_ready',
