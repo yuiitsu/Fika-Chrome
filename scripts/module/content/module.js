@@ -20,15 +20,13 @@ App.module.extend('content', function() {
         isOpen = false,
 		store;
 
-	this.init = async function() {
-		//
-		store = await new Promise((resolve)=>{
-			chrome.storage.sync.get(null, function (res) {
-				resolve(res)
-			})
-		});
-		// this.findArticle();
-        this.findArticlePro();
+	this.init = function() {
+        //
+        chrome.storage.sync.get(null, function (res) {
+            store = res
+            self.findArticlePro();
+        })
+        // this.findArticle();
 
         // console.log(articleElements);
         // console.log(articleElementRate);

@@ -155,17 +155,17 @@ App.module.extend('reader', function() {
 			imgCont.addClass('fika-photo-bg-blur');
 			tocOverlay.hide()
 
-			photoObj.onload = function(){}
-			photoObj.src = photo.full
+			photoObj.onload = function(){};
+			photoObj.src = photo.full;
 			photoObj.onload = function () {
-				imgEl.attr('src', this.src)
-				imgCont.removeClass('fika-photo-bg-blur')
-				tocOverlay.css('background-image', 'url('+this.src+')')
-				tocOverlay.show()
+				imgEl.attr('src', this.src);
+				imgCont.removeClass('fika-photo-bg-blur');
+				tocOverlay.css('background-image', 'url('+this.src+')');
+				tocOverlay.show();
 			}
 		}
 		$('.fika-photo-grid-item').click(function () {
-			switchPhoto($(this).index())
+			switchPhoto($(this).index());
 		})
 	};
 
@@ -200,50 +200,52 @@ App.module.extend('reader', function() {
 				whitelist.unshift(domain);
 				chrome.storage.sync.set({autopilotWhitelist: whitelist})
 				bindRemove();
-				updateLocalCheck()
+				updateLocalCheck();
 			}
 		}
 		function remove(domain){
 			$('.fika-autopilot-whitelist-item[data-domain="'+domain+'"]').remove();
-			whitelist.splice(whitelist.indexOf(domain), 1)
-			chrome.storage.sync.set({autopilotWhitelist: whitelist})
-			updateLocalCheck()
+			whitelist.splice(whitelist.indexOf(domain), 1);
+			chrome.storage.sync.set({autopilotWhitelist: whitelist});
+			updateLocalCheck();
 		}
 		// bind input or button
 		$('#fika-autopilot-input').keydown(function(e) {
 			if (e.which === 13){
 				try{
 					let url = $(this).val(),
-						regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,10}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+						regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,10}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
 					if (regex.test(url)){
 						url = url.startsWith('http') ? url : 'http://' + url;
-						let domain = new URL(url).hostname.replace(/^www\./, '')
+						let domain = new URL(url).hostname.replace(/^www\./, '');
 						add(domain);
-						$(this).val('')
+						$(this).val('');
 					}
-				} catch {}
+				} catch(err) {
+					console.log(err);
+				}
 			}
 		});
 		bindRemove();
 		function bindRemove(){
 			$('.fika-autopilot-delete').click(function () {
-				remove($(this).parent().attr('data-domain'))
+				remove($(this).parent().attr('data-domain'));
 			})
 		}
 		// local toggle
 		function updateLocalCheck(){
 			if (whitelist.indexOf(currentDomain) === -1) {
-				localCheck.addClass('on')
+				localCheck.addClass('on');
 			} else {
-				localCheck.removeClass('on')
+				localCheck.removeClass('on');
 			}
 		}
 		updateLocalCheck();
 		localCheck.click(function () {
 			if (whitelist.indexOf(currentDomain) === -1){
-				add(currentDomain)
+				add(currentDomain);
 			} else {
-				remove(currentDomain)
+				remove(currentDomain);
 			}
 		});
 	};
@@ -267,14 +269,14 @@ App.module.extend('reader', function() {
             if (open) {
                 if (toc.available){
                     toc.drawer.addClass('fika-drawer-on');
-                    toc.overlay.addClass('fika-overlay-active')
+                    toc.overlay.addClass('fika-overlay-active');
                 } else {
-                    toc.static.addClass('fika-toc-static-active')
+                    toc.static.addClass('fika-toc-static-active');
                 }
             } else {
-                toc.static.removeClass('fika-toc-static-active')
+                toc.static.removeClass('fika-toc-static-active');
                 toc.drawer.removeClass('fika-drawer-on');
-                toc.overlay.removeClass('fika-overlay-active')
+                toc.overlay.removeClass('fika-overlay-active');
             }
             toc.open = open;
         }
@@ -283,7 +285,7 @@ App.module.extend('reader', function() {
         toc.close.click(()=> toggleToc(false));
         toc.overlay.click(()=>{
 			toggleToc(false);
-			toc.overlay.removeClass('fika-overlay-active')
+			toc.overlay.removeClass('fika-overlay-active');
 		});
 		// check toc availability
         function updateTocDrawerAvailability(){
@@ -297,10 +299,10 @@ App.module.extend('reader', function() {
             const wasAvailable = toc.available
             updateTocDrawerAvailability();
             if (wasAvailable && !toc.available){
-                toggleToc(false)
-                toggleToc(true)
+                toggleToc(false);
+                toggleToc(true);
             } else if (toc.available){
-                toggleToc(false)
+                toggleToc(false);
             }
             toc.w = w;
         });
@@ -337,13 +339,13 @@ App.module.extend('reader', function() {
         // });
 
         $('#fika-fullscreen').click(function() {
-            $(this).toggleClass('fs-on')
-            const el = document.documentElement
+            $(this).toggleClass('fs-on');
+            const el = document.documentElement;
             if ( !document.fullscreenElement || !document.webkitIsFullScreen) {
                 if (el.requestFullscreen) {
-                    el.requestFullscreen()
+                    el.requestFullscreen();
                 } else if (el.webkitRequestFullScreen) {
-                    el.webkitRequestFullScreen()
+                    el.webkitRequestFullScreen();
                 }
             } else {
                 if (document.exitFullscreen) {
@@ -354,10 +356,10 @@ App.module.extend('reader', function() {
             }
         });
 
-        let toolbar = $('.fika-tool')
+        let toolbar = $('.fika-tool');
         $('#fika-tool-btn').click(function () {
-            toolbar.toggleClass('fika-tool-on')
-            $('.fika-menu').removeClass('fika-menu-on')
+            toolbar.toggleClass('fika-tool-on');
+            $('.fika-menu').removeClass('fika-menu-on');
         });
         let hoverTimer;
 /*        toolbar.mouseleave(function () {
@@ -377,13 +379,13 @@ App.module.extend('reader', function() {
 
         // share
         $('#fika-twitter-share').click(function () {
-            const url = encodeURI(`https://twitter.com/intent/tweet?text=${document.title} | #SharedFromFika &url=${window.location.href}`).replace(/#/g,'%23')
-            window.open(url, '_blank', 'width=720, height=600')
+            const url = encodeURI(`https://twitter.com/intent/tweet?text=${document.title} | #SharedFromFika &url=${window.location.href}`).replace(/#/g,'%23');
+            window.open(url, '_blank', 'width=720, height=600');
         })
         $('#fika-facebook-share').click(function(){
-            const url = encodeURI(`https://www.facebook.com/sharer/sharer.php?title=${document.title} ${window.location.href} | shared from Fika&u=${window.location.href}`).replace(/#/g,'%23')
-            window.open(url, '_blank', 'width=720, height=600')
-        })
+            const url = encodeURI(`https://www.facebook.com/sharer/sharer.php?title=${document.title} ${window.location.href} | shared from Fika&u=${window.location.href}`).replace(/#/g,'%23');
+            window.open(url, '_blank', 'width=720, height=600');
+        });
 
         //login
         $('#fika-login').click(function () {
@@ -391,7 +393,7 @@ App.module.extend('reader', function() {
                 'method': 'oauth',
                 'data':{}
             }, function () {});
-        })
+        });
     };
 
     this.feedback = function () {
@@ -403,17 +405,17 @@ App.module.extend('reader', function() {
 			    attr = thisBtn.attr('data-match'),
 			    msg = $('#fika-feedback-msg');
 		    if (feedbackOldVal !== attr && clickCount <= 1){
-			    feedbackBtns.removeClass('fika-feedback-button-active')
-			    thisBtn.addClass('fika-feedback-button-active')
-			    self.module.content.sendFeedback(attr)
+			    feedbackBtns.removeClass('fika-feedback-button-active');
+			    thisBtn.addClass('fika-feedback-button-active');
+			    self.module.content.sendFeedback(attr);
 			    if (attr === '1'){
-				    msg.html('Thanks for the upvote! <a href="https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">Rate Fika</a>')
+				    msg.html('Thanks for the upvote! <a href="https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">Rate Fika</a>');
 			    } else {
-				    msg.html('Sorry to hear that! <a href="mailto:hi@fika.io?subject=Fika User Feedback" target="_blank">Help us improve</a>')
+				    msg.html('Sorry to hear that! <a href="mailto:hi@fika.io?subject=Fika User Feedback" target="_blank">Help us improve</a>');
 			    }
 		    }
-		    clickCount++
-		    feedbackOldVal = attr
+		    clickCount++;
+		    feedbackOldVal = attr;
 	    })
     };
 
@@ -459,18 +461,15 @@ App.module.extend('reader', function() {
 	    }
     };
 
-    this._init = async function(content) {
-        //
-		store = await new Promise((resolve)=>{
-			chrome.storage.sync.get(null, function (res) {
-				resolve(res)
-			})
+    this._init = function(content) {
+		//
+		chrome.storage.sync.get(null, function (res) {
+			store = res;
+			self._initTools();
+			self.feedback();
+			self.retrieveToc();
 		});
-		console.log(store)
-		this._initTools();
-		this.feedback();
-		this.retrieveToc();
-        // 处理语言
+		// 处理语言
         chrome.i18n.detectLanguage(content, function(result) {
             // demo
             // result.languages[i].language 是语言代码
@@ -504,14 +503,14 @@ App.module.extend('reader', function() {
                 $(this).remove();
             });
 
-            self.module.common.cache.get(['fontSize', 'theme', 'font', 'photoBg'], function(res) {
+/*            self.module.common.cache.get(['fontSize', 'theme', 'font', 'photoBg'], function(res) {
                 self.appearance(mainLang['typeface'], {
                     fontSize: res[0],
                     theme: res[1],
                     font: res[2],
                     photoBg: res[3]
                 });
-            });
+            });*/
         });
     };
 

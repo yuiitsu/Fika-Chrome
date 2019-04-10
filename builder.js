@@ -21,6 +21,7 @@ let excludes = {
         'package-lock.json',
         'README.md',
         '.git',
+        '.github',
         '.idea',
         'node_modules',
         'dist',
@@ -28,7 +29,8 @@ let excludes = {
         'icon'
     ],
     'mini': [
-        './scripts/lib/reader.js'
+        './scripts/lib/highlight.min.js',
+        './scripts/lib/jquery-1.11.0.min.js'
     ]
 };
 

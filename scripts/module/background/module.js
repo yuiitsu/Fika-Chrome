@@ -25,14 +25,16 @@ App.module.extend('background', function() {
         });
 
         // 右键菜单
-        chrome.contextMenus.create({
-            type: 'normal',
-            title: 'Toggle Fika',
-            id: 'fikaReaderMode',
-            onclick: this.openReaderMode
-        }, function () {
-            self.log('created context menus.');
-        });
+        chrome.contextMenus.removeAll(function() {
+            chrome.contextMenus.create({
+                type: 'normal',
+                title: 'Toggle Fika',
+                id: 'fikaReaderMode',
+                onclick: self.openReaderMode
+            }, function () {
+                self.log('created context menus.');
+            });
+        })
 
         self.fetchData()
         // 安装完成后，打开网站
@@ -138,10 +140,12 @@ App.module.extend('background', function() {
     };
 
     this.openReaderMode = function(info, tab) {
+        console.log(tab)
         chrome.tabs.sendMessage(tab.id, {
-            'method': 'openReaderMode'
+            'method': 'openReaderMode',
+            'data':{}
         }, function (response) {});
-    }
+    };
 
     this.oauth = function(data, send_response){
         // check identity permission
@@ -195,7 +199,8 @@ App.module.extend('background', function() {
             full: "https://images.unsplash.com/photo-1529164114-6b1bd6f5cc91?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjYzODA2fQ",
             credit: "Jason Leung",
             source: 'Unsplash',
-            link: "https://unsplash.com/photos/KmKAk86LLgc"
+            link: "https://unsplash.com/photos/KmKAk86LLgc",
+            textColor: "#000000"
         },{
             id: 2,
             small: "https://images.unsplash.com/photo-1545105511-839f4a45a030?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjYzODA2fQ",
