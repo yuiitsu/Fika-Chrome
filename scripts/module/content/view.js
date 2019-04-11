@@ -38,13 +38,13 @@ App.view.extend('content', function() {
                             <!--fs-->
                             <svg class="fika-icon" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
                         </button>
-                            <!--exit-->
-                            <button class="fika-btn fika-btn-icon" id="fika-autopilot-local">
-                                <!--on-->
-                              <svg class="fika-icon" viewBox="0 0 24 24"><path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1c.61 0 1.1-.49 1.1-1.1s-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z"/></svg>
-                              <!--off-->
-                              <svg class="fika-icon" viewBox="0 0 24 24"><path d="M18 6l-2.91 6.26 5.25 5.25C21.39 15.93 22 14.04 22 12c0-5.52-4.48-10-10-10-2.04 0-3.93.61-5.51 1.66l5.25 5.25L18 6zM2.81 5.64l.85.85c-1.37 2.07-2 4.68-1.48 7.45.75 3.95 3.92 7.13 7.88 7.88 2.77.52 5.38-.1 7.45-1.48l.85.85c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L4.22 4.22c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.03 0 1.42zm6.1 6.1l3.35 3.35L6 18l2.91-6.26z"/></svg>
-                            </button>
+                        <!--autopilot-->
+                        <button class="fika-btn fika-btn-icon fika-pro-item fika-disabled" id="fika-autopilot-local">
+                            <!--on-->
+                          <svg class="fika-icon" viewBox="0 0 24 24"><path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1c.61 0 1.1-.49 1.1-1.1s-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z"/></svg>
+                          <!--off-->
+                          <svg class="fika-icon" viewBox="0 0 24 24"><path d="M18 6l-2.91 6.26 5.25 5.25C21.39 15.93 22 14.04 22 12c0-5.52-4.48-10-10-10-2.04 0-3.93.61-5.51 1.66l5.25 5.25L18 6zM2.81 5.64l.85.85c-1.37 2.07-2 4.68-1.48 7.45.75 3.95 3.92 7.13 7.88 7.88 2.77.52 5.38-.1 7.45-1.48l.85.85c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L4.22 4.22c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.03 0 1.42zm6.1 6.1l3.35 3.35L6 18l2.91-6.26z"/></svg>
+                        </button>
                     </div>
                     <div class="fika-drawer">
                         <div class="my-2 d-flex align-center justify-space-between">
@@ -141,9 +141,14 @@ App.view.extend('content', function() {
                 <div class="fika-menu-nav-item fika-pro">Autopilot</div>
                 <div class="flex-fill"></div>
                 <a class="fika-menu-nav-item small" href="http://fika.io/updatelog" target="_blank">What's new</a>
-                <a class="fika-menu-nav-item small" href="http://fika.io/pro" target="_blank">Upgrade to Pro</a>
+                <div class="fika-menu-nav-item static small" style="font-size: 12px;
+    line-height: 16px;">
+                    <div class="fika-pro" style=" margin-left: -4px;"></div>
+                    Login and share Fika to gain BETA access.
+                </div>
+                <!--<a class="fika-menu-nav-item small" href="http://fika.io/pro" target="_blank">Upgrade to Pro</a>-->
                 <div class="fika-menu-login">
-                    <div id="fika-login">
+                    <div id="fika-login" class="px-2">
                         <div class="mb-1">Log in</div>
                         <div>with Google account</div>
                     </div>
@@ -170,25 +175,27 @@ App.view.extend('content', function() {
                         <div class="fika-select-theme theme-blabar" data-sel="theme-blabar"></div>
                         <div class="fika-select-theme theme-licorice" data-sel="theme-licorice"></div>
                     </div>
-                    <div class="mt-3 fika-menu-label fika-pro">Background</div>
                     
-                    <div class="my-2 d-flex justify-space-between">
-                        <div class="fika-menu-label">
-                            <span class="fika-menu-label-sec">Photo Rotation</span>
-                            <div class="desc">Rotate photo backgrounds everyday</div>
+                    <div class="fika-pro-item fika-disabled">
+                        <div class="mt-3 fika-menu-label fika-pro">Background</div>
+                        <div class="my-2 d-flex justify-space-between">
+                            <div class="fika-menu-label">
+                                <span class="fika-menu-label-sec">Photo Rotation</span>
+                                <div class="desc">Rotate photo backgrounds everyday</div>
+                            </div>
+                            <input type="checkbox" id="fika-photo-bg" disabled>
+                            <label class="fika-toggle" for="fika-photo-bg"></label>
                         </div>
-                        <input type="checkbox" id="fika-photo-bg">
-                        <label class="fika-toggle" for="fika-photo-bg"></label>
+                        <div class="d-flex align-center mb-1 mt-2">
+                            <div class="fika-photo-grid-tab active" data-tab="photo">PHOTO</div>
+                            <div class="ml-2 fika-photo-grid-tab" data-tab="color">COLOR</div>
+                        </div>
+                        <div class="fika-photo-grid" data-tab="photo"></div>
+                        <div class="fika-photo-grid" data-tab="color" style="display: none;"></div>
                     </div>
-                    <div class="d-flex align-center mb-1 mt-2">
-                        <div class="fika-photo-grid-tab active" data-tab="photo">PHOTO</div>
-                        <div class="ml-2 fika-photo-grid-tab" data-tab="color">COLOR</div>
-                    </div>
-                    <div class="fika-photo-grid" data-tab="photo"></div>
-                    <div class="fika-photo-grid" data-tab="color" style="display: none;"></div>
                 </div>
                 <!--autopilot-->
-                <div class="fika-menu-view">
+                <div class="fika-menu-view fika-pro-item fika-disabled">
                     <div class="fika-menu-label mt-1">
                         <div class="fika-pro">Autopilot</div>
                         <div class="desc">Automatically open Fika reader mode on whitelisted websites</div>
@@ -199,7 +206,7 @@ App.view.extend('content', function() {
                     </div>
                     <div class="fika-menu-label mt-3">Whitelist</div>
                     <div class="fika-select">
-                        <input class="fika-input" id="fika-autopilot-input" type="url" placeholder="Add new website URL">
+                        <input class="fika-input" disabled id="fika-autopilot-input" type="url" placeholder="Add new website URL">
                         <div class="fika-autopilot-whitelist"></div>
                     </div>
                     

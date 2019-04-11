@@ -73,8 +73,9 @@ App.view.extend('reader', function() {
                     <div class="flex-fill"></div>
                     <svg class="fika-icon" width="24" height="24" viewBox="0 0 24 24"><path d="M8.12 9.29L12 13.17l3.88-3.88c.39-.39 1.02-.39 1.41 0 .39.39.39 1.02 0 1.41l-4.59 4.59c-.39.39-1.02.39-1.41 0L6.7 10.7c-.39-.39-.39-1.02 0-1.41.39-.38 1.03-.39 1.42 0z"/></svg>
                 </div>
+                <a class="fika-menu-nav-item small d-block" id="fika-retweet">Share Fika</a>
             {{ else }}
-                <div id="fika-login">
+                <div id="fika-login" class="px-2">
                     <div class="mb-1">Log in</div>
                     <div>with Google account</div>
                 </div>

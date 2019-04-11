@@ -125,15 +125,6 @@ App.module.extend('reader', function() {
 			fikaApp = $('.fika-app'),
 			bgCont = $('.fika-bg'),
 			tocOverlay = $('.fika-toc-static .fika-toc-overlay');
-		// mount selections ui
-		self.view.display('reader', 'photos', {
-			value: store['photos'],
-			type:'photo'
-		}, $('.fika-photo-grid[data-tab="photo"]'));
-		self.view.display('reader', 'photos', {
-			value: store['monoColors'],
-			type:'color'
-		}, $('.fika-photo-grid[data-tab="color"]'));
 		// init background from settings
 		switchBg(store.bgType, store.bg);
 		// toggle photo rotation
@@ -343,8 +334,6 @@ App.module.extend('reader', function() {
         this.ripple(document.querySelectorAll('.fika-btn'));
         this.initToc();
         this.initMenu();
-		this.background();
-		this.autopilot();
 
         $('#fika-settings').click(self.toggleMenu);
         $(document).mouseup(function(e) {
@@ -422,7 +411,7 @@ App.module.extend('reader', function() {
         $('#fika-login').click(function () {
             chrome.extension.sendMessage({
                 'method': 'oauth',
-                'data':{}
+				'data':{}
             }, function () {});
         });
     };
@@ -499,6 +488,17 @@ App.module.extend('reader', function() {
 		self.retrieveToc();
 		self._initTools();
 		self.feedback();
+		self.view.display('reader', 'photos', {
+			value: store['photos'],
+			type:'photo'
+		}, $('.fika-photo-grid[data-tab="photo"]'));
+		self.view.display('reader', 'photos', {
+			value: store['monoColors'],
+			type:'color'
+		}, $('.fika-photo-grid[data-tab="color"]'));
+		if (store.user){
+			self.login(store.user);
+		}
 		// 处理语言
         chrome.i18n.detectLanguage(content, function(result) {
             // demo
@@ -533,62 +533,34 @@ App.module.extend('reader', function() {
                 $(this).remove();
             });
 
-			self.appearance(mainLang['typeface'])
-	        self.initTwitter()
-            // self.module.common.cache.get(['fontSize', 'theme', 'font', 'photoBg'], function(res) {
-            //     self.appearance(mainLang['typeface'], {
-            //         fontSize: res[0],
-            //         theme: res[1],
-            //         font: res[2],
-            //         photoBg: res[3]
-            //     });
-            // });
+			self.appearance(mainLang['typeface']);
         });
-    };
-
-    this.initTwitter = function() {
-    	//https://developer.twitter.com/en/docs/twitter-for-websites/javascript-api/guides/set-up-twitter-for-websites
-	    window.twitter = (function(){
-	    	let js, t = window.twitter || {},
-			    id = "twitter-wjs",
-			    fjs = d.getElementsByTagName('script')[0]
-		    if (document.getElementById(id)) return t;
-	    	js = document.createElement('script');
-		    js.id = id
-		    js.src = "https://platform.twitter.com/widgets.js";
-		    fjs.parentNode.insertBefore(js, fjs);
-		    t._e = [];
-		    t.ready = function (f) {
-			    t._e.push(f)
-		    }
-		    return t
-	    })()
-
-	    window.twitter.ready(function (twitter) {
-		    twitter.events.bind('retweet', function(e){
-		    	console.log(e, e.data)
-			    $.ajax({
-				    url: "http://www.yuiapi.com/api/v1/user/info",
-				    data: {
-				    	user_type: 'beta',
-					    token: store.user.token
-				    },
-				    type: "POST",
-				    success: data =>{
-				    	Object.assign({userType: 'beta'}, store.user)
-				    	chrome.storage.sync.set({user})
-				    }
-			    })
-		    })
-	    })
-
     };
 
     // auth
 	this.login = function (data) {
 		isAuth = true;
-		console.log(data);
+		// make twitter ready for potential sharing
+		$('.fika-disabled').removeClass('fika-disabled');
+		$('.fika-disabled input').prop('disabled', false);
+		self.background();
+		self.autopilot();
 		self.view.display('reader', 'userProfile', data , $('.fika-menu-login'));
+		$('#fika-retweet').click(function () {
+			chrome.extension.sendMessage({
+				'method': 'retweet',
+				'data':{}
+			}, function () {});
+		})
+	}
+	this.logout = function () {
+		$('.fika-pro-item').addClass('fika-disabled');
+		$('.fika-pro-item input').prop('disabled', true);
+		$('#fika-autopilot-local').unbind('click');
+		$('.fika-photo-grid-item').unbind('click');
+		$('.fika-photo-grid-tab').unbind('click');
+		self.view.display('reader', 'userProfile', null , $('.fika-menu-login'));
+		chrome.storage.sync.set({user: null, autopilotWhitelist: []})
 	}
 });
 

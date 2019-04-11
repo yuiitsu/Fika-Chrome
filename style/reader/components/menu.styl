@@ -92,10 +92,13 @@ theme(input, 'input')
           opacity 1
         &.small
           font-size: 14px
+        &.static
+          opacity 1 !important
+
 
     &-login
       $margin(t, 1)
-      $padding(a, 2)
+      $padding(y, 2)
       font-size: 20px
       &:hover
         cursor:pointer
@@ -202,10 +205,12 @@ theme(input, 'input')
     vertical-align super
     margin-left 4px
     background: $primary.dark
-
+  //.fika-pro-item
   .fika-disabled
     pointer-events none
     opacity 0.5
+
+
 
   .fika-photo-grid
     display flex
