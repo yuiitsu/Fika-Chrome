@@ -20,12 +20,14 @@ App.module.extend('content', function() {
         isOpen = false,
 		store;
 
-	this.init = function() {
+	this.init = async function() {
         //
-        chrome.storage.sync.get(null, function (res) {
-            store = res
-            self.findArticlePro();
-        })
+        store = await new Promise((resolve)=>{
+            chrome.storage.sync.get(null, function (res) {
+                resolve(res)
+            });
+        });
+        self.findArticlePro();
         // this.findArticle();
 
         // console.log(articleElements);
@@ -55,16 +57,12 @@ App.module.extend('content', function() {
         }
 
         this.findNextNodePro(root[0]);
-        //
-        // console.log(topPoint);
-        console.log(topElement);
+        // console.log(topElement);
         if (topElement && topElement.innerText.length > 300) {
             isAvailable = true;
-            // if is available trigger autopilot
-			this.autopilot();
-        }
-        if (isAvailable) {
-          this.readerMode();
+            // if is available then execute autopilot
+            this.readerMode();
+            this.autopilot();
         }
         //
         chrome.extension.sendMessage({
@@ -445,7 +443,7 @@ App.module.extend('content', function() {
         // if (topArticleElementLen > 0) {
             //this.module.reader._init(text.join(""));
         // }
-        this.module.reader._init(text);
+        this.module.reader._init(text, store);
         //
         // $('html, body').css('overflow-y', 'hidden');
         //
@@ -502,30 +500,37 @@ App.module.extend('content', function() {
     this.tocScroll = function(){
         const fikaApp = document.getElementById('fika-reader');
         let tocList = [];
-        $('.fika-toc a').each(function () {
+        $('.fika-toc a[data-id]').each(function () {
             let id = $(this).attr('data-id'),
                 header = document.getElementById(id.slice(1)),
                 offsetTop = header.getBoundingClientRect().y;
             tocList.push({
-                el: $(`a[data-id="${id}"]`),
+                el: $(this),
                 top: offsetTop
             });
             $(this).click(function () {
                 fikaApp.scrollTop = offsetTop
             })
         });
-        fikaApp.addEventListener('scroll', function (e) {
-            let scrollTop = e.target.scrollTop;
-            if (tocList.length > 0){
-                tocList[0].el.addClass('fika-toc-active');
-                for (let i of tocList){
-                    if (scrollTop + 48 >= i.top){
-                        $('.fika-toc a').removeClass('fika-toc-active');
-                        i.el.addClass('fika-toc-active')
+        if (tocList.length > 0) {
+            tocList[0].el.addClass('fika-toc-active');
+            tocList[ tocList.length/2 ].el.addClass('fika-toc-active');
+            fikaApp.addEventListener('scroll', function (e) {
+                let scrollTop = e.target.scrollTop,
+                    activeId = '';
+                if (scrollTop <= tocList[0].top){
+                    activeId = tocList[0].el.attr('data-id');
+                } else {
+                    for (let i of tocList) {
+                        if ((scrollTop + 48) >= i.top) {
+                            activeId = i.el.attr('data-id');
+                        }
                     }
                 }
-            }
-        })
+                $('.fika-toc a[data-id].fika-toc-active').removeClass('fika-toc-active');
+                $(`.fika-toc a[data-id="${activeId}"]`).addClass('fika-toc-active')
+            })
+        }
     };
     
     this.highlightCode = function () {
@@ -540,10 +545,10 @@ App.module.extend('content', function() {
     };
 
     this.autopilot = function () {
-    	if (store.autopilot && !isOpen){
-			let currentDomain = window.location.hostname.replace(/^www\./, '');
-			if (store.autopilotWhitelist.indexOf(currentDomain) !== -1){
-				this.readerMode()
+    	if (!isOpen){
+            let currentDomain = window.location.hostname.split('.').splice(-2).join('.'),
+                path =  window.location.pathname;
+            if (path !== '/' && store.autopilotWhitelist.indexOf(currentDomain) !== -1){
 				this.openReaderMode()
 			}
 		}
@@ -576,8 +581,11 @@ App.module.extend('content', function() {
 
         $('html, body').css('overflow-y', overflow);
 
-        self.tocScroll();
-        self.highlightCode();
+        // autopilot 时可能document 还没有ready jquery无法获取相应element
+        $(document).ready(function() {
+            self.tocScroll();
+            self.highlightCode();
+        });
         chrome.extension.sendMessage({
             'method': 'is_open',
             'data': isOpen

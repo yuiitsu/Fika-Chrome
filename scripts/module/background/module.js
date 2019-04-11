@@ -3,7 +3,8 @@
  */
 App.module.extend('background', function() {
     //
-    let self = this;
+    let self = this,
+        store = null;
 
     this.init = function() {
         // open main screen in new tab.
@@ -148,8 +149,7 @@ App.module.extend('background', function() {
     this.oauth = function(data, send_response){
         // check identity permission
         chrome.permissions.contains({
-            permissions: ["identity"],
-            origins: ["http://*/*", "https://*/*"]
+            permissions: ["identity"]
         }, function(result){
             if (result){
                 self.getUser()
@@ -164,9 +164,9 @@ App.module.extend('background', function() {
                     }
                 })
             }
-        })
+        });
         send_response('')
-    }
+    };
 
     this.getUser = function(){
         chrome.identity.getAuthToken({interactive: false}, function(token) {
@@ -189,7 +189,7 @@ App.module.extend('background', function() {
         });
     };
 
-    this.fetchData = function (data, send_response) {
+    this.fetchData = async function (data, send_response) {
         // photos
         let photos = [{
             id: 1,
@@ -198,40 +198,73 @@ App.module.extend('background', function() {
             credit: "Jason Leung",
             source: 'Unsplash',
             link: "https://unsplash.com/photos/KmKAk86LLgc",
-            textColor: "#000000"
+            textColor: "dark"
         },{
             id: 2,
             small: "https://images.unsplash.com/photo-1545105511-839f4a45a030?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjYzODA2fQ",
             full: "https://images.unsplash.com/photo-1545105511-839f4a45a030?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjYzODA2fQ",
             credit: "Jarrett Kow",
             source: 'Unsplash',
-            link: "https://unsplash.com/photos/1ZOyYPOBn7I"
+            link: "https://unsplash.com/photos/1ZOyYPOBn7I",
+            textColor: "light"
         },{
             id: 3,
             small: "https://images.unsplash.com/photo-1554176259-aa961fc32671?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjYzODA2fQ",
             full: "https://images.unsplash.com/photo-1554176259-aa961fc32671?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjYzODA2fQ",
             credit: "Tyler Lastovich",
             source: 'Unsplash',
-            link: "https://unsplash.com/photos/ddLiNMqWAOM"
+            link: "https://unsplash.com/photos/ddLiNMqWAOM",
+            textColor: "light"
         },{
             id: 4,
             small: "https://images.unsplash.com/photo-1554068085-2b084ac42ddd?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjYzODA2fQ",
             full: "https://images.unsplash.com/photo-1554068085-2b084ac42ddd?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjYzODA2fQ",
             credit: "Ansgar Scheffold",
             source: 'Unsplash',
-            link: "https://unsplash.com/photos/3ZZdwACexMM"
-        }];
-        chrome.storage.sync.get(['photosLastFetchedDate'], function(res){
-            let lastFetched = res['photosLastFetchedDate'] ? res['photosLastFetchedDate'] : 0,
-                now = new Date().getTime();
-            if (lastFetched < now - (7*24*60*60*1000)){
-                // request photos
-                chrome.storage.sync.set({
-                    photosLastFetchedDate: now,
-                    photos: photos
-                }, function(){})
+            link: "https://unsplash.com/photos/3ZZdwACexMM",
+            textColor: "light"
+        }],
+        monoColors = [
+            {color: "#293990", textColor: "light"},
+            {color: "#C3ACEA", textColor: "dark"},
+            {color: "#FFC5CC", textColor: "dark"},
+            {color: "#F6D863", textColor: "dark"},
+            {color: "#B9E4C9", textColor: "dark"},
+            {color: "#4A5C80", textColor: "light"},
+            {color: "#111111", textColor: "light"},
+            {color: "#F5F5F5", textColor: "dark"},
+        ];
+        store = await new Promise((resolve, reject) => {
+            chrome.storage.sync.get(null, function(res){
+                resolve(res)
+            })
+        });
+        let now = new Date().getTime(),
+            lastFetched = store['photoLastFetchedDate'] || 0,
+            photoRotation = store['photoRotation'] || 'false',
+            bgType = store['bgType'] || 'default',
+            bg = store['bg'] || 0;
+        if ( lastFetched < now - (7*24*60*60*1000) ){
+            // request photos
+            let photos = await $.ajax({
+                methods:'GET',
+                url: 'http://www.yuiapi.com/api/v1/fika/background'
+            })
+        }
+        if ( bgType === 'photo' && photoRotation === true ){
+            let randomIndex = bg;
+            while (randomIndex === bg){
+                randomIndex = Math.round(Math.random()*(photos.length-1));
+                console.log(randomIndex)
             }
-        })
+            bg = randomIndex
+        }
+        chrome.storage.sync.set({
+            photoLastFetchedDate: now,
+            photos: photos,
+            monoColors: monoColors,
+            bg: bg
+        }, function(){})
         // autopilot whitelist
     };
 });

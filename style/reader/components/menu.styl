@@ -68,7 +68,7 @@ theme(input, 'input')
     cursor auto
     display flex
     flex-direction row-reverse
-    height 360px
+    height 400px
     sans-serif()
     overflow hidden
     &-on
@@ -110,7 +110,9 @@ theme(input, 'input')
       display none
     &-label
       $margin(b, 1)
-      font-size: 18px
+      font-size: 20px
+      &-sec
+        font-size: 16px
       .desc
         margin-top: 4px
         font-size: 13px
@@ -192,7 +194,7 @@ theme(input, 'input')
 
   .fika-pro:after
     color: #fff
-    content:'Pro'
+    content:'BETA'
     padding: 2px 4px
     height 12px
     border-radius 2px
@@ -209,6 +211,14 @@ theme(input, 'input')
     display flex
     flex-wrap wrap
     margin: 0 -4px;
+    &-tab
+      font-size: 16px
+      opacity 0.4
+      cursor pointer
+      &:hover
+        opacity 0.7
+      &.active
+        opacity 1
     &-item
       height: 68px
       flex-basis: 33.3333%
@@ -218,7 +228,10 @@ theme(input, 'input')
       cursor pointer
       radius(6px)
       overflow hidden
-      img
+      .fill
+        display: flex
+        align-items: center
+        justify-content: center
         height 100% !important
         width 100% !important
         object-fit: cover

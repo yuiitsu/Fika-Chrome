@@ -63,20 +63,19 @@ App.module.extend('reader', function() {
     this.appearance = function(typeface) {
         let btns = $("div[data-sel]"),
 			settings = {
-            size: {
-                val: store.size || 'medium',
-                cont: $('.fika-article'),
-            },
-            theme: {
-                val: store.theme || 'vanilla',
-                cont: $('.fika-app'),
-            },
-            font: {
-                val: store.font ? store.font[typeface.script] ? store.font[typeface.script] : typeface.fonts[typeface.default]['class'] : typeface.fonts[typeface.default]['class'] ,
-                cont: $('.fika-article'),
-            }
-        };
-
+				size: {
+					val: store.size || 'medium',
+					cont: $('.fika-article'),
+				},
+				theme: {
+					val: store.theme || 'vanilla',
+					cont: $('.fika-app'),
+				},
+				font: {
+					val: store.font ? store.font[typeface.script] ? store.font[typeface.script] : typeface.fonts[typeface.default]['class'] : typeface.fonts[typeface.default]['class'] ,
+					cont: $('.fika-article'),
+				}
+			};
         function setAppearance(data) {
         	let prop = data.split('-')[0],
 				val = data.split('-')[1];
@@ -119,55 +118,87 @@ App.module.extend('reader', function() {
 		})
     };
 
-    // photos
-	this.photos = function() {
-		self.view.display('reader', 'photos', store['photos'], $('.fika-photo-grid'));
+    // background
+	this.background = function() {
+		// variables
 		let photoObj = new Image(),
 			inputCheck = $('#fika-photo-bg'),
-			fikaApp = $('.fika-app');
-		// toggle photo background
-		function togglePhotoBackground(val){
-			if (val) {
-				if (!photoObj.src){
-					let rand = Math.round(Math.random()*(store.photos.length-1));
-					inputCheck.attr('checked', 'checked');
-					switchPhoto(rand);
-				}
-				fikaApp.addClass('fika-photo-bg-on');
-			} else {
-				fikaApp.removeClass('fika-photo-bg-on');
-			}
-			chrome.storage.sync.set({photoBg:val})
-		}
-		// select photos
-		// pick a random photo on opening
-		togglePhotoBackground(store.photoBg || false)
+			fikaApp = $('.fika-app'),
+			bgCont = $('.fika-bg'),
+			tocOverlay = $('.fika-toc-static .fika-toc-overlay');
+		// mount selections ui
+		self.view.display('reader', 'photos', {
+			value: store['photos'],
+			type:'photo'
+		}, $('.fika-photo-grid[data-tab="photo"]'));
+		self.view.display('reader', 'photos', {
+			value: store['monoColors'],
+			type:'color'
+		}, $('.fika-photo-grid[data-tab="color"]'));
+		// toggle photo rotation
+		inputCheck.prop('checked', store.photoRotation);
 		inputCheck.change(function(){
-			togglePhotoBackground($(this).is(":checked"))
+			chrome.storage.sync.set({photoRotation:$(this).is(":checked")})
 		});
-		function switchPhoto(index){
-			let photo = store.photos[index],
-				imgEl = $('.fika-photo-bg img'),
-				imgCont = $('.fika-photo-bg'),
-				tocOverlay = $('.fika-toc-static .fika-toc-overlay');
+		// switch background type tab
+		$('.fika-photo-grid-tab').click(function () {
+			$('.fika-photo-grid-tab.active').removeClass('active');
+			$(this).addClass('active');
+			let tab = $(this).attr('data-tab');
+			$('.fika-photo-grid').hide();
+			$(`.fika-photo-grid[data-tab="${tab}"]`).show();
+		});
+		// select background
+		$('.fika-photo-grid-item').click(function () {
+			let type = $(this).attr('data-type'),
+				index = parseInt($(this).attr('data-index')),
+				data;
+			if ( type === 'default'){
+				$('.fika-photo-grid-item.active').removeClass('active');
+				$('.fika-photo-grid-default').addClass('active');
+				fikaApp.removeClass('fika-bg-on fika-bg-dark fika-bg-light');
+			} else {
+				fikaApp.addClass('fika-bg-on');
+				fikaApp.removeClass('fika-bg-dark fika-bg-light');
+				if (type === 'photo'){
+					data = store['photos'][index];
+					switchPhoto(data, index);
+				} else if (type === 'color'){
+					data = store['monoColors'][index];
+					switchColor(data, index);
+				}
+			}
+			chrome.storage.sync.set({bg: index, bgType: type})
+		});
+		// load image
+		function switchPhoto(data, index){
 			$('.fika-photo-grid-item.active').removeClass('active');
-			$('.fika-photo-grid-item').eq(index).addClass('active');
-			imgEl.attr('src', photo.small);
-			imgCont.addClass('fika-photo-bg-blur');
-			tocOverlay.hide()
+			$(`.fika-photo-grid-item[data-type="photo"][data-index="${index}"]`).addClass('active');
+			bgCont.css('background-image', 'url('+data.small+')');
+			bgCont.addClass('fika-bg-blur');
+			fikaApp.addClass('fika-bg-'+data.textColor);
+			tocOverlay.hide();
 
 			photoObj.onload = function(){};
-			photoObj.src = photo.full;
+			photoObj.src = data.full;
 			photoObj.onload = function () {
-				imgEl.attr('src', this.src);
-				imgCont.removeClass('fika-photo-bg-blur');
+				bgCont.css('background-image', 'url('+this.src+')');
+				bgCont.removeClass('fika-bg-blur');
 				tocOverlay.css('background-image', 'url('+this.src+')');
 				tocOverlay.show();
 			}
 		}
-		$('.fika-photo-grid-item').click(function () {
-			switchPhoto($(this).index());
-		})
+		// load mono-color
+		function switchColor(data, index){
+			$('.fika-photo-grid-item.active').removeClass('active');
+			$(`.fika-photo-grid-item[data-type="color"][data-index="${index}"]`).addClass('active');
+			photoObj.src = '';
+			photoObj.onload = function(){};
+			fikaApp.addClass('fika-bg-'+data.textColor);
+			bgCont.css('background-image', '');
+			bgCont.css('background-color', data.color);
+			tocOverlay.hide();
+		}
 	};
 
 	// autopilot
@@ -177,16 +208,9 @@ App.module.extend('reader', function() {
 			globalCheck = $('#fika-autopilot-global'),
 			localCheck = $('#fika-autopilot-local'),
 			whitelistEl = $('.fika-autopilot-whitelist'),
-			currentDomain = window.location.hostname.replace(/^www\./, '');
+			currentDomain = window.location.hostname.split('.').splice(-2).join('.');
 		// mount whitelists UI
 		self.view.display('reader', 'autopilot', store['autopilotWhitelist'], whitelistEl);
-		// toggle autopilot globally
-		if (autopilotOn){
-			globalCheck.attr('checked', 'checked');
-		}
-		globalCheck.change(function(){
-			chrome.storage.sync.set({autopilot:$(this).is(":checked")})
-		});
 		// add & remove domain to whitelist
 		function add(domain){
 			if (whitelist.indexOf(domain) === -1){
@@ -213,18 +237,16 @@ App.module.extend('reader', function() {
 		// bind input or button
 		$('#fika-autopilot-input').keydown(function(e) {
 			if (e.which === 13){
-				try{
+				try {
 					let url = $(this).val(),
 						regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,10}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
 					if (regex.test(url)){
 						url = url.startsWith('http') ? url : 'http://' + url;
-						let domain = new URL(url).hostname.replace(/^www\./, '');
+						let domain = new URL(url).hostname.split('.').splice(-2).join('.');
 						add(domain);
 						$(this).val('');
 					}
-				} catch(err) {
-					console.log(err);
-				}
+				} catch (err) {}
 			}
 		});
 		bindRemove();
@@ -250,7 +272,6 @@ App.module.extend('reader', function() {
 			}
 		});
 	};
-
 
 	// Toc Drawer
 	this.initToc = function(){
@@ -313,7 +334,7 @@ App.module.extend('reader', function() {
         this.ripple(document.querySelectorAll('.fika-btn'));
         this.initToc();
         this.initMenu();
-		this.photos();
+		this.background();
 		this.autopilot();
 
         $('#fika-settings').click(self.toggleMenu);
@@ -462,15 +483,13 @@ App.module.extend('reader', function() {
 	    }
     };
 
-    this._init = function(content) {
+
+	this._init = async function(content, _store) {
 		//
-		chrome.storage.sync.get(null, function (res) {
-			store = res;
-			console.log(store)
-			self._initTools();
-			self.feedback();
-			self.retrieveToc();
-		});
+		store = _store;
+		self.retrieveToc();
+		self._initTools();
+		self.feedback();
 		// 处理语言
         chrome.i18n.detectLanguage(content, function(result) {
             // demo
@@ -505,14 +524,15 @@ App.module.extend('reader', function() {
                 $(this).remove();
             });
 
-            self.module.common.cache.get(['fontSize', 'theme', 'font', 'photoBg'], function(res) {
-                self.appearance(mainLang['typeface'], {
-                    fontSize: res[0],
-                    theme: res[1],
-                    font: res[2],
-                    photoBg: res[3]
-                });
-            });
+			self.appearance(mainLang['typeface'])
+            // self.module.common.cache.get(['fontSize', 'theme', 'font', 'photoBg'], function(res) {
+            //     self.appearance(mainLang['typeface'], {
+            //         fontSize: res[0],
+            //         theme: res[1],
+            //         font: res[2],
+            //         photoBg: res[3]
+            //     });
+            // });
         });
     };
 
@@ -525,7 +545,6 @@ App.module.extend('reader', function() {
 		isAuth = true;
 		console.log(data);
 		self.view.display('reader', 'userProfile', Object.assign({isAuth: true}, data) , $('.fika-menu-login'));
-
 	}
 });
 

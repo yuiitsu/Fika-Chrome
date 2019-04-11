@@ -1,0 +1,68 @@
+/*! Photo */
+
+grid-default($theme)
+  div.fill
+    background: $theme.bg
+
+theme(grid-default, "photo-grid-default")
+
+$background-config()
+  background-attachment fixed
+  background-repeat: no-repeat;
+  background-size cover
+  background-position center
+
+.fika-app
+  .fika-bg
+    position fixed
+    width 100%
+    height 100%
+    pointer-events none
+    $background-config()
+    // photo bg switch
+    opacity: 0
+    short-transition()
+
+    &-blur
+      filter: blur(5px)
+
+  .fika-toc-overlay
+    position: absolute
+    top: 0
+    z-index: -1
+    height: 100%;
+    width: 100%;
+    $background-config()
+    filter: contrast(0.9) blur(8px);
+    br(60px)
+    // photo bg switch
+    opacity 0
+    short-transition()
+
+
+
+// adjust color when photo bg is turned on
+.fika-app.fika-bg-on
+  .fika
+    &-bg
+      opacity 1
+    &-toc-overlay
+      opacity 1
+
+  &.fika-bg-light
+    .fika
+      &-toc-static
+        a
+          &:link ,&:visited ,&:active, &:not([href]):not([tabindex])
+            color: #eee
+      &-footer
+        color: #fff
+
+  &.fika-bg-dark
+    .fika
+      &-toc-static
+        a
+          &:link ,&:visited ,&:active, &:not([href]):not([tabindex])
+            color: #111
+      &-footer
+        color: #000

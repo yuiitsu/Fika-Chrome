@@ -124,7 +124,7 @@ App.view.extend('content', function() {
                         </div>
                     </div>
                     <!--background photo-->
-                    <div class="fika-photo-bg">
+                    <div class="fika-bg">
                       <img />
                     <div>
                 </div>
@@ -158,7 +158,7 @@ App.view.extend('content', function() {
                         <div class="fika-tab-item" style="font-size:14px" data-sel="size-medium">medium</div>
                         <div class="fika-tab-item" style="font-size:16px" data-sel="size-large">large</div>
                     </div>
-                    <div class="fika-menu-label mt-4">Font</div>
+                    <div class="fika-menu-label mt-3">Font</div>
                     <div class="fika-select fika-select-fonts"></div>
                 </div>
                 <!--theme-->
@@ -169,36 +169,35 @@ App.view.extend('content', function() {
                         <div class="fika-select-theme theme-latte" data-sel="theme-latte"></div>
                         <div class="fika-select-theme theme-blabar" data-sel="theme-blabar"></div>
                         <div class="fika-select-theme theme-licorice" data-sel="theme-licorice"></div>
-                    </div> 
-                    <div class="mt-4 d-flex justify-space-between">
+                    </div>
+                    <div class="mt-3 fika-menu-label fika-pro">Background</div>
+                    
+                    <div class="my-2 d-flex justify-space-between">
                         <div class="fika-menu-label">
-                            <span class="fika-pro">Photo Background</span>
-                            <div class="desc">Use inspiring photos as background</div>
+                            <span class="fika-menu-label-sec">Photo Rotation</span>
+                            <div class="desc">Rotate photo backgrounds everyday</div>
                         </div>
                         <input type="checkbox" id="fika-photo-bg">
                         <label class="fika-toggle" for="fika-photo-bg"></label>
                     </div>
-                    <div class="fika-photo-grid">
-                        
+                    <div class="d-flex align-center mb-1 mt-2">
+                        <div class="fika-photo-grid-tab active" data-tab="photo">PHOTO</div>
+                        <div class="ml-2 fika-photo-grid-tab" data-tab="color">COLOR</div>
                     </div>
+                    <div class="fika-photo-grid" data-tab="photo"></div>
+                    <div class="fika-photo-grid" data-tab="color" style="display: none;"></div>
                 </div>
+                <!--autopilot-->
                 <div class="fika-menu-view">
-                    <div class="d-flex justify-space-between">
-                        <div class="fika-menu-label mt-1">
-                            <div class="fika-pro">Autopilot</div>
-                            <div class="desc">Automatically open Fika reader mode on certain website</div>
-                        </div>
-                        <input type="checkbox" id="fika-autopilot-global">
-                        <label class="fika-toggle" for="fika-autopilot-global"></label>
+                    <div class="fika-menu-label mt-1">
+                        <div class="fika-pro">Autopilot</div>
+                        <div class="desc">Automatically open Fika reader mode on whitelisted websites</div>
                     </div>
                     <div class="fika-menu-label d-flex">
                         <svg width="24" height="24" class="fika-icon" style="opacity: 0.7;min-width:24px;" viewBox="0 0 24 24"><path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1c.61 0 1.1-.49 1.1-1.1s-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z"/></svg>
-                        <div class="ml-2 desc" style="margin-top: 0px;">Tip: Add or remove current website to whitelist</div>
+                        <div class="ml-1 desc" style="margin-top: 0px;">Tip: whitelist current website</div>
                     </div>
-                    <div class="fika-menu-label mt-5">
-                        Whitelist
-                        <div class="desc">Autopilot will trigger on these websites</div>
-                    </div>
+                    <div class="fika-menu-label mt-3">Whitelist</div>
                     <div class="fika-select">
                         <input class="fika-input" id="fika-autopilot-input" type="url" placeholder="Add new website URL">
                         <div class="fika-autopilot-whitelist"></div>
