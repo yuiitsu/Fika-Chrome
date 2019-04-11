@@ -113,7 +113,6 @@ App.module.extend('reader', function() {
         });*/
 		// bind click events
 		btns.click(function () {
-			console.log($(this).attr('data-sel'))
 			setAppearance($(this).attr('data-sel'));
 		})
     };
@@ -135,6 +134,8 @@ App.module.extend('reader', function() {
 			value: store['monoColors'],
 			type:'color'
 		}, $('.fika-photo-grid[data-tab="color"]'));
+		// init background from settings
+		switchBg(store.bgType, store.bg);
 		// toggle photo rotation
 		inputCheck.prop('checked', store.photoRotation);
 		inputCheck.change(function(){
@@ -151,8 +152,11 @@ App.module.extend('reader', function() {
 		// select background
 		$('.fika-photo-grid-item').click(function () {
 			let type = $(this).attr('data-type'),
-				index = parseInt($(this).attr('data-index')),
-				data;
+				index = parseInt($(this).attr('data-index'));
+			switchBg(type, index)
+			chrome.storage.sync.set({bg: index, bgType: type})
+		});
+		function switchBg(type, index){
 			if ( type === 'default'){
 				$('.fika-photo-grid-item.active').removeClass('active');
 				$('.fika-photo-grid-default').addClass('active');
@@ -161,15 +165,14 @@ App.module.extend('reader', function() {
 				fikaApp.addClass('fika-bg-on');
 				fikaApp.removeClass('fika-bg-dark fika-bg-light');
 				if (type === 'photo'){
-					data = store['photos'][index];
+					let data = store['photos'][index];
 					switchPhoto(data, index);
 				} else if (type === 'color'){
-					data = store['monoColors'][index];
+					let data = store['monoColors'][index];
 					switchColor(data, index);
 				}
 			}
-			chrome.storage.sync.set({bg: index, bgType: type})
-		});
+		}
 		// load image
 		function switchPhoto(data, index){
 			$('.fika-photo-grid-item.active').removeClass('active');
@@ -204,8 +207,6 @@ App.module.extend('reader', function() {
 	// autopilot
 	this.autopilot = function () {
 		let whitelist = store.autopilotWhitelist || [],
-			autopilotOn = store.autopilot || false,
-			globalCheck = $('#fika-autopilot-global'),
 			localCheck = $('#fika-autopilot-local'),
 			whitelistEl = $('.fika-autopilot-whitelist'),
 			currentDomain = window.location.hostname.split('.').splice(-2).join('.');
@@ -226,6 +227,7 @@ App.module.extend('reader', function() {
 				chrome.storage.sync.set({autopilotWhitelist: whitelist})
 				bindRemove();
 				updateLocalCheck();
+				postUpdate('add');
 			}
 		}
 		function remove(domain){
@@ -233,6 +235,13 @@ App.module.extend('reader', function() {
 			whitelist.splice(whitelist.indexOf(domain), 1);
 			chrome.storage.sync.set({autopilotWhitelist: whitelist});
 			updateLocalCheck();
+			postUpdate('remove');
+		}
+		function postUpdate(method){
+			chrome.extension.sendMessage({
+				'method': 'updateWhitelist',
+				'data':{method, host: currentDomain}
+			}, function () {});
 		}
 		// bind input or button
 		$('#fika-autopilot-input').keydown(function(e) {
@@ -544,7 +553,7 @@ App.module.extend('reader', function() {
 	this.login = function (data) {
 		isAuth = true;
 		console.log(data);
-		self.view.display('reader', 'userProfile', Object.assign({isAuth: true}, data) , $('.fika-menu-login'));
+		self.view.display('reader', 'userProfile', data , $('.fika-menu-login'));
 	}
 });
 

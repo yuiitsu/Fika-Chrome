@@ -168,25 +168,54 @@ App.module.extend('background', function() {
         send_response('')
     };
 
-    this.getUser = function(){
-        chrome.identity.getAuthToken({interactive: false}, function(token) {
-            $.ajax({
-                url: "https://www.googleapis.com/oauth2/v1/userinfo?fields=email,family_name,gender,given_name,id,locale,name,picture",
-                headers: { Authorization: 'Bearer '+ token},
-                type: "GET",
-                success: function(res) {
-                    chrome.tabs.query({active: true}, function(tabs) {
-                        chrome.tabs.sendMessage(tabs[0].id, {
-                            'method': 'loginUser',
-                            'data': {
-                                userInfo: res,
-                                accessToken: token
-                            }
-                        }, function (response) {});
-                    })
-                }
+    this.getUser = async function(){
+        let userInfo = await new Promise((resolve)=>{
+            chrome.identity.getAuthToken({interactive: false}, function(token) {
+                $.ajax({
+                    url: "https://www.googleapis.com/oauth2/v1/userinfo?fields=email,family_name,gender,given_name,id,locale,name,picture",
+                    headers: { Authorization: 'Bearer '+ token},
+                    type: "GET",
+                    success: (data)=> resolve(data)
+                });
             });
         });
+        let res = await $.ajax({
+            url: "http://www.yuiapi.com/api/v1/third_part/google/app",
+            data: Object.assign({avatar: userInfo['picture']}, userInfo),
+            type: "POST"
+        });
+        if (res.code === 0){
+            const data = res.data;
+            let user = {
+                googleId: data['account'],
+                avatar: userInfo['picture'],
+                fullName: userInfo['name'],
+                name: userInfo['given_name'],
+                token: data['token'],
+                userId: data['user_id']
+            };
+            chrome.storage.sync.set({user}, function(){});
+            chrome.tabs.query({active: true}, function(tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, {
+                    'method': 'loginUser',
+                    'data': user
+                }, function (response) {});
+            })
+        }
+    };
+
+    this.updateWhitelist = function (data, send_response) {
+        console.log(data);
+        $.ajax({
+            url: "http://www.yuiapi.com/api/v1/fika/autopilot",
+            data: {
+                is_auto: data.method === 'add' ? 1: 0,
+                host: data.host,
+                token: store.user.token
+            },
+            type: "POST"
+        });
+        send_response('')
     };
 
     this.fetchData = async function (data, send_response) {
@@ -225,12 +254,15 @@ App.module.extend('background', function() {
             textColor: "light"
         }],
         monoColors = [
-            {color: "#293990", textColor: "light"},
             {color: "#C3ACEA", textColor: "dark"},
             {color: "#FFC5CC", textColor: "dark"},
             {color: "#F6D863", textColor: "dark"},
+            {color: "#FCF3CA", textColor: "dark"},
             {color: "#B9E4C9", textColor: "dark"},
-            {color: "#4A5C80", textColor: "light"},
+            {color: "#90F3E8", textColor: "dark"},
+            {color: "#8FCAF2", textColor: "dark"},
+            {color: "#293990", textColor: "light"},
+            {color: "#191D2D", textColor: "light"},
             {color: "#111111", textColor: "light"},
             {color: "#F5F5F5", textColor: "dark"},
         ];
@@ -251,20 +283,28 @@ App.module.extend('background', function() {
                 url: 'http://www.yuiapi.com/api/v1/fika/background'
             })
         }
-        if ( bgType === 'photo' && photoRotation === true ){
+        if ( photoRotation === true ){
             let randomIndex = bg;
             while (randomIndex === bg){
                 randomIndex = Math.round(Math.random()*(photos.length-1));
                 console.log(randomIndex)
             }
             bg = randomIndex
+            bgType = 'photo'
         }
         chrome.storage.sync.set({
             photoLastFetchedDate: now,
             photos: photos,
             monoColors: monoColors,
+            bgType: bgType,
             bg: bg
         }, function(){})
         // autopilot whitelist
+        let fetchedWhiteList = await $.ajax({
+            url: "http://www.yuiapi.com/api/v1/fika/autopilot",
+            data:{token: store.user.token},
+            type: "GET"
+        });
+        console.log(fetchedWhiteList)
     };
 });

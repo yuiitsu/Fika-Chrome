@@ -33,10 +33,10 @@ $background-config()
     height: 100%;
     width: 100%;
     $background-config()
-    filter: contrast(0.9) blur(8px);
+    filter: contrast(0.95) blur(3px);
     br(60px)
     // photo bg switch
-    opacity 0
+    opacity: 0.8
     short-transition()
 
 
@@ -52,6 +52,7 @@ $background-config()
   &.fika-bg-light
     .fika
       &-toc-static
+        text-shadow: 1px 1px 6px #333;
         a
           &:link ,&:visited ,&:active, &:not([href]):not([tabindex])
             color: #eee
@@ -61,6 +62,7 @@ $background-config()
   &.fika-bg-dark
     .fika
       &-toc-static
+        text-shadow: 1px 1px 6px #eee;
         a
           &:link ,&:visited ,&:active, &:not([href]):not([tabindex])
             color: #111
