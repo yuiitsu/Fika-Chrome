@@ -275,7 +275,8 @@ App.module.extend('background', function() {
             lastFetched = store['photoLastFetchedDate'] || 0,
             photoRotation = store['photoRotation'] || 'false',
             bgType = store['bgType'] || 'default',
-            bg = store['bg'] || 0;
+            bg = store['bg'] || 0,
+            autopilotWhitelist = store['autopilotWhitelist'] || [];
         if ( lastFetched < now - (7*24*60*60*1000) ){
             // request photos
             let photos = await $.ajax({
@@ -292,19 +293,22 @@ App.module.extend('background', function() {
             bg = randomIndex
             bgType = 'photo'
         }
+        // autopilot whitelist
+        if (store.user && store.user.token){
+	        let fetchedWhiteList = await $.ajax({
+		        url: "http://www.yuiapi.com/api/v1/fika/autopilot",
+		        data:{token: store.user.token},
+		        type: "GET"
+	        });
+	        console.log(fetchedWhiteList, autopilotWhitelist)
+        }
         chrome.storage.sync.set({
             photoLastFetchedDate: now,
             photos: photos,
             monoColors: monoColors,
             bgType: bgType,
-            bg: bg
+            bg: bg,
+            autopilotWhitelist: autopilotWhitelist
         }, function(){})
-        // autopilot whitelist
-        let fetchedWhiteList = await $.ajax({
-            url: "http://www.yuiapi.com/api/v1/fika/autopilot",
-            data:{token: store.user.token},
-            type: "GET"
-        });
-        console.log(fetchedWhiteList)
     };
 });

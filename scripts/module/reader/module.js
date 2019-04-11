@@ -534,6 +534,7 @@ App.module.extend('reader', function() {
             });
 
 			self.appearance(mainLang['typeface'])
+	        self.initTwitter()
             // self.module.common.cache.get(['fontSize', 'theme', 'font', 'photoBg'], function(res) {
             //     self.appearance(mainLang['typeface'], {
             //         fontSize: res[0],
@@ -545,7 +546,41 @@ App.module.extend('reader', function() {
         });
     };
 
-    this.init = function() {
+    this.initTwitter = function() {
+    	//https://developer.twitter.com/en/docs/twitter-for-websites/javascript-api/guides/set-up-twitter-for-websites
+	    window.twitter = (function(){
+	    	let js, t = window.twitter || {},
+			    id = "twitter-wjs",
+			    fjs = d.getElementsByTagName('script')[0]
+		    if (document.getElementById(id)) return t;
+	    	js = document.createElement('script');
+		    js.id = id
+		    js.src = "https://platform.twitter.com/widgets.js";
+		    fjs.parentNode.insertBefore(js, fjs);
+		    t._e = [];
+		    t.ready = function (f) {
+			    t._e.push(f)
+		    }
+		    return t
+	    })()
+
+	    window.twitter.ready(function (twitter) {
+		    twitter.events.bind('retweet', function(e){
+		    	console.log(e, e.data)
+			    $.ajax({
+				    url: "http://www.yuiapi.com/api/v1/user/info",
+				    data: {
+				    	user_type: 'beta',
+					    token: store.user.token
+				    },
+				    type: "POST",
+				    success: data =>{
+				    	Object.assign({userType: 'beta'}, store.user)
+				    	chrome.storage.sync.set({user})
+				    }
+			    })
+		    })
+	    })
 
     };
 
