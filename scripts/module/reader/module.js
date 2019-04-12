@@ -496,9 +496,7 @@ App.module.extend('reader', function() {
 			value: store['monoColors'],
 			type:'color'
 		}, $('.fika-photo-grid[data-tab="color"]'));
-		if (store.user){
-			self.login(store.user);
-		}
+		self.login(store.user);
 		// 处理语言
         chrome.i18n.detectLanguage(content, function(result) {
             // demo
@@ -539,27 +537,43 @@ App.module.extend('reader', function() {
 
     // auth
 	this.login = function (data) {
-		isAuth = true;
-		// make twitter ready for potential sharing
-		$('.fika-disabled').removeClass('fika-disabled');
-		$('.fika-disabled input').prop('disabled', false);
-		self.background();
-		self.autopilot();
-		self.view.display('reader', 'userProfile', data , $('.fika-menu-login'));
-		$('#fika-retweet').click(function () {
-			chrome.extension.sendMessage({
-				'method': 'retweet',
-				'data':{}
-			}, function () {});
-		})
-	}
+		store.user = data;
+		console.log(data)
+		if (data){
+			self.view.display('reader', 'userProfile', data , $('.fika-menu-login'));
+			$('#fika-retweet').click(function () {
+				window.open('https://twitter.com/intent/retweet?tweet_id=1102503571889696768', 'twitter_share', 'width=600, height=480');
+				chrome.extension.sendMessage({
+					'method': 'changeUserType'
+				}, function () {});
+			})
+			$('#fika-user-expand').click(function () {
+				$('#fika-logout').toggle();
+			});
+			$('#fika-logout').click(function () {
+				self.logout()
+			});
+		}
+		if (data.type === 'beta'){
+			$('.fika-disabled').removeClass('fika-disabled');
+			$('.fika-disabled input').prop('disabled', false);
+			self.background();
+			self.autopilot();
+		}
+	};
 	this.logout = function () {
+		self.view.display('reader', 'userProfile', null , $('.fika-menu-login'));
 		$('.fika-pro-item').addClass('fika-disabled');
 		$('.fika-pro-item input').prop('disabled', true);
 		$('#fika-autopilot-local').unbind('click');
 		$('.fika-photo-grid-item').unbind('click');
 		$('.fika-photo-grid-tab').unbind('click');
-		self.view.display('reader', 'userProfile', null , $('.fika-menu-login'));
+		$('#fika-login').click(function () {
+			chrome.extension.sendMessage({
+				'method': 'oauth',
+				'data':{}
+			}, function () {});
+		});
 		chrome.storage.sync.set({user: null, autopilotWhitelist: []})
 	}
 });

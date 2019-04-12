@@ -6,54 +6,7 @@ App.module.extend('background', function() {
     let self = this,
         store = null;
 
-    this.initTwitter = function() {
-        //https://developer.twitter.com/en/docs/twitter-for-websites/javascript-api/guides/set-up-twitter-for-websites
-        window.twttr = (function(){
-            let js, t = window.twttr || {},
-                id = "twitter-wjs",
-                fjs = document.getElementsByTagName('script')[0]
-            if (document.getElementById(id)) return t;
-            js = document.createElement('script');
-            js.id = id
-            js.src = "https://platform.twitter.com/widgets.js";
-            fjs.parentNode.insertBefore(js, fjs);
-            t._e = [];
-            t.ready = function (f) {
-                t._e.push(f)
-            }
-            return t
-        })();
-
-        twttr.ready(function (twttr) {
-            console.log(twttr)
-            twttr.events.bind('retweet', function(e){
-                console.log(e, e.data)
-            })
-            // $.ajax({
-            //     url: "http://www.yuiapi.com/api/v1/user/info",
-            //     data: {
-            //         user_type: 'beta',
-            //         token: store.user.token
-            //     },
-            //     type: "POST",
-            //     success: (data) =>{
-            //         if (data.code === 0){
-            //             store.user = Object.assign({userType: 'beta'}, store.user)
-            //             chrome.storage.sync.set({user: store.user})
-            //         }
-            //     }
-            // })
-        })
-    };
-    
-    this.retweet = function (data, send_response) {
-        console.log('retweet')
-        window.open("https://twitter.com/intent/retweet?tweet_id=463440424141459456");
-        send_response('')
-    };
-
     this.init = function() {
-        this.initTwitter();
         // open main screen in new tab.
         chrome.browserAction.onClicked.addListener(function(tab) {
             self.openReaderMode(null, tab);
@@ -239,7 +192,8 @@ App.module.extend('background', function() {
                 fullName: userInfo['name'],
                 name: userInfo['given_name'],
                 token: data['token'],
-                userId: data['user_id']
+                userId: data['user_id'],
+                type: data['user_type']
             };
             chrome.storage.sync.set({user}, function(){});
             chrome.tabs.query({active: true}, function(tabs) {
@@ -279,6 +233,23 @@ App.module.extend('background', function() {
         }
         chrome.storage.sync.set({autopilotWhitelist: whiteList})
     };
+
+    this.changeUserType = function (data, send_repsonse) {
+        $.ajax({
+            url: "http://www.yuiapi.com/api/v1/user/info",
+            data: {
+                user_type: 'beta',
+                token: store.user.token
+            },
+            type: "POST",
+            success: (data) =>{
+                store.user = Object.assign({type: 'beta'}, store.user)
+                chrome.storage.sync.set({user: store.user})
+                self.getUser()
+            }
+        })
+        send_repsonse('')
+    }
 
     this.fetchData = async function (data, send_response) {
         // photos
