@@ -80,6 +80,7 @@ App.view.extend('reader', function() {
                     <div class="mb-1">Log in</div>
                     <div>with Google account</div>
                 </div>
+                <div class="fika-loading" id="fika-loading-login" style="display: none;position: absolute;right: 16px;bottom: 24px;"></div>
             {{ end }}
         `
     }

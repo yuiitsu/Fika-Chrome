@@ -124,7 +124,9 @@ App.module.extend('reader', function() {
 			inputCheck = $('#fika-photo-bg'),
 			fikaApp = $('.fika-app'),
 			bgCont = $('.fika-bg'),
-			tocOverlay = $('.fika-toc-static .fika-toc-overlay');
+			tocOverlay = $('.fika-toc-static .fika-toc-overlay'),
+			credit = $('.fika-bg-credit'),
+			loading = $('#fika-loading-bg');
 		// init background from settings
 		switchBg(store.bgType, store.bg);
 		// toggle photo rotation
@@ -148,6 +150,7 @@ App.module.extend('reader', function() {
 			chrome.storage.sync.set({bg: index, bgType: type})
 		});
 		function switchBg(type, index){
+			credit.hide();
 			if ( type === 'default'){
 				$('.fika-photo-grid-item.active').removeClass('active');
 				$('.fika-photo-grid-default').addClass('active');
@@ -158,6 +161,9 @@ App.module.extend('reader', function() {
 				if (type === 'photo'){
 					let data = store['photos'][index];
 					switchPhoto(data, index);
+					credit.attr('href', data['link']);
+					credit.html(`photo by ${data['credit']} / ${data['source']}`);
+					credit.show();
 				} else if (type === 'color'){
 					let data = store['monoColors'][index];
 					switchColor(data, index);
@@ -172,6 +178,7 @@ App.module.extend('reader', function() {
 			bgCont.addClass('fika-bg-blur');
 			fikaApp.addClass('fika-bg-'+data.textColor);
 			tocOverlay.hide();
+			loading.show();
 
 			photoObj.onload = function(){};
 			photoObj.src = data.full;
@@ -180,6 +187,7 @@ App.module.extend('reader', function() {
 				bgCont.removeClass('fika-bg-blur');
 				tocOverlay.css('background-image', 'url('+this.src+')');
 				tocOverlay.show();
+				loading.hide();
 			}
 		}
 		// load mono-color
@@ -381,8 +389,9 @@ App.module.extend('reader', function() {
             toolbar.toggleClass('fika-tool-on');
             $('.fika-menu').removeClass('fika-menu-on');
         });
-        let hoverTimer;
-/*        toolbar.mouseleave(function () {
+        // hover
+/*        let hoverTimer;
+        toolbar.mouseleave(function () {
             hoverTimer = setTimeout(()=>{
                 $(this).removeClass('fika-tool-on')
                 self.toggleMenu(false);
@@ -390,7 +399,7 @@ App.module.extend('reader', function() {
         });
         toolbar.mouseenter(function () {
             clearTimeout(hoverTimer)
-        })*/
+        });*/
 
         //close
         // $('#fika-exit').click(function () {
@@ -405,14 +414,6 @@ App.module.extend('reader', function() {
         $('#fika-facebook-share').click(function(){
             const url = encodeURI(`https://www.facebook.com/sharer/sharer.php?title=${document.title} ${window.location.href} | shared from Fika&u=${window.location.href}`).replace(/#/g,'%23');
             window.open(url, '_blank', 'width=720, height=600');
-        });
-
-        //login
-        $('#fika-login').click(function () {
-            chrome.extension.sendMessage({
-                'method': 'oauth',
-				'data':{}
-            }, function () {});
         });
     };
 
@@ -496,7 +497,7 @@ App.module.extend('reader', function() {
 			value: store['monoColors'],
 			type:'color'
 		}, $('.fika-photo-grid[data-tab="color"]'));
-		self.login(store.user);
+		self.login(store);
 		// 处理语言
         chrome.i18n.detectLanguage(content, function(result) {
             // demo
@@ -536,11 +537,12 @@ App.module.extend('reader', function() {
     };
 
     // auth
-	this.login = function (data) {
-		store.user = data;
-		console.log(data)
-		if (data){
-			self.view.display('reader', 'userProfile', data , $('.fika-menu-login'));
+	this.login = function (_store) {
+		store = _store;
+		self.view.display('reader', 'userProfile', store.user , $('.fika-menu-login'));
+		this.loginClick();
+		$('#fika-loading-login').hide();
+		if (store.user ){
 			$('#fika-retweet').click(function () {
 				window.open('https://twitter.com/intent/retweet?tweet_id=1102503571889696768', 'twitter_share', 'width=600, height=480');
 				chrome.extension.sendMessage({
@@ -554,9 +556,9 @@ App.module.extend('reader', function() {
 				self.logout()
 			});
 		}
-		if (data.type === 'beta'){
+		if (store.user  && store.user.type === 'beta'){
 			$('.fika-disabled').removeClass('fika-disabled');
-			$('.fika-disabled input').prop('disabled', false);
+			$('input').prop('disabled', false);
 			self.background();
 			self.autopilot();
 		}
@@ -568,13 +570,18 @@ App.module.extend('reader', function() {
 		$('#fika-autopilot-local').unbind('click');
 		$('.fika-photo-grid-item').unbind('click');
 		$('.fika-photo-grid-tab').unbind('click');
+		this.loginClick();
+		$('#fika-loading-login').hide();
+		chrome.storage.sync.set({user: null, autopilotWhitelist: []})
+	};
+	this.loginClick = function () {
 		$('#fika-login').click(function () {
+			$('#fika-loading-login').show();
 			chrome.extension.sendMessage({
 				'method': 'oauth',
 				'data':{}
 			}, function () {});
 		});
-		chrome.storage.sync.set({user: null, autopilotWhitelist: []})
-	}
+	};
 });
 

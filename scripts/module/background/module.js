@@ -195,18 +195,19 @@ App.module.extend('background', function() {
                 userId: data['user_id'],
                 type: data['user_type']
             };
+            store['user'] = user;
+            store['autopilotWhitelist'] = await this.fetchAutopilotWhitelist()
             chrome.storage.sync.set({user}, function(){});
             chrome.tabs.query({active: true}, function(tabs) {
                 chrome.tabs.sendMessage(tabs[0].id, {
                     'method': 'loginUser',
-                    'data': user
+                    'data': store
                 }, function (response) {});
             })
         }
     };
 
     this.updateWhitelist = function (data, send_response) {
-        console.log(data);
         $.ajax({
             url: "http://www.yuiapi.com/api/v1/fika/autopilot",
             data: {
@@ -219,19 +220,27 @@ App.module.extend('background', function() {
         send_response('')
     };
 
-    this.fetchAutopilotWhitelist = async function () {
-        let whiteList = []
-        if (store.user && store.user.token){
-            let fetchedWhiteList = await $.ajax({
-                url: "http://www.yuiapi.com/api/v1/fika/autopilot",
-                data:{token: store.user.token},
-                type: "GET"
-            });
-            fetchedWhiteList.data.forEach((i)=>{
-                if (i.is_auto === 1) whiteList.push(i.host)
-            });
-        }
-        chrome.storage.sync.set({autopilotWhitelist: whiteList})
+    this.fetchAutopilotWhitelist = function () {
+        return new Promise((resolve, reject) => {
+            let whiteList = []
+            if (store.user && store.user.token){
+                $.ajax({
+                    url: "http://www.yuiapi.com/api/v1/fika/autopilot",
+                    data:{token: store.user.token},
+                    type: "GET",
+                    success: res => {
+                        res.data.forEach((i)=>{
+                            if (i.is_auto === 1) whiteList.push(i.host)
+                        });
+                        chrome.storage.sync.set({autopilotWhitelist: whiteList}, function () {
+                            resolve(whiteList)
+                        })
+                    }
+                });
+            } else {
+                reject('')
+            }
+        })
     };
 
     this.changeUserType = function (data, send_repsonse) {
@@ -326,7 +335,7 @@ App.module.extend('background', function() {
             bgType = 'photo'
         }
         // autopilot whitelist
-        self.fetchAutopilotWhitelist()
+        this.fetchAutopilotWhitelist().then();
         chrome.storage.sync.set({
             photoLastFetchedDate: now,
             photos: photos,
