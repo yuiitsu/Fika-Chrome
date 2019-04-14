@@ -548,7 +548,7 @@ App.module.extend('content', function() {
     	if (!isOpen){
             let currentDomain = window.location.hostname.split('.').splice(-2).join('.'),
                 path =  window.location.pathname;
-            if (path !== '/' && store.autopilotWhitelist.indexOf(currentDomain) !== -1){
+            if (path !== '/' && store.autopilotWhitelist && store.autopilotWhitelist.indexOf(currentDomain) !== -1){
 				this.openReaderMode()
 			}
 		}

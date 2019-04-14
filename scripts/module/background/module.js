@@ -170,7 +170,7 @@ App.module.extend('background', function() {
 
     this.getUser = async function(){
         let userInfo = await new Promise((resolve)=>{
-            chrome.identity.getAuthToken({interactive: false}, function(token) {
+            chrome.identity.getAuthToken({interactive: true}, function(token) {
                 $.ajax({
                     url: "https://www.googleapis.com/oauth2/v1/userinfo?fields=email,family_name,gender,given_name,id,locale,name,picture",
                     headers: { Authorization: 'Bearer '+ token},
@@ -228,17 +228,15 @@ App.module.extend('background', function() {
                     url: "http://www.yuiapi.com/api/v1/fika/autopilot",
                     data:{token: store.user.token},
                     type: "GET",
-                    success: res => {
-                        res.data.forEach((i)=>{
+                    success: (res) => {
+                        for (let i of res.data){
                             if (i.is_auto === 1) whiteList.push(i.host)
-                        });
-                        chrome.storage.sync.set({autopilotWhitelist: whiteList}, function () {
-                            resolve(whiteList)
-                        })
+                        }
+                        resolve(whiteList)
                     }
                 });
             } else {
-                reject('')
+                resolve([])
             }
         })
     };
@@ -308,7 +306,7 @@ App.module.extend('background', function() {
             {color: "#111111", textColor: "light"},
             {color: "#F5F5F5", textColor: "dark"},
         ];
-        store = await new Promise((resolve, reject) => {
+        store = await new Promise((resolve) => {
             chrome.storage.sync.get(null, function(res){
                 resolve(res)
             })
@@ -335,13 +333,14 @@ App.module.extend('background', function() {
             bgType = 'photo'
         }
         // autopilot whitelist
-        this.fetchAutopilotWhitelist().then();
+        let whiteList = await this.fetchAutopilotWhitelist();
         chrome.storage.sync.set({
+            autopilotWhitelist: whiteList,
             photoLastFetchedDate: now,
             photos: photos,
             monoColors: monoColors,
             bgType: bgType,
-            bg: bg,
-        }, function(){})
+            bg: bg
+        })
     };
 });
