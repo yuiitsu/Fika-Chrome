@@ -47,7 +47,7 @@ App.view.extend('content', function() {
                         </button>
                     </div>
                     <div class="fika-drawer">
-                        <div class="my-2 d-flex align-center justify-space-between">
+                        <div class="my-2 d-flex fika-align-center fika-justify-space-between">
                             <div class="fika-select-label" style="margin: 8px">Table of content</div>
                             <button class="fika-btn fika-btn-icon ml-1 fika-drawer-close">
                                 <svg class="fika-icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
@@ -119,7 +119,7 @@ App.view.extend('content', function() {
                                 <img style="" src="{{ chrome.runtime.getURL('images/logo64.png') }}">
                                 Made with love by Fika
                             </a>
-                            <div class="d-flex align-center"><b>Alt+R (Option+R)</b>: to open Fika  <b class="ml-2">Esc</b>: to close reader mode
+                            <div class="d-flex fika-align-center"><b>Alt+R (Option+R)</b>: to open Fika  <b class="ml-2">Esc</b>: to close reader mode
                             </div>
                         </div>
                     </div>
@@ -175,7 +175,7 @@ App.view.extend('content', function() {
                     
                     <div class="fika-pro-item fika-disabled">
                         <div class="mt-3 fika-menu-label fika-pro">Background</div>
-                        <div class="my-2 d-flex justify-space-between">
+                        <div class="my-2 d-flex fika-justify-space-between">
                             <div class="fika-menu-label">
                                 <span class="fika-menu-label-sec">Photo Rotation</span>
                                 <div class="fika-menu-label-desc">Rotate photo backgrounds everyday</div>
@@ -183,7 +183,7 @@ App.view.extend('content', function() {
                             <input type="checkbox" id="fika-photo-bg" disabled>
                             <label class="fika-toggle" for="fika-photo-bg"></label>
                         </div>
-                        <div class="d-flex align-center mb-1 mt-2">
+                        <div class="d-flex fika-align-center mb-1 mt-2">
                             <div class="fika-photo-grid-tab active" data-tab="photo">PHOTO</div>
                             <div class="ml-2 fika-photo-grid-tab" data-tab="color">COLOR</div>
                         </div>

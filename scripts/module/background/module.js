@@ -229,10 +229,14 @@ App.module.extend('background', function() {
                     data:{token: store.user.token},
                     type: "GET",
                     success: (res) => {
-                        for (let i of res.data){
-                            if (i.is_auto === 1) whiteList.push(i.host)
+                        if (res.code === 0){
+                            for (let i of res.data){
+                                if (i.is_auto === 1) whiteList.push(i.host)
+                            }
+                            resolve(whiteList)
+                        } else {
+                            resolve([])
                         }
-                        resolve(whiteList)
                     }
                 });
             } else {
@@ -249,10 +253,12 @@ App.module.extend('background', function() {
                 token: store.user.token
             },
             type: "POST",
-            success: (data) =>{
-                store.user = Object.assign({type: 'beta'}, store.user)
-                chrome.storage.sync.set({user: store.user})
-                self.getUser()
+            success: (res) =>{
+                if (res.code === 0){
+                    store.user = Object.assign({type: 'beta'}, store.user)
+                    chrome.storage.sync.set({user: store.user})
+                    self.getUser()
+                }
             }
         })
         send_repsonse('')

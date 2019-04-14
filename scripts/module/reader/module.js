@@ -483,7 +483,7 @@ App.module.extend('reader', function() {
     };
 
 
-	this._init = async function(content, _store) {
+	this._init = function(content, _store) {
 		//
 		store = _store;
 		self.retrieveToc();

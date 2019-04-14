@@ -66,8 +66,12 @@ let excludes = {
     let jsMini = function (sourceList, target) {
 
         try {
-            let r = babel.transformFileSync(sourceList, {presets: ['es2015']});
+            let r = babel.transformFileSync(sourceList, {
+                // https://github.com/babel/babel-preset-env
+                presets: ['env']
+            });
             let result = uglify.minify(r.code);
+            console.log(result);
             Fs.writeFileSync(target, result['code'], 'utf8');
         } catch (e) {
             console.error(e);
