@@ -151,6 +151,9 @@ App.module.extend('reader', function() {
 		});
 		function switchBg(type, index){
 			credit.hide();
+			loading.hide();
+			photoObj.src = '';
+			photoObj.onload = function(){};
 			if ( type === 'default'){
 				$('.fika-photo-grid-item.active').removeClass('active');
 				$('.fika-photo-grid-default').addClass('active');
@@ -180,7 +183,6 @@ App.module.extend('reader', function() {
 			tocOverlay.hide();
 			loading.show();
 
-			photoObj.onload = function(){};
 			photoObj.src = data.full;
 			photoObj.onload = function () {
 				bgCont.css('background-image', 'url('+this.src+')');
@@ -194,8 +196,6 @@ App.module.extend('reader', function() {
 		function switchColor(data, index){
 			$('.fika-photo-grid-item.active').removeClass('active');
 			$(`.fika-photo-grid-item[data-type="color"][data-index="${index}"]`).addClass('active');
-			photoObj.src = '';
-			photoObj.onload = function(){};
 			fikaApp.addClass('fika-bg-'+data.textColor);
 			bgCont.css('background-image', '');
 			bgCont.css('background-color', data.color);
@@ -539,6 +539,7 @@ App.module.extend('reader', function() {
     // auth
 	this.login = function (_store) {
 		store = _store;
+		console.log(store)
 		self.view.display('reader', 'userProfile', store.user , $('.fika-menu-login'));
 		this.loginClick();
 		$('#fika-loading-login').hide();
@@ -570,6 +571,7 @@ App.module.extend('reader', function() {
 		$('#fika-autopilot-local').unbind('click');
 		$('.fika-photo-grid-item').unbind('click');
 		$('.fika-photo-grid-tab').unbind('click');
+		$('.fika-app').removeClass('fika-bg-on');
 		this.loginClick();
 		$('#fika-loading-login').hide();
 		chrome.storage.sync.set({user: null, autopilotWhitelist: []})
