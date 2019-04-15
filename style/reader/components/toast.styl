@@ -1,0 +1,24 @@
+/*! Toast*/
+toast($theme)
+  background: $theme.text
+  color: $theme.bg
+
+theme(toast, "toast")
+
+.fika-app
+  .fika-toast
+    position: fixed;
+    z-index: 100;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -48px;
+    padding: 16px 24px;
+    border-radius: 8px 8px 0 0;
+    $shadows(2)
+    medium-transition()
+    &.active
+      bottom: 0
+
+    u
+      text-decoration underline
+      color: $primary.dark

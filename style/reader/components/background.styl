@@ -17,6 +17,8 @@ $background-config()
     position fixed
     width 100%
     height 100%
+    left 0
+    top 0
     pointer-events none
     $background-config()
     // photo bg switch
@@ -33,10 +35,11 @@ $background-config()
     height: 100%;
     width: 100%;
     $background-config()
-    filter: contrast(0.95) blur(3px);
+    //filter: contrast(0.95) blur(3px);
     br(60px)
+    display none
     // photo bg switch
-    opacity: 0.8
+    opacity: 0
     short-transition()
 
   a.fika-bg-credit
@@ -58,19 +61,25 @@ $background-config()
   &.fika-bg-light
     .fika
       &-toc-static
-        text-shadow: 1px 1px 6px #333;
+        text-shadow: #000 1px 1px 7px,
+                    #222 1px 2px 2px,
+                    #666 0px 0px 7px
         a
           &:link ,&:visited ,&:active, &:not([href]):not([tabindex])
-            color: #eee
+            color: #fff
+            opacity 1 !important
       &-footer
-        color: #eee
+        color: #fff
 
   &.fika-bg-dark
     .fika
       &-toc-static
-        text-shadow: 1px 1px 6px #eee;
+        text-shadow: #fff 1px 1px 7px,
+                #ddd 1px 2px 2px,
+                #999 0px 0px 7px
         a
           &:link ,&:visited ,&:active, &:not([href]):not([tabindex])
             color: #222
+            opacity 1 !important
       &-footer
         color: #222

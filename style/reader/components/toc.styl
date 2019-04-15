@@ -17,7 +17,7 @@ theme(toc, "toc")
 
 
 $toc-h()
-  $padding(a, 0)
+  $padding(r, 0)
   line-height 1.2
   overflow: hidden
   position: relative
@@ -72,7 +72,7 @@ $bullet(p)
 
     a
       display: block
-      $margin(y, 1)
+      padding: 4px 0
       cursor: pointer
       text-decoration: none
       font-weight normal
@@ -101,24 +101,24 @@ $bullet(p)
           $toc-h()
           $bullet(20px)
           font-size: 14px !important
-          opacity 0.7
+          opacity 0.8
         &h3
           $toc-h()
           $bullet(28px)
           font-size: 13px !important
-          opacity 0.56
+          opacity 0.64
         &h4
           $toc-h()
           $bullet(36px)
           font-size: 13px !important
-          opacity 0.48
+          opacity 0.56
         &h5
           $toc-h()
           $bullet(44px)
           font-size: 12px !important
-          opacity 0.40
+          opacity 0.48
         &h6
           $toc-h()
           $bullet(52px)
           font-size: 12px !important
-          opacity 0.32
+          opacity 0.40
