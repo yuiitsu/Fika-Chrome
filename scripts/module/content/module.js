@@ -5,8 +5,8 @@ App.module.extend('content', function() {
     //
     let self = this,
         tags = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'PRE', 'CODE', 'FIGURE'],
-        excludeTags = ['BUTTON', 'IFRAME', 'CANVAS', '#comment', 'SCRIPT', 'INPUT', 'ASIDE', 'FOOTER', 'PERSONALIZATION-PLACEMENT'],
-        excludeAttrName = ['share', 'twitter', 'linkedin', 'pinterest', 'singleadthumbcontainer', 'author', 'reward', 'reviewer', 'bb_iawr', 'bg-food-en-retail'],
+        excludeTags = ['BUTTON', 'IFRAME', 'CANVAS', '#comment', 'SCRIPT', 'INPUT', 'SELECT', 'ASIDE', 'FOOTER', 'PERSONALIZATION-PLACEMENT'],
+        excludeAttrName = ['share', 'twitter', 'linkedin', 'pinterest', 'singleadthumbcontainer', 'author', 'reward', 'reviewer', 'bb_iawr', 'bg-food-en-retail', 'metadata', 'page-metadata'],
         titleTags = ['H1', 'H2', 'H3'],
         topArticleElement = [],
         articleElementIndex = [],
