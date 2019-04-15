@@ -11,6 +11,7 @@
     "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlRc/NUFDfCfaPI7r+5g/kIO1ktJ6zXqh5cIwaysH1Lvx+ilqjwu2WJ+5//Mw5y2o36+Gx1MSYqF7EIWdDLzpMDv45qG0KlITOEs7A440EE+L1ZzZT0UXY4GKhW+vGMcYd5JMIWZNA2X6R6FX5sU5MC1k58ytL4H4inWseZMo49oJtuSXY20kLE60jAnNhWs3ngq489I8ZAMahb2clVhgVMQOpU2ZMdUHuLvjhgs169LJLDJeKCbm2OMEe7Uhg/sQyxmbVb3bIGTaLssMVxBNQ2SyCpEDqRkgYpTSscqf6PvKzwq6cQMJinSRTLtgMurk6nunkjAh5Zg+wMuCALUSZQIDAQAB",
     "background": {
         "scripts": [
+            "scripts/lib/polyfill.min.js",
             "scripts/lib/jquery-1.11.0.min.js",
             "scripts/model.js",
             "scripts/app.js",
@@ -26,6 +27,7 @@
             "https://*/*"
         ],
         "js": [
+            "scripts/lib/polyfill.min.js",
             "scripts/lib/jquery-1.11.0.min.js",
             "scripts/lib/highlight.min.js",
             "scripts/app.js",
@@ -64,7 +66,6 @@
         "48": "images/logo64.png",
         "128": "images/logo128.png"
     },
-    "content_security_policy": "script-src 'self' https://platform.twitter.com; object-src 'self'",
     "web_accessible_resources": [
         "*.ttf",
         "images/*"

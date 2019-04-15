@@ -39,6 +39,12 @@ $background-config()
     opacity: 0.8
     short-transition()
 
+  a.fika-bg-credit
+    position: fixed;
+    bottom: 8px;
+    right: 24px;
+    font-size: 11px;
+    color: #eee
 
 
 // adjust color when photo bg is turned on
@@ -57,7 +63,7 @@ $background-config()
           &:link ,&:visited ,&:active, &:not([href]):not([tabindex])
             color: #eee
       &-footer
-        color: #fff
+        color: #eee
 
   &.fika-bg-dark
     .fika
@@ -65,6 +71,6 @@ $background-config()
         text-shadow: 1px 1px 6px #eee;
         a
           &:link ,&:visited ,&:active, &:not([href]):not([tabindex])
-            color: #111
+            color: #222
       &-footer
-        color: #000
+        color: #222

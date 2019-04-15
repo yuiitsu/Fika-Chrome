@@ -6,54 +6,7 @@ App.module.extend('background', function() {
     let self = this,
         store = null;
 
-    this.initTwitter = function() {
-        //https://developer.twitter.com/en/docs/twitter-for-websites/javascript-api/guides/set-up-twitter-for-websites
-        window.twttr = (function(){
-            let js, t = window.twttr || {},
-                id = "twitter-wjs",
-                fjs = document.getElementsByTagName('script')[0]
-            if (document.getElementById(id)) return t;
-            js = document.createElement('script');
-            js.id = id
-            js.src = "https://platform.twitter.com/widgets.js";
-            fjs.parentNode.insertBefore(js, fjs);
-            t._e = [];
-            t.ready = function (f) {
-                t._e.push(f)
-            }
-            return t
-        })();
-
-        twttr.ready(function (twttr) {
-            console.log(twttr)
-            twttr.events.bind('retweet', function(e){
-                console.log(e, e.data)
-            })
-            // $.ajax({
-            //     url: "http://www.yuiapi.com/api/v1/user/info",
-            //     data: {
-            //         user_type: 'beta',
-            //         token: store.user.token
-            //     },
-            //     type: "POST",
-            //     success: (data) =>{
-            //         if (data.code === 0){
-            //             store.user = Object.assign({userType: 'beta'}, store.user)
-            //             chrome.storage.sync.set({user: store.user})
-            //         }
-            //     }
-            // })
-        })
-    };
-    
-    this.retweet = function (data, send_response) {
-        console.log('retweet')
-        window.open("https://twitter.com/intent/retweet?tweet_id=463440424141459456");
-        send_response('')
-    };
-
     this.init = function() {
-        this.initTwitter();
         // open main screen in new tab.
         chrome.browserAction.onClicked.addListener(function(tab) {
             self.openReaderMode(null, tab);
@@ -217,7 +170,7 @@ App.module.extend('background', function() {
 
     this.getUser = async function(){
         let userInfo = await new Promise((resolve)=>{
-            chrome.identity.getAuthToken({interactive: false}, function(token) {
+            chrome.identity.getAuthToken({interactive: true}, function(token) {
                 $.ajax({
                     url: "https://www.googleapis.com/oauth2/v1/userinfo?fields=email,family_name,gender,given_name,id,locale,name,picture",
                     headers: { Authorization: 'Bearer '+ token},
@@ -239,20 +192,22 @@ App.module.extend('background', function() {
                 fullName: userInfo['name'],
                 name: userInfo['given_name'],
                 token: data['token'],
-                userId: data['user_id']
+                userId: data['user_id'],
+                type: data['user_type']
             };
+            store['user'] = user;
+            store['autopilotWhitelist'] = await this.fetchAutopilotWhitelist()
             chrome.storage.sync.set({user}, function(){});
             chrome.tabs.query({active: true}, function(tabs) {
                 chrome.tabs.sendMessage(tabs[0].id, {
                     'method': 'loginUser',
-                    'data': user
+                    'data': store
                 }, function (response) {});
             })
         }
     };
 
     this.updateWhitelist = function (data, send_response) {
-        console.log(data);
         $.ajax({
             url: "http://www.yuiapi.com/api/v1/fika/autopilot",
             data: {
@@ -265,20 +220,49 @@ App.module.extend('background', function() {
         send_response('')
     };
 
-    this.fetchAutopilotWhitelist = async function () {
-        let whiteList = []
-        if (store.user && store.user.token){
-            let fetchedWhiteList = await $.ajax({
-                url: "http://www.yuiapi.com/api/v1/fika/autopilot",
-                data:{token: store.user.token},
-                type: "GET"
-            });
-            fetchedWhiteList.data.forEach((i)=>{
-                if (i.is_auto === 1) whiteList.push(i.host)
-            });
-        }
-        chrome.storage.sync.set({autopilotWhitelist: whiteList})
+    this.fetchAutopilotWhitelist = function () {
+        return new Promise((resolve, reject) => {
+            let whiteList = []
+            if (store.user && store.user.token){
+                $.ajax({
+                    url: "http://www.yuiapi.com/api/v1/fika/autopilot",
+                    data:{token: store.user.token},
+                    type: "GET",
+                    success: (res) => {
+                        if (res.code === 0){
+                            for (let i of res.data){
+                                if (i.is_auto === 1) whiteList.push(i.host)
+                            }
+                            resolve(whiteList)
+                        } else {
+                            resolve([])
+                        }
+                    }
+                });
+            } else {
+                resolve([])
+            }
+        })
     };
+
+    this.changeUserType = function (data, send_repsonse) {
+        $.ajax({
+            url: "http://www.yuiapi.com/api/v1/user/info",
+            data: {
+                user_type: 'beta',
+                token: store.user.token
+            },
+            type: "POST",
+            success: (res) =>{
+                if (res.code === 0){
+                    store.user = Object.assign({type: 'beta'}, store.user)
+                    chrome.storage.sync.set({user: store.user})
+                    self.getUser()
+                }
+            }
+        })
+        send_repsonse('')
+    }
 
     this.fetchData = async function (data, send_response) {
         // photos
@@ -328,7 +312,7 @@ App.module.extend('background', function() {
             {color: "#111111", textColor: "light"},
             {color: "#F5F5F5", textColor: "dark"},
         ];
-        store = await new Promise((resolve, reject) => {
+        store = await new Promise((resolve) => {
             chrome.storage.sync.get(null, function(res){
                 resolve(res)
             })
@@ -355,13 +339,14 @@ App.module.extend('background', function() {
             bgType = 'photo'
         }
         // autopilot whitelist
-        self.fetchAutopilotWhitelist()
+        let whiteList = await this.fetchAutopilotWhitelist();
         chrome.storage.sync.set({
+            autopilotWhitelist: whiteList,
             photoLastFetchedDate: now,
             photos: photos,
             monoColors: monoColors,
             bgType: bgType,
-            bg: bg,
-        }, function(){})
+            bg: bg
+        })
     };
 });

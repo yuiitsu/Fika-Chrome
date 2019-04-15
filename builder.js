@@ -30,7 +30,8 @@ let excludes = {
     ],
     'mini': [
         './scripts/lib/highlight.min.js',
-        './scripts/lib/jquery-1.11.0.min.js'
+        './scripts/lib/jquery-1.11.0.min.js',
+        './scripts/lib/polyfill.min.js',
     ]
 };
 
@@ -66,8 +67,11 @@ let excludes = {
     let jsMini = function (sourceList, target) {
 
         try {
-            let r = babel.transformFileSync(sourceList, {presets: ['es2015']});
+            let r = babel.transformFileSync(sourceList, {
+                presets: ['env']
+            });
             let result = uglify.minify(r.code);
+
             Fs.writeFileSync(target, result['code'], 'utf8');
         } catch (e) {
             console.error(e);

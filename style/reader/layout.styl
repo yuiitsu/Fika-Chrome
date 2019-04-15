@@ -4,34 +4,38 @@
 
 // display
 for i in (block inline flex grid none)
-  .d-{i}
-    display: i
+  .fika-app
+    .d-{i}
+      display: i
 
 for i in (center flex-start flex-end)
-  .align-{i}
-    align-items: i
+  .fika-app
+    .fika-align-{i}
+      align-items: i
 
 for i in (space-around space-between center flex-start flex-end)
-  .justify-{i}
-    justify-content: i
+  .fika-app
+    .fika-justify-{i}
+      justify-content: i
 
-.row
-  flex-direction row
-
-.column
-  flex-direction column
-
-.d-flex
-  .flex-fill
-    flex: 1 1 auto
-  .flex-none
-    flex: none
-  .flex-wrap
-    flex-wrap: wrap
-  &.row
+.fika-app
+  .row
     flex-direction row
-  &.column
+
+  .flex-column
     flex-direction column
+
+  .d-flex
+    .flex-fill
+      flex: 1 1 auto
+    .flex-none
+      flex: none
+    .flex-wrap
+      flex-wrap: wrap
+    &.row
+      flex-direction row
+    &.column
+      flex-direction column
 
 // spacing
 directions = a y x l r t b
