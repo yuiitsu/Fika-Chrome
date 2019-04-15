@@ -467,7 +467,7 @@ App.module.extend('content', function() {
 
                 for (let i = 0; i < attributesLen; i++) {
                     if (attributes[i].nodeName.indexOf('data-src') !== -1 ||
-                        // attributes[i].nodeName.indexOf('src') !== -1 ||
+                        attributes[i].nodeName.indexOf('datasrc') !== -1 ||
                         attributes[i].nodeName.indexOf('data-original-src') !== -1 ||
                         attributes[i].nodeName.indexOf('data-actualsrc') !== -1) {
                         console.log(attributes[i].nodeValue);
