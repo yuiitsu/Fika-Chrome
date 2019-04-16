@@ -123,12 +123,12 @@ App.view.extend('content', function() {
                             </div>
                         </div>
                     </div>
+                    <!--message toast-->
+                    <div class="fika-toast"></div>
                     <!--background photo-->
                     <div class="fika-bg"></div>
-                    <div>
-                        <div class="fika-loading" id="fika-loading-bg" style="display: none;position: fixed;right: 24px;bottom: 24px;"></div>
-                        <a class="fika-bg-credit" target="_blank"></a>
-                    </div>
+                    <div class="fika-loading" id="fika-loading-bg" style="display: none;position: fixed;right: 24px;bottom: 24px;"></div>
+                    <a class="fika-bg-credit" target="_blank"></a>
                 </div>
             </div>
         `;
@@ -173,7 +173,8 @@ App.view.extend('content', function() {
                         <div class="fika-select-theme theme-licorice" data-sel="theme-licorice"></div>
                     </div>
                     
-                    <div class="fika-pro-item fika-disabled">
+                    <div class="fika-pro-item has-unlock-btn fika-disabled">
+                        <a class="fika-share-to-unlock">Login & Share to Unlock</a>
                         <div class="mt-3 fika-menu-label fika-pro">Background</div>
                         <div class="my-2 d-flex fika-justify-space-between">
                             <div class="fika-menu-label">
@@ -192,7 +193,8 @@ App.view.extend('content', function() {
                     </div>
                 </div>
                 <!--autopilot-->
-                <div class="fika-menu-view fika-pro-item fika-disabled">
+                <div class="fika-menu-view fika-pro-item has-unlock-btn fika-disabled">
+                    <a class="fika-share-to-unlock">Login & Share to Unlock</a>
                     <div class="fika-menu-label mt-1">
                         <div class="fika-pro">Autopilot</div>
                         <div class="fika-menu-label-desc">Automatically open Fika reader mode on whitelisted websites</div>

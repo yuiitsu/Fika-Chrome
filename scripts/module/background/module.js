@@ -273,7 +273,7 @@ App.module.extend('background', function() {
             credit: "Jason Leung",
             source: 'Unsplash',
             link: "https://unsplash.com/photos/KmKAk86LLgc",
-            textColor: "dark"
+            textColor: "light"
         },{
             id: 2,
             small: "https://images.unsplash.com/photo-1545105511-839f4a45a030?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjYzODA2fQ",
@@ -300,13 +300,13 @@ App.module.extend('background', function() {
             textColor: "light"
         }],
         monoColors = [
-            {color: "#C3ACEA", textColor: "dark"},
-            {color: "#FFC5CC", textColor: "dark"},
-            {color: "#F6D863", textColor: "dark"},
+            {color: "#C3ACEA", textColor: "light"},
+            {color: "#FFC5CC", textColor: "light"},
+            {color: "#F6D863", textColor: "light"},
             {color: "#FCF3CA", textColor: "dark"},
-            {color: "#B9E4C9", textColor: "dark"},
-            {color: "#90F3E8", textColor: "dark"},
-            {color: "#8FCAF2", textColor: "dark"},
+            {color: "#B9E4C9", textColor: "light"},
+            {color: "#90F3E8", textColor: "light"},
+            {color: "#8FCAF2", textColor: "light"},
             {color: "#293990", textColor: "light"},
             {color: "#191D2D", textColor: "light"},
             {color: "#111111", textColor: "light"},

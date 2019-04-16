@@ -224,6 +224,7 @@ App.module.extend('reader', function() {
 				`);
 				whitelist.unshift(domain);
 				chrome.storage.sync.set({autopilotWhitelist: whitelist})
+				self.toast(`<u>${domain}</u> is added to whitelist`);
 				bindRemove();
 				updateLocalCheck();
 				postUpdate('add');
@@ -233,6 +234,7 @@ App.module.extend('reader', function() {
 			$('.fika-autopilot-whitelist-item[data-domain="'+domain+'"]').remove();
 			whitelist.splice(whitelist.indexOf(domain), 1);
 			chrome.storage.sync.set({autopilotWhitelist: whitelist});
+			self.toast(`<u>${domain}</u> is removed from whitelist`)
 			updateLocalCheck();
 			postUpdate('remove');
 		}
@@ -280,6 +282,17 @@ App.module.extend('reader', function() {
 			}
 		});
 	};
+
+	// Toast
+	this.toast = function (msg) {
+		let el = $('.fika-toast');
+		el.html(msg)
+		el.addClass('active')
+		window.clearTimeout(window.toastTimeout)
+		window.toastTimeout = setTimeout(()=>{
+			el.removeClass('active')
+		}, 3000)
+	}
 
 	// Toc Drawer
 	this.initToc = function(){
@@ -544,11 +557,18 @@ App.module.extend('reader', function() {
 		this.loginClick();
 		$('#fika-loading-login').hide();
 		if (store.user ){
-			$('#fika-retweet').click(function () {
-				window.open('https://twitter.com/intent/retweet?tweet_id=1102503571889696768', 'twitter_share', 'width=600, height=480');
-				chrome.extension.sendMessage({
-					'method': 'changeUserType'
-				}, function () {});
+			$('.fika-share-to-unlock').click(function () {
+				let win = window.open('https://twitter.com/intent/retweet?tweet_id=1117715831540965376', 'twitter_share', 'width=600, height=480');
+				console.log(win)
+				let interval = setInterval(function(){
+					if (win.closed){
+						console.log(win)
+						chrome.extension.sendMessage({
+							'method': 'changeUserType'
+						}, function () {});
+						clearInterval(interval)
+					}
+				}, 500)
 			})
 			$('#fika-user-expand').click(function () {
 				$('#fika-logout').toggle();
