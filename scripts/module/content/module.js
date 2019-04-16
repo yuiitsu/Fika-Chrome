@@ -33,7 +33,12 @@ App.module.extend('content', function() {
             'metadata',
             'page-metadata',
             'references',
-            'aside'
+            'aside',
+            'crumb',
+            'comment',
+            'recommend',
+            'side',
+            'qrcode'
         ],
         titleTags = ['H1', 'H2', 'H3'],
         topArticleElement = [],
@@ -85,7 +90,7 @@ App.module.extend('content', function() {
         }
 
         this.findNextNodePro(root[0]);
-        // console.log(topElement);
+        console.log(topElement);
         if (topElement && topElement.innerText.length > 300) {
             isAvailable = true;
             // if is available then execute autopilot
@@ -157,6 +162,11 @@ App.module.extend('content', function() {
             //
             if (element['fp'] && element['fp'] > 0) {
                 let point = element.parentElement.childNodes.length === 1 ? element['fp'] : (fl > 0 ? element['fp'] : 1);
+                for (var i in excludeAttrName) {
+                    if (element.className && element.className.toLocaleLowerCase().indexOf(excludeAttrName[i])) {
+                        point -= 10;
+                    }
+                }
                 if (tags.indexOf(element.nodeName) !== -1) {
                     element['fp'] += 10;
                     point += 10;
