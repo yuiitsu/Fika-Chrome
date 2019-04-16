@@ -47,11 +47,11 @@ App.module.extend('content', function() {
         articleElementRate = {},
         articleTitle = '',
         pageUrl = '',
-        dom = '',
         topElement = '',
         topPoint = 0,
         isOpen = false,
-		store;
+		store,
+        isAvailable = false;
 
 	this.init = async function() {
         //
@@ -69,7 +69,7 @@ App.module.extend('content', function() {
         chrome.extension.onMessage.addListener(function(request, _, response) {
             let method = request.method;
             if (self.hasOwnProperty(method)) {
-                self[method](request.data);
+                self[method](request.data, response);
             } else {
                 self.log('method '+ method +' not exist.');
             }
@@ -78,8 +78,7 @@ App.module.extend('content', function() {
     };
 
     this.findArticlePro = function() {
-        let root = $('body'),
-            isAvailable = false;
+        let root = $('body');
 
         pageUrl = location.href;
         topElement = '';
@@ -98,12 +97,7 @@ App.module.extend('content', function() {
             this.autopilot();
         }
         //
-        chrome.extension.sendMessage({
-            'method': 'reader_ready',
-            'data': {
-                is_available: isAvailable
-            }
-        }, function () {});
+        this.isReady();
     };
 
     this.findNextNodePro = function(element) {
@@ -262,9 +256,10 @@ App.module.extend('content', function() {
         chrome.extension.sendMessage({
             'method': 'reader_ready',
             'data': {
-                is_available: isAvailable
+                is_available: isAvailable,
             }
-        }, function () {});
+        }, function () {
+        });
     };
 
     this.findNextNode = function(element) {
@@ -482,17 +477,7 @@ App.module.extend('content', function() {
         //
         this.extFilter();
         //
-        // if (topArticleElementLen > 0) {
-            //this.module.reader._init(text.join(""));
-        // }
         this.module.reader._init(text, store);
-        //
-        // $('html, body').css('overflow-y', 'hidden');
-        //
-        // chrome.extension.sendMessage({
-        //     'method': 'is_open',
-        //     'data': true
-        // }, function () {});
     };
 
     this.extFilter = function() {
@@ -662,6 +647,22 @@ App.module.extend('content', function() {
     this.loginUser = function(data){
 		    this.module.reader.login(data);
 		    this.module.reader.toast('👋 Welcome aboard - ' + data.user.name)
+    };
+
+    this.checkAvailable = function() {
+        if (isAvailable) {
+            this.isReady();
+        }
+    };
+
+    this.isReady = function() {
+        chrome.extension.sendMessage({
+            'method': 'reader_ready',
+            'data': {
+                is_available: isAvailable,
+            }
+        }, function () {
+        });
     };
 });
 

@@ -35,7 +35,17 @@ App.module.extend('background', function() {
             }, function () {
                 self.log('created context menus.');
             });
-        })
+        });
+
+        // 激活tab事件，激活则表示处于可见状态，通过
+        chrome.tabs.onActivated.addListener(function(active_info) {
+            //
+            let activate_tab_id = active_info['tabId'];
+            //
+            chrome.tabs.sendMessage(activate_tab_id, {
+                'method': 'checkAvailable'
+            }, function (response) {});
+        });
 
         self.fetchData()
         // 安装完成后，打开网站
@@ -66,11 +76,11 @@ App.module.extend('background', function() {
                     tabId: tabs[0].id
                 }, function () {});
             }
+            //
         });
 
         // 更新版本后 推送版本更新消息 （暂时先关闭！！！）
         // Version.notice();
-
         send_response('');
     };
 
