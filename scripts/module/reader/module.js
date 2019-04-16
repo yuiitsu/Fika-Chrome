@@ -486,9 +486,10 @@ App.module.extend('reader', function() {
 	    d = min - 2; // at least h2
 		if (d > 0){
 			for (let i of tocs.slice(1)){
-			  i.class = i.class.slice(0, -1) + d
+			  i.class = i.class.slice(0, -1) + (parseInt(i.class.slice(-1)) - d)
 			}
 		}
+		console.log(tocs)
 		// 如果没有抓到TOC 就不显示
 		if (tocs.length > 1){
 		    self.view.display('reader', 'toc', tocs, $('.fika-toc'));

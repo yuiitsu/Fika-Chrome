@@ -465,7 +465,8 @@ App.module.extend('content', function() {
         for (let i of headLinks){
             let rel = i.getAttribute('rel')
             if (rel === 'icon' || rel === 'shortcut icon' || rel === 'apple-touch-icon'){
-                favicon = i.getAttribute('href')
+                favicon = i.getAttribute('href');
+                break;
             }
         }
 
