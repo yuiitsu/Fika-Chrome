@@ -195,6 +195,7 @@ App.module.extend('background', function() {
                 userId: data['user_id'],
                 type: data['user_type']
             };
+            store = await self.getStore();
             store['user'] = user;
             store['autopilotWhitelist'] = await this.fetchAutopilotWhitelist()
             chrome.storage.sync.set({user}, function(){});
@@ -262,7 +263,15 @@ App.module.extend('background', function() {
             }
         })
         send_repsonse('')
-    }
+    };
+
+    this.getStore = function () {
+        return new Promise((resolve) => {
+            chrome.storage.sync.get(null, function(res){
+                resolve(res)
+            })
+        });
+    };
 
     this.fetchData = async function (data, send_response) {
         // photos
@@ -312,11 +321,7 @@ App.module.extend('background', function() {
             {color: "#111111", textColor: "light"},
             {color: "#F5F5F5", textColor: "dark"},
         ];
-        store = await new Promise((resolve) => {
-            chrome.storage.sync.get(null, function(res){
-                resolve(res)
-            })
-        });
+        store = await self.getStore();
         let now = new Date().getTime(),
             lastFetched = store['photoLastFetchedDate'] || 0,
             photoRotation = store['photoRotation'] || 'false',

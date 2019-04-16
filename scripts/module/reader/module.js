@@ -489,7 +489,6 @@ App.module.extend('reader', function() {
 			  i.class = i.class.slice(0, -1) + (parseInt(i.class.slice(-1)) - d)
 			}
 		}
-		console.log(tocs)
 		// 如果没有抓到TOC 就不显示
 		if (tocs.length > 1){
 		    self.view.display('reader', 'toc', tocs, $('.fika-toc'));
@@ -553,7 +552,6 @@ App.module.extend('reader', function() {
     // auth
 	this.login = function (_store) {
 		store = _store;
-		console.log(store)
 		self.view.display('reader', 'userProfile', store.user , $('.fika-menu-login'));
 		this.loginClick();
 		$('#fika-loading-login').hide();
