@@ -458,8 +458,10 @@ App.module.extend('content', function() {
         let favicon = '',
             headLinks = document.getElementsByTagName('link')
         for (let i of headLinks){
-            if (i.getAttribute('rel') === 'icon' || i.getAttribute('rel') === 'shortcut icon' ){
-                favicon = i.getAttribute('href')
+            let rel = i.getAttribute('rel')
+            if (rel === 'icon' || rel === 'shortcut icon' || rel === 'apple-touch-icon'){
+                favicon = i.getAttribute('href');
+                break;
             }
         }
 
