@@ -164,7 +164,7 @@ App.module.extend('content', function() {
                 let point = element.parentElement.childNodes.length === 1 ? element['fp'] : (fl > 0 ? element['fp'] : 1);
                 for (var i in excludeAttrName) {
                     try {
-                        if (element.className && element.className.toLocaleLowerCase().indexOf(excludeAttrName[i])) {
+                        if (element.className && element.className.toLocaleLowerCase().indexOf(excludeAttrName[i]) !== -1) {
                             point -= 10;
                         }
                     } catch (e) {
