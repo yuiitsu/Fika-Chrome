@@ -172,10 +172,19 @@ theme(input, 'input')
 
   input[type="checkbox"]
     display none
-    &:checked + .fika-toggle
+    & + label.fika-toggle:before
+      $margin(a, 0)
+      float: clear
+    &:checked + label.fika-toggle
       background: $primary.dark
       &:before
         left: 50%
+        content: ""
+        san-serif()
+        $margin(a, 0)
+        float: clear
+    &:hover+label:after
+      display none
   .fika-toggle
     $margin(l, 1)
     min-width 48px
