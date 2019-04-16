@@ -5,8 +5,36 @@ App.module.extend('content', function() {
     //
     let self = this,
         tags = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'PRE', 'CODE', 'FIGURE'],
-        excludeTags = ['BUTTON', 'IFRAME', 'CANVAS', '#comment', 'SCRIPT', 'INPUT', 'SELECT', 'ASIDE', 'FOOTER', 'PERSONALIZATION-PLACEMENT'],
-        excludeAttrName = ['share', 'twitter', 'linkedin', 'pinterest', 'singleadthumbcontainer', 'author', 'reward', 'reviewer', 'bb_iawr', 'bg-food-en-retail', 'metadata', 'page-metadata'],
+        excludeTags = [
+            'BUTTON',
+            'IFRAME',
+            'CANVAS',
+            '#comment',
+            'SCRIPT',
+            'INPUT',
+            'SELECT',
+            'ASIDE',
+            'HEADER',
+            'FOOTER',
+            'PERSONALIZATION-PLACEMENT'
+        ],
+        excludeAttrName = [
+            'social',
+            'share',
+            'twitter',
+            'linkedin',
+            'pinterest',
+            'singleadthumbcontainer',
+            'author',
+            'reward',
+            'reviewer',
+            'bb_iawr',
+            'bg-food-en-retail',
+            'metadata',
+            'page-metadata',
+            'references',
+            'aside'
+        ],
         titleTags = ['H1', 'H2', 'H3'],
         topArticleElement = [],
         articleElementIndex = [],
@@ -350,7 +378,8 @@ App.module.extend('content', function() {
         } else {
             for (var i in excludeAttrName) {
                 try {
-                    if (element.className && element.className.toLocaleLowerCase().indexOf(excludeAttrName[i]) !== -1) {
+                    if (element.className && element.className.toLocaleLowerCase().indexOf(excludeAttrName[i]) !== -1
+                        || element.id && element.id.toLocaleLowerCase().indexOf(excludeAttrName[i]) !== -1) {
                         return false;
                     }
                 } catch (e) {
