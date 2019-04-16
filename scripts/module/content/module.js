@@ -163,8 +163,11 @@ App.module.extend('content', function() {
             if (element['fp'] && element['fp'] > 0) {
                 let point = element.parentElement.childNodes.length === 1 ? element['fp'] : (fl > 0 ? element['fp'] : 1);
                 for (var i in excludeAttrName) {
-                    if (element.className && element.className.toLocaleLowerCase().indexOf(excludeAttrName[i])) {
-                        point -= 10;
+                    try {
+                        if (element.className && element.className.toLocaleLowerCase().indexOf(excludeAttrName[i])) {
+                            point -= 10;
+                        }
+                    } catch (e) {
                     }
                 }
                 if (tags.indexOf(element.nodeName) !== -1) {
