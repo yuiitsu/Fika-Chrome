@@ -207,7 +207,7 @@ App.module.extend('background', function() {
             };
             store = await self.getStore();
             store['user'] = user;
-            store['autopilotWhitelist'] = await this.fetchAutopilotWhitelist()
+            store['autopilotWhitelist'] = await this.fetchAutopilotWhitelist();
             chrome.storage.sync.set({user}, function(){});
             chrome.tabs.query({active: true}, function(tabs) {
                 chrome.tabs.sendMessage(tabs[0].id, {
@@ -233,7 +233,7 @@ App.module.extend('background', function() {
 
     this.fetchAutopilotWhitelist = function () {
         return new Promise((resolve, reject) => {
-            let whiteList = []
+            let whiteList = [];
             if (store.user && store.user.token){
                 $.ajax({
                     url: "http://www.yuiapi.com/api/v1/fika/autopilot",
@@ -266,12 +266,12 @@ App.module.extend('background', function() {
             type: "POST",
             success: (res) =>{
                 if (res.code === 0){
-                    store.user = Object.assign({type: 'beta'}, store.user)
-                    chrome.storage.sync.set({user: store.user})
+                    store.user = Object.assign({type: 'beta'}, store.user);
+                    chrome.storage.sync.set({user: store.user});
                     self.getUser()
                 }
             }
-        })
+        });
         send_repsonse('')
     };
 
@@ -350,7 +350,7 @@ App.module.extend('background', function() {
                 randomIndex = Math.round(Math.random()*(photos.length-1));
                 console.log(randomIndex)
             }
-            bg = randomIndex
+            bg = randomIndex;
             bgType = 'photo'
         }
         // autopilot whitelist
