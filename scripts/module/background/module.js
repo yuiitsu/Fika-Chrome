@@ -7,16 +7,16 @@ App.module.extend('background', function() {
         store = null;
 
     this.init = function() {
-        // open main screen in new tab.
         chrome.browserAction.onClicked.addListener(function(tab) {
+
             self.openReaderMode(null, tab);
             // chrome.tabs.sendMessage(tab.id, {
             //     'method': 'openReaderMode'
             // }, function (response) {});
         });
+        chrome.extension.onMessage.addListener(function(request, _, send_response) {
 
         // listen content script message.
-        chrome.extension.onMessage.addListener(function(request, _, send_response) {
             let method = request.method;
             if ($.isFunction(self[method])) {
                 self[method](request.data, send_response);
@@ -24,9 +24,9 @@ App.module.extend('background', function() {
                 self.log('Background [' + method + '] not exist.')
             }
         });
+        chrome.contextMenus.removeAll(function() {
 
         // 右键菜单
-        chrome.contextMenus.removeAll(function() {
             chrome.contextMenus.create({
                 type: 'normal',
                 title: 'Toggle Fika',
@@ -36,9 +36,9 @@ App.module.extend('background', function() {
                 self.log('created context menus.');
             });
         });
+        chrome.tabs.onActivated.addListener(function(active_info) {
 
         // 激活tab事件，激活则表示处于可见状态，通过
-        chrome.tabs.onActivated.addListener(function(active_info) {
             //
             let activate_tab_id = active_info['tabId'];
             //
@@ -46,15 +46,17 @@ App.module.extend('background', function() {
                 'method': 'checkAvailable'
             }, function (response) {});
         });
+        // open main screen in new tab.
 
         self.fetchData()
+        this.initFacebook()
+
         // 安装完成后，打开网站
         // chrome.runtime.onInstalled.addListener(function() {
         //     chrome.tabs.create({
         //         url: 'http://www.fika.io',
         //         active: true
         //     });
-
         //     return false;
         // });
     };
@@ -162,7 +164,7 @@ App.module.extend('background', function() {
             permissions: ["identity"]
         }, function(result){
             if (result){
-                self.getUser()
+                self.loginUser()
             } else {
                 // request identity permission
                 chrome.permissions.request({
@@ -170,7 +172,7 @@ App.module.extend('background', function() {
                     origins:["http://*/*", "https://*/*"]
                 }, function(granted){
                     if (granted) {
-                        self.getUser()
+                        self.loginUser()
                     }
                 })
             }
@@ -178,7 +180,7 @@ App.module.extend('background', function() {
         send_response('')
     };
 
-    this.getUser = async function(){
+    this.loginUser = async function(){
         let userInfo = await new Promise((resolve)=>{
             chrome.identity.getAuthToken({interactive: true}, function(token) {
                 $.ajax({
@@ -217,6 +219,28 @@ App.module.extend('background', function() {
             })
         }
     };
+    
+    this.getUserType = function (data, send_response) {
+        $.ajax({
+            url: "http://www.yuiapi.com/api/v1/user/info",
+            data: {token: store.user.token},
+            type: "GET",
+            success: res => {
+                if (res.code === 0){
+                    store['user'] = Object.assign(store.user, {type: res.data.user_type});
+                    console.log(store.user)
+                    chrome.storage.sync.set({user: store['user']}, function(){});
+                    chrome.tabs.query({active: true}, function(tabs) {
+                        chrome.tabs.sendMessage(tabs[0].id, {
+                            'method': 'loginUser',
+                            'data': store
+                        }, function (response) {});
+                    })
+                }
+            }
+        });
+        send_response('')
+    }
 
     this.updateWhitelist = function (data, send_response) {
         $.ajax({
@@ -256,7 +280,7 @@ App.module.extend('background', function() {
         })
     };
 
-    this.changeUserType = function (data, send_repsonse) {
+/*    this.changeUserType = function (data, send_repsonse) {
         $.ajax({
             url: "http://www.yuiapi.com/api/v1/user/info",
             data: {
@@ -268,12 +292,12 @@ App.module.extend('background', function() {
                 if (res.code === 0){
                     store.user = Object.assign({type: 'beta'}, store.user)
                     chrome.storage.sync.set({user: store.user})
-                    self.getUser()
+                    self.loginUser()
                 }
             }
         })
         send_repsonse('')
-    };
+    };*/
 
     this.getStore = function () {
         return new Promise((resolve) => {
