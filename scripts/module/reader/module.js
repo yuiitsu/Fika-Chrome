@@ -7,7 +7,7 @@ App.module.extend('reader', function() {
     let self = this,
         toc = null,
 		store = null,
-		isAuth = false;
+		photoSrc = [];
 
     this.ripple = function(els){
         if (els){
@@ -124,7 +124,6 @@ App.module.extend('reader', function() {
 			inputCheck = $('#fika-photo-bg'),
 			fikaApp = $('.fika-app'),
 			bgCont = $('.fika-bg'),
-			tocOverlay = $('.fika-toc-static .fika-toc-overlay'),
 			credit = $('.fika-bg-credit'),
 			loading = $('#fika-loading-bg');
 		// init background from settings
@@ -162,7 +161,8 @@ App.module.extend('reader', function() {
 				fikaApp.addClass('fika-bg-on');
 				fikaApp.removeClass('fika-bg-dark fika-bg-light');
 				if (type === 'photo'){
-					let data = store['photos'][index];
+					console.log(photoSrc, index)
+					let data = photoSrc[index];
 					switchPhoto(data, index);
 					credit.attr('href', data['link']);
 					credit.html(`photo by ${data['credit']} / ${data['source']}`);
@@ -179,16 +179,13 @@ App.module.extend('reader', function() {
 			$(`.fika-photo-grid-item[data-type="photo"][data-index="${index}"]`).addClass('active');
 			bgCont.css('background-image', 'url('+data.small+')');
 			bgCont.addClass('fika-bg-blur');
-			fikaApp.addClass('fika-bg-'+data.textColor);
-			tocOverlay.hide();
+			fikaApp.addClass('fika-bg-'+data.text_color);
 			loading.show();
 
 			photoObj.src = data.full;
 			photoObj.onload = function () {
 				bgCont.css('background-image', 'url('+this.src+')');
 				bgCont.removeClass('fika-bg-blur');
-				tocOverlay.css('background-image', 'url('+this.src+')');
-				tocOverlay.show();
 				loading.hide();
 			}
 		}
@@ -196,10 +193,9 @@ App.module.extend('reader', function() {
 		function switchColor(data, index){
 			$('.fika-photo-grid-item.active').removeClass('active');
 			$(`.fika-photo-grid-item[data-type="color"][data-index="${index}"]`).addClass('active');
-			fikaApp.addClass('fika-bg-'+data.textColor);
+			fikaApp.addClass('fika-bg-'+data.text_color);
 			bgCont.css('background-image', '');
 			bgCont.css('background-color', data.color);
-			tocOverlay.hide();
 		}
 	};
 
@@ -496,14 +492,19 @@ App.module.extend('reader', function() {
     };
 
 
-	this._init = function(content, _store) {
+	this._init = async function(content, _store) {
 		//
 		store = _store;
 		self.retrieveToc();
 		self._initTools();
 		self.feedback();
+		photoSrc = await new Promise((resolve)=>{
+			self.module.common.cache.get(['photos'], function(res) {
+				resolve(JSON.parse(res[0]));
+			});
+		})
 		self.view.display('reader', 'photos', {
-			value: store['photos'],
+			value: photoSrc,
 			type:'photo'
 		}, $('.fika-photo-grid[data-tab="photo"]'));
 		self.view.display('reader', 'photos', {
