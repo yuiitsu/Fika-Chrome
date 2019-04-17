@@ -114,7 +114,7 @@ App.module.extend('content', function() {
                 }
                 //
                 if (nodeValue.length > 300) {
-                    fp = 100;
+                    fp = 10;
                 }
                 //
                 if (!element.parentElement.hasOwnProperty('fp')) {
