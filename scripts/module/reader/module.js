@@ -430,7 +430,11 @@ App.module.extend('reader', function() {
 				window.open('http://fika.io/sharetounlock?t='+ store.user.token);
 				self.toggleMenu(false);
 			} else {
-				self.toast('You must first log in!')
+				$('#fika-loading-login').show();
+				chrome.extension.sendMessage({
+					'method': 'oauth',
+					'data':{}
+				}, function () {});
 			}
 		})
     };
