@@ -38,7 +38,8 @@ App.module.extend('content', function() {
             'comment',
             'recommend',
             'side',
-            'qrcode'
+            'qrcode',
+            'clearfix'
         ],
         titleTags = ['H1', 'H2', 'H3'],
         topArticleElement = [],
@@ -113,7 +114,7 @@ App.module.extend('content', function() {
                     fp = 2;
                 }
                 //
-                if (nodeValue.length > 300) {
+                if (nodeValue.length > 50) {
                     fp = 10;
                 }
                 //
@@ -159,7 +160,7 @@ App.module.extend('content', function() {
                 for (var i in excludeAttrName) {
                     try {
                         if (element.className && element.className.toLocaleLowerCase().indexOf(excludeAttrName[i]) !== -1) {
-                            point -= 10;
+                            point -= 100;
                         }
                     } catch (e) {
                     }
@@ -376,7 +377,7 @@ App.module.extend('content', function() {
                     src = attributes[i].nodeValue;
                 }
             }
-
+            console.log(element.outerHTML);
             let htmlString = element.outerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, '').replace(/width="(.+?)"/g, '').replace(/height="(.+?)"/g, '');
             if (element.offsetWidth <= 200) {
                 htmlString = htmlString.replace(/\s+/, ` style='height:${element.offsetHeight}px;width:${element.offsetWidth}px;'`);
