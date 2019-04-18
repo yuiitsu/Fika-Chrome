@@ -4,7 +4,7 @@
 App.module.extend('content', function() {
     //
     let self = this,
-        tags = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'PRE', 'CODE', 'FIGURE'],
+        tags = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'PRE', 'CODE', 'FIGURE', 'ARTICLE'],
         excludeTags = [
             'BUTTON',
             'IFRAME',
@@ -165,7 +165,11 @@ App.module.extend('content', function() {
                     }
                 }
                 if (tags.indexOf(element.nodeName) !== -1) {
-                    element['fp'] += 10;
+                    if (element.nodeName === 'ARTICLE' && element.innerText.length > 400) {
+                        element['fp'] += 500;
+                    } else {
+                        element['fp'] += 10;
+                    }
                     point += 10;
                 } else if (element.nodeName === 'DIV') {
                     element['fp'] += 5;
