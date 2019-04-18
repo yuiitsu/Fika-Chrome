@@ -216,25 +216,31 @@ theme(input, 'input')
     margin-left 4px
     background: $primary.dark
   .fika-pro-item
-    a.fika-share-to-unlock
+    .fika-share-to-unlock
       display none
     &.fika-disabled
       position relative
-      & > *:not(a)
+      & > *:not(.fika-share-to-unlock)
         pointer-events none
-        opacity 0.2
-      & a.fika-share-to-unlock
+        opacity 0.14
+      & .fika-share-to-unlock
         position absolute
-        top: 50%
+        top: 80px
         left: 50%
         cursor pointer
         text-align: center
         white-space nowrap
         transform translate(-50%, -50%)
         display block
-        &:hover
-          text-decoration underline
-          color: $primary.dark
+        font-size: 17px
+
+        button.fika-btn.fika-share-to-unlock-btn
+          width: 100px !important
+          color:#fff
+          font-size: 14px
+          height: 24px
+          border-radius: 4px
+          padding-right: 12px
 
 
 

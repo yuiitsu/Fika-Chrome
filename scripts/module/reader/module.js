@@ -7,7 +7,8 @@ App.module.extend('reader', function() {
     let self = this,
         toc = null,
 		store = null,
-		photoSrc = [];
+		photoSrc = [],
+		pendingToShare;
 
     this.ripple = function(els){
         if (els){
@@ -161,12 +162,8 @@ App.module.extend('reader', function() {
 				fikaApp.addClass('fika-bg-on');
 				fikaApp.removeClass('fika-bg-dark fika-bg-light');
 				if (type === 'photo'){
-					console.log(photoSrc, index)
 					let data = photoSrc[index];
 					switchPhoto(data, index);
-					credit.attr('href', data['link']);
-					credit.html(`photo by ${data['credit']} / ${data['source']}`);
-					credit.show();
 				} else if (type === 'color'){
 					let data = store['monoColors'][index];
 					switchColor(data, index);
@@ -188,6 +185,9 @@ App.module.extend('reader', function() {
 				bgCont.removeClass('fika-bg-blur');
 				loading.hide();
 			}
+			credit.attr('href', data['link']);
+			credit.html(`photo by ${data['credit']} / ${data['source']}`);
+			credit.show();
 		}
 		// load mono-color
 		function switchColor(data, index){
@@ -352,29 +352,20 @@ App.module.extend('reader', function() {
         this.initToc();
         this.initMenu();
 
-        $('#fika-settings').click(self.toggleMenu);
+        $('#fika-settings').click(function (){
+        	self.toggleMenu();
+        	if (store.user && store.user.type !== 'beta'){
+				chrome.extension.sendMessage({
+					'method': 'getUserType'
+				}, function () {});
+			}
+		});
         $(document).mouseup(function(e) {
             let container = $(".fika-menu");
             if (!container.is(e.target) && container.has(e.target).length === 0){
-                container.removeClass('fika-menu-on');
+				self.toggleMenu(false)
             }
         });
-
-        // print 暂时砍去打印功能
-        // $('#fika-print').click(function(){
-        //     var ifr = document.createElement('iframe');
-        //     ifr.style='height: 0px; width: 0px; position: absolute'
-        //     document.body.appendChild(ifr);
-        //     var cssLink = document.createElement("link");
-        //     cssLink.rel = "stylesheet";
-        //     cssLink.type = "text/css";
-        //     cssLink.href = "chrome-extension://gbgpnkjlajphppfjolpcpffegigiokii/style/content.css";
-        //     ifr.contentDocument.head.appendChild(cssLink)
-        //     $('#fika-reader').clone().appendTo(ifr.contentDocument.body);
-        //     ifr.contentWindow.print();
-        //     ifr.parentElement.removeChild(ifr);
-        // });
-
         $('#fika-fullscreen').click(function() {
             $(this).toggleClass('fs-on');
             const el = document.documentElement;
@@ -396,10 +387,10 @@ App.module.extend('reader', function() {
         let toolbar = $('.fika-tool');
         $('#fika-tool-btn').click(function () {
             toolbar.toggleClass('fika-tool-on');
-            $('.fika-menu').removeClass('fika-menu-on');
+			self.toggleMenu(false)
         });
         // hover
-/*        let hoverTimer;
+        let hoverTimer;
         toolbar.mouseleave(function () {
             hoverTimer = setTimeout(()=>{
                 $(this).removeClass('fika-tool-on')
@@ -408,7 +399,7 @@ App.module.extend('reader', function() {
         });
         toolbar.mouseenter(function () {
             clearTimeout(hoverTimer)
-        });*/
+        });
 
         //close
         // $('#fika-exit').click(function () {
@@ -424,7 +415,39 @@ App.module.extend('reader', function() {
             const url = encodeURI(`https://www.facebook.com/sharer/sharer.php?title=${document.title} ${window.location.href} | shared from Fika&u=${window.location.href}`).replace(/#/g,'%23');
             window.open(url, '_blank', 'width=720, height=600');
         });
+		$('.fika-share-to-unlock-btn').click(function () {
+			let type = $(this).attr('data-type');
+			if (store.user) {
+				self.shareToUnlock(type);
+			} else {
+				$('#fika-loading-login').show();
+				pendingToShare = type;
+				chrome.extension.sendMessage({
+					'method': 'oauth',
+					'data':{}
+				}, function () {});
+			}
+		})
     };
+
+    this.shareToUnlock = function (type) {
+		if (type === 'fb'){
+			window.open('http://fika.io/sharetounlock?t=' + store.user.token);
+			self.toggleMenu(false);
+		} else if (type === 'tw') {
+			let win = window.open('https://twitter.com/intent/retweet?tweet_id=1117715831540965376', 'twitter_share', 'width=600, height=480');
+			let interval = setInterval(function(){
+				if (win.closed){
+					console.log(win)
+					chrome.extension.sendMessage({
+						'method': 'changeUserType'
+					}, function () {});
+					clearInterval(interval)
+				}
+			}, 500)
+			self.toggleMenu(false);
+		}
+	}
 
     this.feedback = function () {
 	    let feedbackBtns = $('.fika-feedback-button'),
@@ -495,9 +518,6 @@ App.module.extend('reader', function() {
 	this._init = async function(content, _store) {
 		//
 		store = _store;
-		self.retrieveToc();
-		self._initTools();
-		self.feedback();
 		photoSrc = await new Promise((resolve)=>{
 			self.module.common.cache.get(['photos'], function(res) {
 				resolve(JSON.parse(res[0]));
@@ -511,6 +531,10 @@ App.module.extend('reader', function() {
 			value: store['monoColors'],
 			type:'color'
 		}, $('.fika-photo-grid[data-tab="color"]'));
+		self.view.display('reader', 'shareToUnlock', {}, $('.fika-share-to-unlock'))
+		self.retrieveToc();
+		self._initTools();
+		self.feedback();
 		self.login(store);
 		// 处理语言
         chrome.i18n.detectLanguage(content, function(result) {
@@ -557,19 +581,6 @@ App.module.extend('reader', function() {
 		this.loginClick();
 		$('#fika-loading-login').hide();
 		if (store.user ){
-			$('.fika-share-to-unlock').click(function () {
-				let win = window.open('https://twitter.com/intent/retweet?tweet_id=1117715831540965376', 'twitter_share', 'width=600, height=480');
-				console.log(win)
-				let interval = setInterval(function(){
-					if (win.closed){
-						console.log(win)
-						chrome.extension.sendMessage({
-							'method': 'changeUserType'
-						}, function () {});
-						clearInterval(interval)
-					}
-				}, 500)
-			})
 			$('#fika-user-expand').click(function () {
 				$('#fika-logout').toggle();
 			});
@@ -577,11 +588,14 @@ App.module.extend('reader', function() {
 				self.logout()
 			});
 		}
-		if (store.user  && store.user.type === 'beta'){
+		if (store.user && store.user.type === 'beta'){
 			$('.fika-disabled').removeClass('fika-disabled');
 			$('input').prop('disabled', false);
 			self.background();
 			self.autopilot();
+		} else if (pendingToShare){
+			self.shareToUnlock(pendingToShare);
+			pendingToShare = null
 		}
 	};
 	this.logout = function () {
@@ -594,6 +608,7 @@ App.module.extend('reader', function() {
 		$('.fika-app').removeClass('fika-bg-on');
 		this.loginClick();
 		$('#fika-loading-login').hide();
+		store.user = null;
 		chrome.storage.sync.set({user: null, autopilotWhitelist: []})
 	};
 	this.loginClick = function () {

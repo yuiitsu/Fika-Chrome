@@ -174,7 +174,7 @@ App.view.extend('content', function() {
                     </div>
                     
                     <div class="fika-pro-item has-unlock-btn fika-disabled">
-                        <a class="fika-share-to-unlock">Login & Share to Unlock</a>
+                        <div class="fika-share-to-unlock"></div>
                         <div class="mt-3 fika-menu-label fika-pro">Background</div>
                         <div class="my-2 d-flex fika-justify-space-between">
                             <div class="fika-menu-label">
@@ -194,7 +194,7 @@ App.view.extend('content', function() {
                 </div>
                 <!--autopilot-->
                 <div class="fika-menu-view fika-pro-item has-unlock-btn fika-disabled">
-                    <a class="fika-share-to-unlock">Login & Share to Unlock</a>
+                    <div class="fika-share-to-unlock"></div>
                     <div class="fika-menu-label mt-1">
                         <div class="fika-pro">Autopilot</div>
                         <div class="fika-menu-label-desc">Automatically open Fika reader mode on whitelisted websites</div>

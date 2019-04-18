@@ -648,8 +648,7 @@ App.module.extend('content', function() {
     };
 
     this.loginUser = function(data){
-		    this.module.reader.login(data);
-		    this.module.reader.toast('👋 Welcome aboard - ' + data.user.name)
+        this.module.reader.login(data);
     };
 
     this.checkAvailable = function() {
