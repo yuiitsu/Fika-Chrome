@@ -4,7 +4,7 @@
 App.module.extend('content', function() {
     //
     let self = this,
-        tags = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'PRE', 'CODE', 'FIGURE', 'ARTICLE'],
+        tags = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'PRE', 'CODE', 'FIGURE'],
         excludeTags = [
             'BUTTON',
             'IFRAME',
@@ -38,6 +38,7 @@ App.module.extend('content', function() {
             'comment',
             'recommend',
             'side',
+            'video',
             'qrcode',
             'clearfix'
         ],
