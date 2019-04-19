@@ -40,7 +40,8 @@ App.module.extend('content', function() {
             'side',
             'video',
             'qrcode',
-            'clearfix'
+            'clearfix',
+            'thumb'
         ],
         titleTags = ['H1', 'H2', 'H3'],
         topArticleElement = [],
@@ -130,6 +131,9 @@ App.module.extend('content', function() {
                 //
                 if (nodeValue.length > 50) {
                     fp = 10;
+                }
+                if (parent.nodeName === 'P') {
+                    fp = nodeValue.length;
                 }
                 //
                 if (!element.parentElement.hasOwnProperty('fp')) {
