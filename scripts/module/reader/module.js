@@ -96,14 +96,6 @@ App.module.extend('reader', function() {
             // change class name for buttons
 			$(`[data-sel^='${prop}']`).removeClass('active');
 			$(`[data-sel='${data}']`).addClass('active');
-			// ga events
-			chrome.extension.sendMessage({
-				'method': 'sendGA',
-				'data': {
-					type: 'event',
-					p: [prop, val, null]
-				}
-			});
         }
 		// set theme from storage
 		setAppearance('size-' + settings['size'].val);
@@ -122,7 +114,16 @@ App.module.extend('reader', function() {
         });*/
 		// bind click events
 		btns.click(function () {
-			setAppearance($(this).attr('data-sel'));
+			let dataSel = $(this).attr('data-sel')
+			setAppearance(dataSel );
+			// ga events
+			chrome.extension.sendMessage({
+				'method': 'sendGA',
+				'data': {
+					type: 'event',
+					p: [dataSel .split('-')[0], dataSel .split('-')[1], null]
+				}
+			});
 		})
     };
 
@@ -162,9 +163,23 @@ App.module.extend('reader', function() {
 			if (type === 'photo') {
 				let index = photoSrc.map((x)=>x.id).indexOf(id);
 				data = photoSrc[index];
+				chrome.extension.sendMessage({
+					'method': 'sendGA',
+					'data': {
+						type: 'event',
+						p: ['bg-photo', data.link ]
+					}
+				});
 			} else if (type === 'color') {
 				let index = store['monoColors'].map((x)=>x.id).indexOf(id);
 				data = store['monoColors'][index];
+				chrome.extension.sendMessage({
+					'method': 'sendGA',
+					'data': {
+						type: 'event',
+						p: ['bg-color', data.color ]
+					}
+				});
 			}
 			switchBg(type, data, id);
 		});
@@ -182,22 +197,8 @@ App.module.extend('reader', function() {
 				fikaApp.removeClass('fika-bg-dark fika-bg-light');
 				if (type === 'photo'){
 					switchPhoto(data, id);
-					chrome.extension.sendMessage({
-						'method': 'sendGA',
-						'data': {
-							type: 'event',
-							p: ['bg-photo', data.link ]
-						}
-					});
 				} else if (type === 'color'){
 					switchColor(data, id);
-					chrome.extension.sendMessage({
-						'method': 'sendGA',
-						'data': {
-							type: 'event',
-							p: ['bg-color', data.color ]
-						}
-					});
 				}
 				chrome.storage.sync.set({bg: data, bgType: type})
 			}
@@ -486,7 +487,7 @@ App.module.extend('reader', function() {
 					p: ['twitter', 'share', window.location.href]
 				}
 			});
-        })
+        });
         $('#fika-facebook-share').click(function(){
             const url = encodeURI(`https://www.facebook.com/sharer/sharer.php?title=${document.title} ${window.location.href} | shared from Fika&u=${window.location.href}`).replace(/#/g,'%23');
             window.open(url, '_blank', 'width=720, height=600');
@@ -550,7 +551,14 @@ App.module.extend('reader', function() {
 		    if (feedbackOldVal !== attr && clickCount <= 1){
 			    feedbackBtns.removeClass('fika-feedback-button-active');
 			    thisBtn.addClass('fika-feedback-button-active');
-			    self.module.content.sendFeedback(attr);
+			    // self.module.content.sendFeedback(attr);
+				chrome.extension.sendMessage({
+					'method': 'sendGA',
+					'data': {
+						type: 'event',
+						p: ['feedback', attr === '1'?'good':'bad', window.location.href]
+					}
+				});
 			    if (attr === '1'){
 				    msg.html('Thanks for the upvote! <a href="https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">Rate Fika</a>');
 			    } else {

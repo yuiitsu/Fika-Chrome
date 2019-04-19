@@ -115,7 +115,7 @@ App.module.extend('content', function() {
             chrome.extension.sendMessage({
                 'method': 'sendGA',
                 'data': {type: 'exception',
-                    p:{exDescription: window.location.href}}
+                    p:{exDescription: window.location.host}}
             }, function () {});
         }
         //
@@ -576,7 +576,7 @@ App.module.extend('content', function() {
                 chrome.extension.sendMessage({
                     'method': 'sendGA',
                     'data': {
-                        type: 'timing',
+                        type: 'event',
                         p: ['toc', 'click']
                     }
                 });
@@ -642,11 +642,31 @@ App.module.extend('content', function() {
             target.show();
             isOpen = true;
             $('body').hide();
+            chrome.extension.sendMessage({
+                'method': 'sendGA',
+                'data': {
+                    type: 'pageview',
+                    p: '/on'
+                }
+            });
+            openedTimeStamp = new Date().getTime()
         } else {
             target.hide();
             isOpen = false;
             overflow = 'auto';
             $('body').show();
+            // 计算用户使用时间
+            if (openedTimeStamp !== 0){
+                let duration = new Date().getTime() - openedTimeStamp
+                console.log('duration', Math.round(duration))
+                chrome.extension.sendMessage({
+                    'method': 'sendGA',
+                    'data': {
+                        type: 'timing',
+                        p: ['duration', 'use', Math.round(duration)]
+                    }
+                });
+            }
         }
 
         $('html, body').css('overflow-y', overflow);
@@ -658,18 +678,9 @@ App.module.extend('content', function() {
         });
         chrome.extension.sendMessage({
             'method': 'is_open',
-            'data': {isOpen}
+            'data': isOpen
         }, function () {});
-        chrome.extension.sendMessage({
-            'method': 'sendGA',
-            'data': {
-                type: 'pageview',
-                p: '/on'
-            }
-        });
-        openedTimeStamp = new Date().getTime()/1000
     };
-
     let openedTimeStamp = 0
 
     this.closeReaderMode = function() {
@@ -682,18 +693,6 @@ App.module.extend('content', function() {
             'method': 'is_open',
             'data': false
         }, function () {});
-        // 计算用户使用时间
-        if (openedTimeStamp !== 0){
-            let duration = new Date().getTime()/1000 - openedTimeStamp
-            console.log('duration', duration)
-            chrome.extension.sendMessage({
-                'method': 'sendGA',
-                'data': {
-                    type: 'timing',
-                    p: ['duration', 'use', duration]
-                }
-            });
-        }
     };
 
     this.sendFeedback = function(isMatch) {
