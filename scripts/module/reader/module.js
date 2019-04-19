@@ -136,7 +136,12 @@ App.module.extend('reader', function() {
 			credit = $('.fika-bg-credit'),
 			loading = $('#fika-loading-bg');
 		// init background from settings
-		switchBg(store.bgType, store.bg);
+		if (!store.bg || !store.bg['id']) {
+			store.bgType = 'default'
+			switchBg('default')
+		} else {
+			switchBg(store.bgType, store.bg, store.bg['id']);
+		}
 		// toggle photo rotation
 		inputCheck.prop('checked', store.photoRotation);
 		inputCheck.change(function(){
@@ -153,11 +158,17 @@ App.module.extend('reader', function() {
 		// select background
 		$('.fika-photo-grid-item').click(function () {
 			let type = $(this).attr('data-type'),
-				index = parseInt($(this).attr('data-index'));
-			switchBg(type, index)
-			chrome.storage.sync.set({bg: index, bgType: type})
+				data, id = parseInt($(this).attr('data-id'));
+			if (type === 'photo') {
+				let index = photoSrc.map((x)=>x.id).indexOf(id);
+				data = photoSrc[index];
+			} else if (type === 'color') {
+				let index = store['monoColors'].map((x)=>x.id).indexOf(id);
+				data = store['monoColors'][index];
+			}
+			switchBg(type, data, id);
 		});
-		function switchBg(type, index){
+		function switchBg(type, data, id){
 			credit.hide();
 			loading.hide();
 			photoObj.src = '';
@@ -170,25 +181,31 @@ App.module.extend('reader', function() {
 				fikaApp.addClass('fika-bg-on');
 				fikaApp.removeClass('fika-bg-dark fika-bg-light');
 				if (type === 'photo'){
-					let data = photoSrc[index];
-					switchPhoto(data, index);
+					switchPhoto(data, id);
+					chrome.extension.sendMessage({
+						'method': 'sendGA',
+						'data': {
+							type: 'event',
+							p: ['bg-photo', data.link ]
+						}
+					});
 				} else if (type === 'color'){
-					let data = store['monoColors'][index];
-					switchColor(data, index);
+					switchColor(data, id);
+					chrome.extension.sendMessage({
+						'method': 'sendGA',
+						'data': {
+							type: 'event',
+							p: ['bg-color', data.color ]
+						}
+					});
 				}
-				chrome.extension.sendMessage({
-					'method': 'sendGA',
-					'data': {
-						type: 'event',
-						p: ['bg-'+type, type === 'photo' ? data.link : data.color]
-					}
-				});
+				chrome.storage.sync.set({bg: data, bgType: type})
 			}
 		}
 		// load image
-		function switchPhoto(data, index){
+		function switchPhoto(data, id){
 			$('.fika-photo-grid-item.active').removeClass('active');
-			$(`.fika-photo-grid-item[data-type="photo"][data-index="${index}"]`).addClass('active');
+			$(`.fika-photo-grid-item[data-type="photo"][data-id="${id}"]`).addClass('active');
 			bgCont.css('background-image', 'url('+data.small+')');
 			bgCont.addClass('fika-bg-blur');
 			fikaApp.addClass('fika-bg-'+data.text_color);
@@ -199,29 +216,40 @@ App.module.extend('reader', function() {
 				bgCont.css('background-image', 'url('+this.src+')');
 				bgCont.removeClass('fika-bg-blur');
 				loading.hide();
-			}
-			photoObj.onerror = function () {
-				photoSrc.splice(index,1);
-				self.module.common.cache.set('photos', JSON.stringify(photoSrc));
-				self.view.display('reader', 'photos', {
-					value: photoSrc,
-					type:'photo'
-				}, $('.fika-photo-grid[data-tab="photo"]'));
-				store.bg = 0;
-				self.background();
-			}
+			};
 			credit.attr('href', data['link']);
 			credit.html(`photo by ${data['credit']} / ${data['source']}`);
 			credit.show();
 		}
 		// load mono-color
-		function switchColor(data, index){
+		function switchColor(data, id){
 			$('.fika-photo-grid-item.active').removeClass('active');
-			$(`.fika-photo-grid-item[data-type="color"][data-index="${index}"]`).addClass('active');
+			$(`.fika-photo-grid-item[data-type="color"][data-id="${id}"]`).addClass('active');
 			fikaApp.addClass('fika-bg-'+data.text_color);
 			bgCont.css('background-image', '');
 			bgCont.css('background-color', data.color);
 		}
+		// load more photos
+		$('.fika-menu-view-cont').scroll(function () {
+			let el = $(this)
+			if ($('.fika-menu-view[data-tab="theme"]').css('display')==='block'){
+				if (el.scrollTop() + el.innerHeight() >= el[0].scrollHeight - 100 ){
+					chrome.extension.sendMessage({
+						'method': 'loadMorePhotoSrc',
+						'data': {}
+					}, function () {});
+				}
+			}
+		})
+	};
+	this.updatePhotoSrc = function (data) {
+		photoSrc = data
+		self.view.display('reader', 'photos', {
+			value: photoSrc,
+			type:'photo'
+		}, $('.fika-photo-grid[data-tab="photo"]'));
+		self.background()
+		console.log('more',data)
 	};
 
 	// autopilot
@@ -577,14 +605,10 @@ App.module.extend('reader', function() {
     };
 
 
-	this._init = async function(content, _store) {
+	this._init = async function(content, _store, _photoSrc) {
 		//
 		store = _store;
-		photoSrc = await new Promise((resolve)=>{
-			self.module.common.cache.get(['photos'], function(res) {
-				resolve(JSON.parse(res[0]));
-			});
-		})
+		photoSrc = _photoSrc
 		self.view.display('reader', 'photos', {
 			value: photoSrc,
 			type:'photo'

@@ -164,7 +164,7 @@ App.view.extend('content', function() {
                     <div class="fika-select fika-select-fonts"></div>
                 </div>
                 <!--theme-->
-                <div class="fika-menu-view">
+                <div class="fika-menu-view" data-tab="theme">
                     <div class="fika-menu-label">Theme Color</div>
                     <div class="fika-select-themes">
                         <div class="fika-select-theme theme-vanilla" data-sel="theme-vanilla"></div>

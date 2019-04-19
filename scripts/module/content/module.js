@@ -52,7 +52,7 @@ App.module.extend('content', function() {
         topElement = '',
         topPoint = 0,
         isOpen = false,
-		store,
+		store, photoSrc,
         isAvailable = false;
 
 	this.init = async function() {
@@ -62,6 +62,13 @@ App.module.extend('content', function() {
                 resolve(res)
             });
         });
+        photoSrc = await new Promise((resolve)=>{
+            chrome.extension.sendMessage({
+                'method': 'getPhotoSrc','data':null
+            }, function (res) {
+                resolve(res)
+            });
+        })
         self.findArticlePro();
         // this.findArticle();
 
@@ -497,7 +504,7 @@ App.module.extend('content', function() {
         //
         this.extFilter();
         //
-        this.module.reader._init(text, store);
+        this.module.reader._init(text, store, photoSrc);
     };
 
     this.extFilter = function() {
@@ -517,7 +524,7 @@ App.module.extend('content', function() {
                         attributes[i].nodeName.indexOf('datasrc') !== -1 ||
                         attributes[i].nodeName.indexOf('data-original-src') !== -1 ||
                         attributes[i].nodeName.indexOf('data-actualsrc') !== -1) {
-                        console.log(attributes[i].nodeValue);
+                        // console.log(attributes[i].nodeValue);
                         $(this).attr('src', attributes[i].nodeValue);
                     }
                 }
@@ -650,7 +657,7 @@ App.module.extend('content', function() {
             'method': 'sendGA',
             'data': {
                 type: 'pageview',
-                p: '/'+window.location.href
+                p: '/on'
             }
         });
         openedTimeStamp = new Date().getTime()/1000
@@ -711,5 +718,9 @@ App.module.extend('content', function() {
             'data': {is_available: isAvailable,}
         }, function () {});
     };
+    
+    this.updatePhotoSrc = function (data) {
+        this.module.reader.updatePhotoSrc = data
+    }
 });
 

@@ -4,7 +4,8 @@
 App.module.extend('background', function() {
     //
     let self = this,
-        store = null;
+        store = null,
+        photos = [];
 
     this.init = function() {
         chrome.browserAction.onClicked.addListener(function(tab) {
@@ -260,7 +261,7 @@ App.module.extend('background', function() {
         send_response('')
     }
 
-    this.changeUserType = function (data, send_repsonse) {
+    this.changeUserType = function (data, send_response) {
         $.ajax({
             url: "http://www.yuiapi.com/api/v1/user/info",
             data: {
@@ -281,7 +282,7 @@ App.module.extend('background', function() {
                 }
             }
         });
-        send_repsonse('')
+        send_response('')
     };
 
     this.updateWhitelist = function (data, send_response) {
@@ -325,64 +326,88 @@ App.module.extend('background', function() {
     this.getStore = function () {
         return new Promise((resolve) => {
             chrome.storage.sync.get(null, function(res){
-                resolve(res)
+                store = res;
+                resolve(res);
             })
         });
     };
 
+    this.getPhotoSrc = function (data, send_response) {
+        send_response(photos)
+    }
+
+    let loadingPhotos = false,
+        morePhotosAvailable = true;
+    this.loadMorePhotoSrc = function (data, send_response) {
+        let pageIndex = Math.floor(photos/32);
+        if (pageIndex >= 1 && !loadingPhotos && morePhotosAvailable){
+            loadingPhotos = true
+            $.ajax({
+                methods:'GET',
+                url: 'http://www.yuiapi.com/api/v1/fika/background?page_index='+pageIndex+'&page_size=33',
+                success: data =>{
+                    for (let i of data.list){
+                        photos.push(i)
+                    }
+                    if (photos.length > data.row_count){
+                        morePhotosAvailable = false
+                    }
+                    chrome.tabs.query({active: true}, function(tabs) {
+                        chrome.tabs.sendMessage(tabs[0].id, {
+                            'method': 'updatePhotoSrc',
+                            'data': photos
+                        }, function (response) {});
+                    });
+                },
+                complete: ()=>{
+                    loadingPhotos = false
+                }
+            });
+        }
+        send_response('')
+    }
+
     this.fetchData = async function (data, send_response) {
         // photos
-        let photos = [{"small":"https://images.unsplash.com/photo-1554602337-bcb0d619e511?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1554602337-bcb0d619e511?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Nicole Y-C","source":"unsplash","link":"https://unsplash.com/photos/9XixVlnUCbk","text_color":"light"},{"small":"https://images.unsplash.com/photo-1527580795266-e93c8e079c22?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1527580795266-e93c8e079c22?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Roland Lösslein","source":"unsplash","link":"https://unsplash.com/photos/NeCNxRwobes","text_color":"light"},{"small":"https://images.unsplash.com/photo-1496737018672-b1a6be2e949c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1496737018672-b1a6be2e949c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Fezbot2000","source":"unsplash","link":"https://unsplash.com/photos/5brvJbR1Pn8","text_color":"light"},{"small":"https://images.unsplash.com/photo-1444260239795-df1f0772a252?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1444260239795-df1f0772a252?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Mathew Waters","source":"unsplash","link":"https://unsplash.com/photos/cuTk59eNHUE","text_color":"dark"},{"small":"https://images.unsplash.com/photo-1529344173594-5f748ed24b2c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1529344173594-5f748ed24b2c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Xavier  Coiffic","source":"unsplash","link":"https://unsplash.com/photos/EYVQ5dM4dKg","text_color":"light"},{"small":"https://images.unsplash.com/photo-1468753613798-cfa7e7f0e5cf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1468753613798-cfa7e7f0e5cf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Branislav Knappek","source":"unsplash","link":"https://unsplash.com/photos/542ILIJoFJ8","text_color":"light"},{"small":"https://images.unsplash.com/photo-1477696957384-3b1d731c4cff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1477696957384-3b1d731c4cff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Noah Silliman","source":"unsplash","link":"https://unsplash.com/photos/01Qqkfz-ck8","text_color":"light"},{"small":"https://images.unsplash.com/photo-1544077960-604201fe74bc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1544077960-604201fe74bc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Andre Benz","source":"unsplash","link":"https://unsplash.com/photos/e4xOmzd8vzg","text_color":"light"},{"small":"https://images.unsplash.com/photo-1490750967868-88aa4486c946?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1490750967868-88aa4486c946?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Sergey Shmidt","source":"unsplash","link":"https://unsplash.com/photos/koy6FlCCy5s","text_color":"light"},{"small":"https://images.unsplash.com/photo-1459664018906-085c36f472af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1459664018906-085c36f472af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Erol Ahmed","source":"unsplash","link":"https://unsplash.com/photos/aIYFR0vbADk","text_color":"light"},{"small":"https://images.unsplash.com/photo-1526275750900-6961d302a565?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1526275750900-6961d302a565?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Tom Grimbert (@tomgrimbert)","source":"unsplash","link":"https://unsplash.com/photos/GkBqGIySm5Q","text_color":"light"},{"small":"https://images.unsplash.com/photo-1541100242370-4d536228f2a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1541100242370-4d536228f2a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Max Ostrozhinskiy","source":"unsplash","link":"https://unsplash.com/photos/4sZfoo0awos","text_color":"light"},{"small":"https://images.unsplash.com/photo-1529801877115-8a69a227fcc0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1529801877115-8a69a227fcc0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Sifan Liu","source":"unsplash","link":"https://unsplash.com/photos/Ry6Imrao4hE","text_color":"light"},{"small":"https://images.unsplash.com/photo-1554176259-aa961fc32671?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1554176259-aa961fc32671?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Tyler Lastovich","source":"unsplash","link":"https://unsplash.com/photos/ddLiNMqWAOM","text_color":"light"},{"small":"https://images.unsplash.com/photo-1529164114-6b1bd6f5cc91?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1529164114-6b1bd6f5cc91?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Jason Leung","source":"unsplash","link":"https://unsplash.com/photos/KmKAk86LLgc","text_color":"light"},{"small":"https://images.unsplash.com/photo-1538947378928-4561e14354fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1538947378928-4561e14354fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Madara Parma","source":"unsplash","link":"https://unsplash.com/photos/5lgC0sAa6Gg","text_color":"light"},{"small":"https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"NASA","source":"unsplash","link":"https://unsplash.com/photos/yZygONrUBe8","text_color":"light"},{"small":"https://images.unsplash.com/photo-1549880181-7827bc088ad9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1549880181-7827bc088ad9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Zhang JR","source":"unsplash","link":"https://unsplash.com/photos/vWIDTvXtGCk","text_color":"light"},{"small":"https://images.unsplash.com/photo-1528164344705-47542687000d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1528164344705-47542687000d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Manuel Cosentino","source":"unsplash","link":"https://unsplash.com/photos/n--CMLApjfI","text_color":"light"},{"small":"https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Qingbao Meng","source":"unsplash","link":"https://unsplash.com/photos/01_igFr7hd4","text_color":"light"},{"small":"https://images.unsplash.com/flagged/photo-1554935897-1bb0d260620a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/flagged/photo-1554935897-1bb0d260620a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Garrett Patz","source":"unsplash","link":"https://unsplash.com/photos/Ilu1Vv6EYds","text_color":"light"},{"small":"https://images.unsplash.com/photo-1554147090-e1221a04a025?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1554147090-e1221a04a025?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"John Fowler","source":"unsplash","link":"https://unsplash.com/photos/RsRTIofe0HE","text_color":"light"},{"small":"https://images.unsplash.com/photo-1496768050990-568b4d02ec18?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1496768050990-568b4d02ec18?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"George Tsapakis","source":"unsplash","link":"https://unsplash.com/photos/gB6c0iVrfAE","text_color":"light"},{"small":"https://images.unsplash.com/photo-1548919973-5cef591cdbc9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1548919973-5cef591cdbc9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"Denys Nevozhai","source":"unsplash","link":"https://unsplash.com/photos/D8iZPlX-2fs","text_color":"light"},{"small":"https://images.unsplash.com/photo-1552152370-fb05b25ff17d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=50&fm=jpg&crop=entropy&cs=tinysrgb&w=400","full":"https://images.unsplash.com/photo-1552152370-fb05b25ff17d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjYzODA2fQ&q=60&fm=jpg&crop=entropy&cs=tinysrgb&w=2250&fit=max","credit":"asoggetti","source":"unsplash","link":"https://unsplash.com/photos/PdGBci-4jR8","text_color":"light"},{"small":"https://live.staticflickr.com/4240/34943640193_c2a25d399e.jpg","full":"https://live.staticflickr.com/4240/34943640193_fe52e","credit":"hpd-fotografy","source":"flickr","link":"https://www.flickr.com/photos/by_hpd/34943640193/","text_color":"light"}],
-        monoColors = [
-            {color: "#C3ACEA", text_color: "light"},
-            {color: "#FFC5CC", text_color: "light"},
-            {color: "#F6D863", text_color: "light"},
-            {color: "#FCF3CA", text_color: "dark"},
-            {color: "#B9E4C9", text_color: "light"},
-            {color: "#90F3E8", text_color: "light"},
-            {color: "#8FCAF2", text_color: "light"},
-            {color: "#293990", text_color: "light"},
-            {color: "#191D2D", text_color: "light"},
-            {color: "#111111", text_color: "light"},
-            {color: "#F5F5F5", text_color: "dark"},
+        let monoColors = [
+            {id:1, color: "#C3ACEA", text_color: "light"},
+            {id:2, color: "#FFC5CC", text_color: "light"},
+            {id:3, color: "#F6D863", text_color: "light"},
+            {id:4, color: "#FCF3CA", text_color: "dark"},
+            {id:5, color: "#B9E4C9", text_color: "light"},
+            {id:6, color: "#90F3E8", text_color: "light"},
+            {id:7, color: "#8FCAF2", text_color: "light"},
+            {id:8, color: "#293990", text_color: "light"},
+            {id:9, color: "#191D2D", text_color: "light"},
+            {id:10, color: "#111111", text_color: "light"},
+            {id:11, color: "#F5F5F5", text_color: "dark"},
         ];
         store = await self.getStore();
         let now = new Date().getTime(),
-            lastFetched = store['photoLastFetchedDate'] || 0,
-            photoRotation = store['photoRotation'] || true,
+            photoRotation = store['photoRotation'],
             // photos = localStorage.getItem('photos') || [],
             bgType = store['bgType'] || 'default',
             bg = store['bg'];
         // request photos and cache
-        if ( lastFetched < now - (7*24*60*60*1000) || photos.length < 32 ){
-            let res = await $.ajax({
-                methods:'GET',
-                url: 'http://www.yuiapi.com/api/v1/fika/background'
-            });
-            photos = res.data;
+        let res = await $.ajax({
+            methods:'GET',
+            url: 'http://www.yuiapi.com/api/v1/fika/background?page_index=1&page_size=32'
+        });
+        photos = res.data.list;
+        if (bg && store['bgType'] === 'photo' && photos.filter(x => x.id === bg['id']).length === 0){
+            photos.unshift(bg)
         }
-        let cachedPhotoIndex = 0
-        let interval = setInterval(()=>{
-            let src = photos[cachedPhotoIndex]
-            if (src){
-                $('<img/>')[0].src = photos[cachedPhotoIndex].full;
-                cachedPhotoIndex ++
-            } else {
-                clearInterval(interval)
+        if (photos.length > res.data.row_count){
+            morePhotosAvailable = false
+        }
+        // $('<img/>')[0].src = photos[cachedPhotoIndex].full;
+        if ( bgType === 'photo' && photoRotation === true ){
+            let random = bg;
+            while (random === bg){
+                let randomIndex = Math.round(Math.random()*(photos.length-1));
+                random = photos[randomIndex]
             }
-        }, 10000)
-        localStorage.setItem('photos', JSON.stringify(photos));
-        if ( photoRotation === true ){
-            if (!bg){
-                bg = 0
-            } else {
-                let randomIndex = bg;
-                while (randomIndex === bg){
-                    randomIndex = Math.round(Math.random()*(photos.length-1));
-                }
-                bg = randomIndex;
-                bgType = 'photo'
-            }
+            bg = random;
         }
         // autopilot whitelist
         let whiteList = await this.fetchAutopilotWhitelist();

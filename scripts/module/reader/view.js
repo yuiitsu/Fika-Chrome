@@ -36,7 +36,7 @@ App.view.extend('reader', function() {
                 <div class="fill">Default</div>
             </div>
             {{ for var i in data['value'] }}
-            <div class="fika-photo-grid-item" data-type="{{ data['type'] }}" data-index="{{ i }}">
+            <div class="fika-photo-grid-item" data-type="{{ data['type'] }}" data-index="{{ i }}" data-id="{{ data['value'][i]['id'] }}">
                 <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                 {{ if data['type'] === 'photo' }}
                 <img class="fill" src="{{ data['value'][i]['small'] }}"/>
