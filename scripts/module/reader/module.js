@@ -95,7 +95,15 @@ App.module.extend('reader', function() {
 			}
             // change class name for buttons
 			$(`[data-sel^='${prop}']`).removeClass('active');
-			$(`[data-sel='${data}']`).addClass('active')
+			$(`[data-sel='${data}']`).addClass('active');
+			// ga events
+			chrome.extension.sendMessage({
+				'method': 'sendGA',
+				'data': {
+					type: 'event',
+					p: [prop, val, null]
+				}
+			});
         }
 		// set theme from storage
 		setAppearance('size-' + settings['size'].val);
@@ -168,6 +176,13 @@ App.module.extend('reader', function() {
 					let data = store['monoColors'][index];
 					switchColor(data, index);
 				}
+				chrome.extension.sendMessage({
+					'method': 'sendGA',
+					'data': {
+						type: 'event',
+						p: ['bg-'+type, type === 'photo' ? data.link : data.color]
+					}
+				});
 			}
 		}
 		// load image
@@ -234,6 +249,14 @@ App.module.extend('reader', function() {
 				bindRemove();
 				updateLocalCheck();
 				postUpdate('add');
+				// ga event
+				chrome.extension.sendMessage({
+					'method': 'sendGA',
+					'data': {
+						type: 'event',
+						p: ['ap-whitelist', domain]
+					}
+				});
 			}
 		}
 		function remove(domain){
@@ -385,6 +408,14 @@ App.module.extend('reader', function() {
                 } else if (el.webkitRequestFullScreen) {
                     el.webkitRequestFullScreen();
                 }
+				// ga event
+				chrome.extension.sendMessage({
+					'method': 'sendGA',
+					'data': {
+						type: 'event',
+						p: ['fullscreen', 'on']
+					}
+				});
             } else {
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
@@ -420,10 +451,24 @@ App.module.extend('reader', function() {
         $('#fika-twitter-share').click(function () {
             const url = encodeURI(`https://twitter.com/intent/tweet?text=${document.title} | #SharedFromFika &url=${window.location.href}`).replace(/#/g,'%23');
             window.open(url, '_blank', 'width=720, height=600');
+			chrome.extension.sendMessage({
+				'method': 'sendGA',
+				'data': {
+					type: 'social',
+					p: ['twitter', 'share', window.location.href]
+				}
+			});
         })
         $('#fika-facebook-share').click(function(){
             const url = encodeURI(`https://www.facebook.com/sharer/sharer.php?title=${document.title} ${window.location.href} | shared from Fika&u=${window.location.href}`).replace(/#/g,'%23');
             window.open(url, '_blank', 'width=720, height=600');
+			chrome.extension.sendMessage({
+				'method': 'sendGA',
+				'data': {
+					type: 'social',
+					p: ['facebook', 'share', window.location.href]
+				}
+			});
         });
 		$('.fika-share-to-unlock-btn').click(function () {
 			let type = $(this).attr('data-type');
@@ -457,6 +502,13 @@ App.module.extend('reader', function() {
 			}, 500)
 			self.toggleMenu(false);
 		}
+		chrome.extension.sendMessage({
+			'method': 'sendGA',
+			'data': {
+				type: 'event',
+				p: ['beta-access', type]
+			}
+		});
 	}
 
     this.feedback = function () {

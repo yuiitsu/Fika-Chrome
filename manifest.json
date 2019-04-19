@@ -70,7 +70,7 @@
         "*.ttf",
         "images/*"
     ],
-    "content_security_policy":"script-src 'self' https://connect.facebook.net; object-src 'self'",
+    "content_security_policy":"script-src 'self' https://www.google-analytics.com; object-src 'self'",
     "oauth2": {
         "client_id": "386130166125-uoa0kfcm866v0k5l2mlddenj5fnpobmu.apps.googleusercontent.com",
         "scopes": [

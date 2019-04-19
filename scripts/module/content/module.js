@@ -95,6 +95,12 @@ App.module.extend('content', function() {
             // if is available then execute autopilot
             this.readerMode();
             this.autopilot();
+        } else {
+            chrome.extension.sendMessage({
+                'method': 'sendGA',
+                'data': {type: 'exception',
+                    p:{exDescription: window.location.href}}
+            }, function () {});
         }
         //
         this.isReady();
@@ -543,6 +549,13 @@ App.module.extend('content', function() {
             });
             $(this).click(function () {
                 fikaApp.scrollTop = offsetTop
+                chrome.extension.sendMessage({
+                    'method': 'sendGA',
+                    'data': {
+                        type: 'timing',
+                        p: ['toc', 'click']
+                    }
+                });
             })
         });
         if (tocList.length > 0) {
@@ -621,9 +634,19 @@ App.module.extend('content', function() {
         });
         chrome.extension.sendMessage({
             'method': 'is_open',
-            'data': isOpen
+            'data': {isOpen}
         }, function () {});
+        chrome.extension.sendMessage({
+            'method': 'sendGA',
+            'data': {
+                type: 'pageview',
+                p: '/'+window.location.href
+            }
+        });
+        openedTimeStamp = new Date().getTime()/1000
     };
+
+    let openedTimeStamp = 0
 
     this.closeReaderMode = function() {
         let target = $('#fika-reader');
@@ -635,6 +658,18 @@ App.module.extend('content', function() {
             'method': 'is_open',
             'data': false
         }, function () {});
+        // 计算用户使用时间
+        if (openedTimeStamp !== 0){
+            let duration = new Date().getTime()/1000 - openedTimeStamp
+            console.log('duration', duration)
+            chrome.extension.sendMessage({
+                'method': 'sendGA',
+                'data': {
+                    type: 'timing',
+                    p: ['duration', 'use', duration]
+                }
+            });
+        }
     };
 
     this.sendFeedback = function(isMatch) {
@@ -663,11 +698,8 @@ App.module.extend('content', function() {
     this.isReady = function() {
         chrome.extension.sendMessage({
             'method': 'reader_ready',
-            'data': {
-                is_available: isAvailable,
-            }
-        }, function () {
-        });
+            'data': {is_available: isAvailable,}
+        }, function () {});
     };
 });
 
