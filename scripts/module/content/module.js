@@ -348,6 +348,9 @@ App.module.extend('content', function() {
             chileNodesLen = element.childNodes.length;
 
         // title
+        if (nodeName === 'H1') {
+            return false
+        }
         if (titleTags.indexOf(nodeName) !== -1 && !articleTitle) {
             if (element.innerText && element.innerText.length > 0) {
                 let pageTitleTarget = $('head title');
