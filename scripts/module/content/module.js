@@ -89,6 +89,12 @@ App.module.extend('content', function() {
             return false;
         }
 
+        //
+        let h1 = $('h1');
+        if (h1.length === 1) {
+            articleTitle = h1.text();
+        }
+
         this.findNextNodePro(root[0]);
         console.log(topElement);
         if (topElement && topElement.innerText.length > 300) {
@@ -104,6 +110,7 @@ App.module.extend('content', function() {
     this.findNextNodePro = function(element) {
         let nodeName = element.nodeName,
             parent = element.parentElement;
+
         if (nodeName === '#text') {
             let nodeValue = element.nodeValue.replace(/\n|\s|\r/g, '');
             if (nodeValue) {
@@ -325,7 +332,7 @@ App.module.extend('content', function() {
         let nodeName = element.nodeName,
             chileNodesLen = element.childNodes.length;
 
-        // filter
+        // title
         if (titleTags.indexOf(nodeName) !== -1 && !articleTitle) {
             if (element.innerText && element.innerText.length > 0) {
                 let pageTitleTarget = $('head title');
@@ -377,7 +384,6 @@ App.module.extend('content', function() {
                     src = attributes[i].nodeValue;
                 }
             }
-            console.log(element.outerHTML);
             let htmlString = element.outerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, '').replace(/width="(.+?)"/g, '').replace(/height="(.+?)"/g, '');
             if (element.offsetWidth <= 200) {
                 htmlString = htmlString.replace(/\s+/, ` style='height:${element.offsetHeight}px;width:${element.offsetWidth}px;'`);
@@ -505,6 +511,8 @@ App.module.extend('content', function() {
                     }
                 }
             // }
+            //
+            $(this).removeClass();
 
             if ($(this).attr('crossorigin') && $(this).attr('crossorigin') === 'anonymous') {
                 $(this).remove();
