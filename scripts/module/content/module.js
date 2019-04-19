@@ -663,7 +663,7 @@ App.module.extend('content', function() {
                     'method': 'sendGA',
                     'data': {
                         type: 'timing',
-                        p: ['duration', 'use', Math.round(duration)]
+                        p: ['duration', window.location.host, Math.round(duration)]
                     }
                 });
             }
