@@ -57,6 +57,7 @@ App.module.extend('background', function() {
         //     });
         //     return false;
         // });
+        self.initGA();
         chrome.runtime.setUninstallURL('https://forms.gle/XDMmfdceYsac9p4z8')
     };
 
@@ -156,6 +157,25 @@ App.module.extend('background', function() {
             'method': 'openReaderMode'
         }, function (response) {});
     };
+
+    this.initGA = function () {
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-138661141-1', 'auto')
+        ga('set', 'checkProtocolTask', null);
+        ga('require', 'displayfeatures');
+    }
+
+    this.sendGA = function (data, send_response) {
+        if (data.type === 'pageview' || data.type === 'exception'){
+            ga('send', data.type, data.p)
+        } else {
+            ga('send', data.type, data.p[0], data.p[1], data.p[2] || null)
+        }
+        send_response('')
+    }
 
     this.oauth = function(data, send_response){
         // check identity permission
@@ -340,11 +360,10 @@ App.module.extend('background', function() {
                 url: 'http://www.yuiapi.com/api/v1/fika/background'
             });
             photos = res.data;
-            console.log(photos)
         }
         let cachedPhotoIndex = 0
         let interval = setInterval(()=>{
-            let src = photos[cachedPhotoIndex].full
+            let src = photos[cachedPhotoIndex]
             if (src){
                 $('<img/>')[0].src = photos[cachedPhotoIndex].full;
                 cachedPhotoIndex ++
