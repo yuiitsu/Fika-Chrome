@@ -185,6 +185,16 @@ App.module.extend('reader', function() {
 				bgCont.removeClass('fika-bg-blur');
 				loading.hide();
 			}
+			photoObj.onerror = function () {
+				photoSrc.splice(index,1);
+				self.module.common.cache.set('photos', JSON.stringify(photoSrc));
+				self.view.display('reader', 'photos', {
+					value: photoSrc,
+					type:'photo'
+				}, $('.fika-photo-grid[data-tab="photo"]'));
+				store.bg = 0;
+				self.background();
+			}
 			credit.attr('href', data['link']);
 			credit.html(`photo by ${data['credit']} / ${data['source']}`);
 			credit.show();
