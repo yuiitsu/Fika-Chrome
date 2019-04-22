@@ -639,6 +639,10 @@ App.module.extend('content', function() {
 		if (location.href !== pageUrl) {
 			this.findArticlePro();
 		}
+		if (!isAvailable) {
+		    return false;
+        }
+		//
         let target = $('#fika-reader');
 		if (target.length === 0) {
             this.findArticlePro();
