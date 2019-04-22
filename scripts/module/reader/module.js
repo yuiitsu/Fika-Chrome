@@ -460,7 +460,7 @@ App.module.extend('reader', function() {
 			self.toggleMenu(false)
         });
         // hover
-/*        let hoverTimer;
+        let hoverTimer;
         toolbar.mouseleave(function () {
             hoverTimer = setTimeout(()=>{
                 $(this).removeClass('fika-tool-on')
@@ -469,7 +469,7 @@ App.module.extend('reader', function() {
         });
         toolbar.mouseenter(function () {
             clearTimeout(hoverTimer)
-        });*/
+        });
 
         //close
         // $('#fika-exit').click(function () {
