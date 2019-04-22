@@ -362,15 +362,17 @@ App.module.extend('content', function() {
         let nodeName = element.nodeName,
             chileNodesLen = element.childNodes.length;
 
-        // //
-        // let attributes = element.attributes,
-        //     attributesLen = attributes.length;
-        // for (let i = 0; i < attributesLen; i++) {
-        //     let nodeValue = attributes[i].nodeValue.toLowerCase();
-        //     if (nodeValue.indexOf('content') !== -1 || nodeValue.indexOf('article') !== -1) {
-        //         articleElementRate[key] += 20;
-        //     }
-        // }
+        //
+        if (element.attributes) {
+            let attributes = element.attributes,
+                attributesLen = attributes.length;
+            for (let i = 0; i < attributesLen; i++) {
+                if (attributes[i].nodeName === 'style' && attributes[i].nodeValue.indexOf('display:none') !== -1) {
+                    console.log(attributes[i].nodeValue);
+                    return false;
+                }
+            }
+        }
 
         // title
         if (nodeName === 'H1') {
