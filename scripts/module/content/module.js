@@ -430,9 +430,9 @@ App.module.extend('content', function() {
                 }
             }
             let htmlString = element.outerHTML.replace(/class="(.+?)"/g, '').replace(/style="(.+?)"/g, '').replace(/width="(.+?)"/g, '').replace(/height="(.+?)"/g, '');
-            if (element.offsetWidth <= 200) {
-                htmlString = htmlString.replace(/\s+/, ` style='height:${element.offsetHeight}px;width:${element.offsetWidth}px;'`);
-            }
+            // if (element.offsetWidth <= 200) {
+            //     htmlString = htmlString.replace(/\s+/, ` style='height:${element.offsetHeight}px;width:${element.offsetWidth}px;'`);
+            // }
             articleHtml.push(htmlString);
             return true;
         } else {
