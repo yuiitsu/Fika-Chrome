@@ -42,7 +42,8 @@ App.module.extend('content', function() {
             'qrcode',
             'clearfix',
             'thumb',
-            'tags'
+            'tags',
+            'post-header'
         ],
         titleTags = ['H1', 'H2', 'H3'],
         topArticleElement = [],
@@ -361,6 +362,16 @@ App.module.extend('content', function() {
         let nodeName = element.nodeName,
             chileNodesLen = element.childNodes.length;
 
+        // //
+        // let attributes = element.attributes,
+        //     attributesLen = attributes.length;
+        // for (let i = 0; i < attributesLen; i++) {
+        //     let nodeValue = attributes[i].nodeValue.toLowerCase();
+        //     if (nodeValue.indexOf('content') !== -1 || nodeValue.indexOf('article') !== -1) {
+        //         articleElementRate[key] += 20;
+        //     }
+        // }
+
         // title
         if (nodeName === 'H1') {
             return false
@@ -423,17 +434,16 @@ App.module.extend('content', function() {
             articleHtml.push(htmlString);
             return true;
         } else {
-            if (element.className === 'progressiveMedia js-progressiveMedia graf-image') {
-                console.log(element);
-            }
-            for (var i in excludeAttrName) {
-                try {
-                    if ((element.className && element.className.toLocaleLowerCase().indexOf(excludeAttrName[i]) !== -1
-                        || element.id && element.id.toLocaleLowerCase().indexOf(excludeAttrName[i]) !== -1)
-                        && element.className.toLocaleLowerCase().indexOf('article') === -1) {
-                        return false;
+            if (nodeName !== 'ARTICLE') {
+                for (var i in excludeAttrName) {
+                    try {
+                        if ((element.className && element.className.toLocaleLowerCase().indexOf(excludeAttrName[i]) !== -1
+                            || element.id && element.id.toLocaleLowerCase().indexOf(excludeAttrName[i]) !== -1)
+                            && (element.className.toLocaleLowerCase().indexOf('article') === -1 && element.nodeName !== 'ARTICLE')) {
+                            return false;
+                        }
+                    } catch (e) {
                     }
-                } catch (e) {
                 }
             }
             //
