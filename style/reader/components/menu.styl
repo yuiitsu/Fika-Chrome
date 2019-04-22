@@ -71,6 +71,9 @@ theme(input, 'input')
     height 400px
     sans-serif()
     overflow hidden
+    *
+      sans-serif()
+
     &-on
       transform scale(1)
       opacity 1
@@ -326,3 +329,15 @@ theme(input, 'input')
   #fika-login
     div + div
       font-size: 11px
+
+  .fika-whats-new
+    position relative
+    &:after
+      content:''
+      height 6px
+      width 6px
+      border-radius 50%
+      background: $primary.dark
+      position absolute
+      bottom 4px
+      right 4px

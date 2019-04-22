@@ -512,6 +512,23 @@ App.module.extend('reader', function() {
 				}, function () {});
 			}
 		})
+		//whats new dot
+		if (store.whatsnew.length > 0){
+			$('[data-whats-new]').each(function () {
+				let dataSet = $(this).attr('data-whats-new');
+				if (store.whatsnew.includes(dataSet)){
+					$(this).addClass('fika-whats-new');
+				}
+				$(this).click(function () {
+					$(this).removeClass('fika-whats-new');
+					let index = store.whatsnew.indexOf($(this).attr('data-whats-new'));
+					if (index !== -1){
+						store.whatsnew.splice(index, 1);
+						chrome.storage.sync.set({whatsnew: store.whatsnew});
+					}
+				})
+			})
+		}
     };
 
     this.shareToUnlock = function (type) {
@@ -685,6 +702,7 @@ App.module.extend('reader', function() {
 		if (store.user && store.user.type === 'beta'){
 			$('.fika-disabled').removeClass('fika-disabled');
 			$('input').prop('disabled', false);
+			$('.fika-share-fika').css('display','flex');
 			self.background();
 			self.autopilot();
 		} else if (pendingToShare){
@@ -700,6 +718,7 @@ App.module.extend('reader', function() {
 		$('.fika-photo-grid-item').unbind('click');
 		$('.fika-photo-grid-tab').unbind('click');
 		$('.fika-app').removeClass('fika-bg-on');
+		$('.fika-share-fika').hide();
 		this.loginClick();
 		$('#fika-loading-login').hide();
 		store.user = null;

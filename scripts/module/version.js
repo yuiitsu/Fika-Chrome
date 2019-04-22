@@ -11,7 +11,9 @@ const Version = {
      */
     updateLogs: {
         'v0.6.0': [
-            ''
+            'User authentication',
+            'Photo & color background',
+            'Autopilot mode'
         ],
         'v0.5.0': [
             'Highlight code syntax',

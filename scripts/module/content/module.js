@@ -671,7 +671,7 @@ App.module.extend('content', function() {
                 'method': 'sendGA',
                 'data': {
                     type: 'pageview',
-                    p: window.location.host
+                    p: '/on'
                 }
             });
             openedTimeStamp = new Date().getTime()
