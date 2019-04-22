@@ -510,7 +510,7 @@ App.module.extend('content', function() {
         let title = articleTitle ? articleTitle : $('head title').text();
 
         // get favicon
-        let favicon = '',
+        let favicon,
             headLinks = document.getElementsByTagName('link')
         for (let i of headLinks){
             let rel = i.getAttribute('rel')

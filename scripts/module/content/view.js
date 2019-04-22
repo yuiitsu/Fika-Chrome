@@ -75,8 +75,10 @@ App.view.extend('content', function() {
                         <div class="fika-paper">
                             <div class="fika-article size-medium font-geogia">
                                 <div class="fika-article-domain">
-                                    <img src="{{ data['favicon'] }}"/>
-                                    {{ data['domain'] }}
+                                    {{ if data['favicon'] }}
+                                        <img src="{{ data['favicon'] }}"/>
+                                    {{ end }}
+                                    <span>{{ data['domain'] }}</span>
                                 </div>
                                 <h1 class="fika-article-title">
                                     {{ data['title'] }}
