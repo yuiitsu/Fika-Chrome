@@ -42,6 +42,7 @@ App.module.extend('content', function() {
             'qrcode',
             'clearfix',
             'thumb',
+            'tags'
         ],
         titleTags = ['H1', 'H2', 'H3'],
         topArticleElement = [],
@@ -105,7 +106,7 @@ App.module.extend('content', function() {
         }
 
         this.findNextNodePro(root[0]);
-        console.log(topElement);
+        console.log(topElement, topPoint);
         if (topElement && topElement.innerText.length > 300) {
             isAvailable = true;
             // if is available then execute autopilot
@@ -155,7 +156,7 @@ App.module.extend('content', function() {
 
         //
         if (element.nodeName === 'ARTICLE' && element.innerText.length > 400) {
-            element['fp'] += 15000;
+            element['fp'] = element.innerText.length;
         }
         //
         // if (nodeName === 'ARTICLE') {
