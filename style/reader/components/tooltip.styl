@@ -1,0 +1,45 @@
+/*tooltip($theme)
+  background: $theme.text
+  color: $theme.text
+  &::placeholder
+    color: rgba($theme.text, 0.4)
+
+theme(tooltip, "tooltip")*/
+
+/* tooltip */
+
+$tool-tip-bg = tint($themes.licorice.paper, 8%)
+
+.fika-app
+  .fika-tooltip
+    position: absolute
+    background: $tool-tip-bg
+    color: #fff
+    font-size:13px
+    padding: 6px 8px
+    white-space: nowrap
+    top: 40px
+    radius(4px)
+    opacity: 0
+    pointer-events none
+    $z-index(tool)
+    &:before
+      content:''
+      position:absolute
+      top:-10px
+      left: 50%;
+      margin-left: -5px
+      border: 5px solid transparent;
+      border-bottom: 5px solid $tool-tip-bg;
+      width: 0;
+      height: 0;
+
+  button:hover
+    overflow: visible;
+    .fika-tooltip
+      opacity 1 !important
+
+button.fika-pro-item
+  &.fika-disabled
+    .fika-tooltip
+      display none;

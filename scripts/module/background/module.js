@@ -388,7 +388,8 @@ App.module.extend('background', function() {
             photoRotation = store['photoRotation'],
             // photos = localStorage.getItem('photos') || [],
             bgType = store['bgType'] || 'default',
-            bg = store['bg'];
+            bg = store['bg'],
+            whatsnew = store['whatsnew'] || ['settings','autopilot-local'];
         // request photos and cache
         let res = await $.ajax({
             methods:'GET',
@@ -418,7 +419,8 @@ App.module.extend('background', function() {
             photoRotation: photoRotation,
             monoColors: monoColors,
             bgType: bgType,
-            bg: bg
+            bg: bg,
+            whatsnew: whatsnew
         })
     };
 });

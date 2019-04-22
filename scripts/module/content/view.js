@@ -18,9 +18,11 @@ App.view.extend('content', function() {
                             <svg class="fika-icon" viewBox="0 0 24 24">
                                 <path d="M4 13c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0-8c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm4 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zm0 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zM7 8c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1zm-3 5c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0-8c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm4 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zm0 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zM7 8c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1z"/>
                             </svg>
+                            <div class="fika-tooltip">TOC</div>
                         </button>
-                        <button class="fika-btn fika-btn-icon" id="fika-settings">
+                        <button class="fika-btn fika-btn-icon" id="fika-settings" data-whats-new="settings">
                             <svg class="fika-icon" width="20px" height="20px" viewBox="0 0 20 20"><path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/></svg>
+                            <div class="fika-tooltip">Settings</div>
                         </button>
                         <!--appearance settings-->
                         <div class="fika-menu"></div>
@@ -37,13 +39,15 @@ App.view.extend('content', function() {
                             <svg class="fika-icon" viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>
                             <!--fs-->
                             <svg class="fika-icon" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                            <div class="fika-tooltip">Fullscreen</div>
                         </button>
                         <!--autopilot-->
-                        <button class="fika-btn fika-btn-icon fika-pro-item fika-disabled" id="fika-autopilot-local">
-                            <!--on-->
+                        <button class="fika-btn fika-btn-icon fika-pro-item fika-disabled" id="fika-autopilot-local" data-whats-new="autopilot-local">
+                            <!--on  .on-->
                           <svg class="fika-icon" viewBox="0 0 24 24"><path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1c.61 0 1.1-.49 1.1-1.1s-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z"/></svg>
                           <!--off-->
                           <svg class="fika-icon" viewBox="0 0 24 24"><path d="M18 6l-2.91 6.26 5.25 5.25C21.39 15.93 22 14.04 22 12c0-5.52-4.48-10-10-10-2.04 0-3.93.61-5.51 1.66l5.25 5.25L18 6zM2.81 5.64l.85.85c-1.37 2.07-2 4.68-1.48 7.45.75 3.95 3.92 7.13 7.88 7.88 2.77.52 5.38-.1 7.45-1.48l.85.85c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L4.22 4.22c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.03 0 1.42zm6.1 6.1l3.35 3.35L6 18l2.91-6.26z"/></svg>
+                          <div class="fika-tooltip">Autopilot</div>
                         </button>
                     </div>
                     <div class="fika-drawer">
@@ -142,7 +146,26 @@ App.view.extend('content', function() {
                 <div class="fika-menu-nav-item">Theme</div>
                 <div class="fika-menu-nav-item fika-pro">Autopilot</div>
                 <div class="flex-fill"></div>
-                <a class="fika-menu-nav-item small" href="http://fika.io/updatelog" target="_blank">What's new</a>
+                <a class="fika-menu-nav-item small flex-y-center fika-share-fika"
+                data-type="fb" style="margin-bottom: -6px;margin-left: -4px" href="https://www.facebook.com/dialog/feed?app_id=393950891439557&display=popup&link=https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">
+                    <svg  height="20px" width="20px" viewBox="0 0 32 32" fill="#fff">
+                    <path class="st0" d="M21.2,9.2h-2c-1.5,0-1.9,0.8-1.9,1.8v2.5h3.8l-0.8,3.7h-3l0.1,8.9h-3.7v-8.8h-3v-3.8h3v-3c0-3.1,2-4.6,4.7-4.6
+                        C19.9,5.9,21,6,21.2,6V9.2z"/>
+                    </svg>
+                    Facebook
+                </a>
+                <a class="fika-menu-nav-item small flex-y-center fika-share-fika"
+                 data-type="tw" style="margin-bottom: -6px;margin-left: -4px" href="https://twitter.com/intent/retweet?tweet_id=1117715831540965376" target="_blank">
+                    <svg height="20px" width="20px" viewBox="0 0 32 32" fill="#fff">
+                    <path class="st0" d="M23.9,11.9c0,0.2,0,0.3,0,0.5c0,5.3-4.1,11.4-11.4,11.4c-2.2,0-4.4-0.7-6.2-1.8c0.3,0.1,0.7,0.1,1,0.1
+                        c1.9,0,3.7-0.7,5-1.7c-1.7,0-3.3-1.2-3.8-2.8c0.2,0.1,0.5,0.1,0.7,0.1c0.4,0,0.7,0,1.1-0.1c-1.9-0.4-3.3-2-3.3-3.9v-0.1
+                        c0.5,0.3,1.1,0.5,1.8,0.5c-1.1-0.7-1.8-2-1.8-3.3c0-0.7,0.2-1.4,0.6-2c2,2.4,4.9,4,8.4,4.1c0-0.3-0.1-0.6-0.1-0.9c0-2.2,1.8-4,4-4
+                        C21,8,22,8.5,22.8,9.3c0.9-0.2,1.7-0.5,2.5-1c-0.3,0.9-1,1.7-1.8,2.2c0.8,0,1.5-0.2,2.3-0.6C25.2,10.8,24.6,11.4,23.9,11.9z"/>
+                    </svg>
+                    Twitter
+                </a>       
+           
+                <div class="fika-menu-nav-item small mb-1" href="http://fika.io/updatelog" target="_blank">What's new</div>
                 <div class="fika-menu-nav-item static small" style="font-size: 12px;
     line-height: 16px;">
                     <div class="fika-pro" style=" margin-left: -4px;"></div>
@@ -199,7 +222,7 @@ App.view.extend('content', function() {
                         <div class="fika-pro">Autopilot</div>
                         <div class="fika-menu-label-desc">Automatically open Fika reader mode on whitelisted websites</div>
                     </div>
-                    <div class="fika-menu-label d-flex">
+                    <div class="fika-menu-label d-flex fika-align-center">
                         <svg width="24" height="24" class="fika-icon" style="opacity: 0.7;min-width:24px;" viewBox="0 0 24 24"><path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1c.61 0 1.1-.49 1.1-1.1s-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z"/></svg>
                         <div class="ml-1 fika-menu-label-desc" style="margin-top: 0px;">Tip: whitelist current website</div>
                     </div>
