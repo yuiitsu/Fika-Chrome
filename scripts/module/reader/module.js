@@ -693,6 +693,7 @@ App.module.extend('reader', function() {
 		$('#fika-loading-login').hide();
 		if (store.user ){
 			$('#fika-user-expand').click(function () {
+				$(this).toggleClass('fika-user-expand-on')
 				$('#fika-logout').toggle();
 			});
 			$('#fika-logout').click(function () {

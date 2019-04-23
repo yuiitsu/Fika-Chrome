@@ -164,8 +164,8 @@ App.module.extend('background', function() {
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-        ga('create', 'UA-138661141-1', 'auto')
-        // ga('create', 'UA-138661141-2', 'auto')
+        // ga('create', 'UA-138661141-1', 'auto')
+        ga('create', 'UA-138661141-2', 'auto')
         ga('set', 'checkProtocolTask', null);
         ga('require', 'displayfeatures');
     }
@@ -202,42 +202,46 @@ App.module.extend('background', function() {
     };
 
     this.loginUser = async function(){
-        let userInfo = await new Promise((resolve)=>{
-            chrome.identity.getAuthToken({interactive: true}, function(token) {
-                $.ajax({
-                    url: "https://www.googleapis.com/oauth2/v1/userinfo?fields=email,family_name,gender,given_name,id,locale,name,picture",
-                    headers: { Authorization: 'Bearer '+ token},
-                    type: "GET",
-                    success: (data)=> resolve(data)
+        try {
+            let userInfo = await new Promise((resolve)=>{
+                chrome.identity.getAuthToken({interactive: true}, function(token) {
+                    $.ajax({
+                        url: "https://www.googleapis.com/oauth2/v1/userinfo?fields=email,family_name,gender,given_name,id,locale,name,picture",
+                        headers: { Authorization: 'Bearer '+ token},
+                        type: "GET",
+                        success: (data)=> resolve(data)
+                    });
                 });
             });
-        });
-        let res = await $.ajax({
-            url: "http://www.yuiapi.com/api/v1/third_part/google/app",
-            data: Object.assign({avatar: userInfo['picture']}, userInfo),
-            type: "POST"
-        });
-        if (res.code === 0){
-            const data = res.data;
-            let user = {
-                googleId: data['account'],
-                avatar: userInfo['picture'],
-                fullName: userInfo['name'],
-                name: userInfo['given_name'],
-                token: data['token'],
-                userId: data['user_id'],
-                type: data['user_type']
-            };
-            store = await self.getStore();
-            store['user'] = user;
-            store['autopilotWhitelist'] = await this.fetchAutopilotWhitelist();
-            chrome.storage.sync.set({user}, function(){});
-            chrome.tabs.query({active: true}, function(tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, {
-                    'method': 'loginUser',
-                    'data': store
-                }, function (response) {});
-            })
+            let res = await $.ajax({
+                url: "http://www.yuiapi.com/api/v1/third_part/google/app",
+                data: Object.assign({avatar: userInfo['picture']}, userInfo),
+                type: "POST"
+            });
+            if (res.code === 0){
+                const data = res.data;
+                let user = {
+                    googleId: data['account'],
+                    avatar: userInfo['picture'],
+                    fullName: userInfo['name'],
+                    name: userInfo['given_name'],
+                    token: data['token'],
+                    userId: data['user_id'],
+                    type: data['user_type']
+                };
+                store = await self.getStore();
+                store['user'] = user;
+                store['autopilotWhitelist'] = await this.fetchAutopilotWhitelist();
+                chrome.storage.sync.set({user}, function(){});
+                chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                    chrome.tabs.sendMessage(tabs[0].id, {
+                        'method': 'loginUser',
+                        'data': store
+                    }, function (response) {});
+                })
+            }
+        } catch(err){
+            console.log(err)
         }
     };
     
@@ -250,7 +254,7 @@ App.module.extend('background', function() {
                 if (res.code === 0){
                     store['user'] = Object.assign(store.user, {type: res.data.user_type});
                     chrome.storage.sync.set({user: store['user']}, function(){});
-                    chrome.tabs.query({active: true}, function(tabs) {
+                    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                         chrome.tabs.sendMessage(tabs[0].id, {
                             'method': 'loginUser',
                             'data': store
@@ -274,7 +278,7 @@ App.module.extend('background', function() {
                 if (res.code === 0){
                     store.user = Object.assign(store.user, {type: 'beta'})
                     chrome.storage.sync.set({user: store.user})
-                    chrome.tabs.query({active: true}, function(tabs) {
+                    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                         chrome.tabs.sendMessage(tabs[0].id, {
                             'method': 'loginUser',
                             'data': store
@@ -353,7 +357,7 @@ App.module.extend('background', function() {
                     if (photos.length > data.row_count){
                         morePhotosAvailable = false
                     }
-                    chrome.tabs.query({active: true}, function(tabs) {
+                    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                         chrome.tabs.sendMessage(tabs[0].id, {
                             'method': 'updatePhotoSrc',
                             'data': photos
@@ -383,44 +387,49 @@ App.module.extend('background', function() {
             {id:10, color: "#111111", text_color: "light"},
             {id:11, color: "#F5F5F5", text_color: "dark"},
         ];
-        store = await self.getStore();
-        let now = new Date().getTime(),
-            photoRotation = store['photoRotation'],
-            // photos = localStorage.getItem('photos') || [],
-            bgType = store['bgType'] || 'default',
-            bg = store['bg'],
-            whatsnew = store['whatsnew'] || ['settings','autopilot-local'];
-        // request photos and cache
-        let res = await $.ajax({
-            methods:'GET',
-            url: 'http://www.yuiapi.com/api/v1/fika/background?page_index=1&page_size=32'
-        });
-        photos = res.data.list;
-        if (bg && store['bgType'] === 'photo' && photos.filter(x => x.id === bg['id']).length === 0){
-            photos.unshift(bg)
-        }
-        if (photos.length > res.data.row_count){
-            morePhotosAvailable = false
-        }
-        // $('<img/>')[0].src = photos[cachedPhotoIndex].full;
-        if ( bgType === 'photo' && photoRotation === true ){
-            let random = bg;
-            while (random === bg){
-                let randomIndex = Math.round(Math.random()*(photos.length-1));
-                random = photos[randomIndex]
+        try {
+            store = await self.getStore();
+            let now = new Date().getTime(),
+                photoRotation = store['photoRotation'],
+                // photos = localStorage.getItem('photos') || [],
+                bgType = store['bgType'] || 'default',
+                bg = store['bg'],
+                whatsnew = store['whatsnew'] || ['settings','autopilot-local'];
+            // request photos and cache
+            let res = await $.ajax({
+                methods:'GET',
+                url: 'http://www.yuiapi.com/api/v1/fika/background?page_index=1&page_size=32'
+            });
+            photos = res.data.list;
+            if (bg && store['bgType'] === 'photo' && photos.filter(x => x.id === bg['id']).length === 0){
+                photos.unshift(bg)
             }
-            bg = random;
+            if (photos.length > res.data.row_count){
+                morePhotosAvailable = false
+            }
+            // $('<img/>')[0].src = photos[cachedPhotoIndex].full;
+            if ( bgType === 'photo' && photoRotation === true ){
+                let random = bg;
+                while (random === bg){
+                    let randomIndex = Math.round(Math.random()*(photos.length-1));
+                    random = photos[randomIndex]
+                }
+                bg = random;
+            }
+            // autopilot whitelist
+            let whiteList = await this.fetchAutopilotWhitelist();
+            chrome.storage.sync.set({
+                autopilotWhitelist: whiteList,
+                photoLastFetchedDate: now,
+                photoRotation: photoRotation,
+                monoColors: monoColors,
+                bgType: bgType,
+                bg: bg,
+                whatsnew: whatsnew
+            })
+        } catch(err) {
+            console.log(err)
         }
-        // autopilot whitelist
-        let whiteList = await this.fetchAutopilotWhitelist();
-        chrome.storage.sync.set({
-            autopilotWhitelist: whiteList,
-            photoLastFetchedDate: now,
-            photoRotation: photoRotation,
-            monoColors: monoColors,
-            bgType: bgType,
-            bg: bg,
-            whatsnew: whatsnew
-        })
+    
     };
 });

@@ -121,7 +121,7 @@ App.view.extend('content', function() {
    
                         </div>
                         <div class="fika-footer">
-                            <a class="fika-footer-logo" href="https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">
+                            <a class="fika-footer-logo" href="http://fika.io" target="_blank">
                                 <img style="" src="{{ chrome.runtime.getURL('images/logo64.png') }}">
                                 Made with love by Fika
                             </a>
@@ -149,7 +149,7 @@ App.view.extend('content', function() {
                 <div class="fika-menu-nav-item fika-pro">Autopilot</div>
                 <div class="flex-fill"></div>
                 <a class="fika-menu-nav-item small flex-y-center fika-share-fika"
-                data-type="fb" style="margin-bottom: -6px;margin-left: -4px" href="https://www.facebook.com/dialog/feed?app_id=393950891439557&display=popup&link=https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">
+                data-type="fb" style="display:none;margin-bottom: -6px;margin-left: -4px" href="https://www.facebook.com/dialog/feed?app_id=393950891439557&display=popup&link=https://chrome.google.com/webstore/detail/fika-reader-mode/fbcdnjeoghampomjjaahjgjghdjdbbcj" target="_blank">
                     <svg class="fika-icon" height="20px" width="20px" viewBox="0 0 32 32">
                     <path class="st0" d="M21.2,9.2h-2c-1.5,0-1.9,0.8-1.9,1.8v2.5h3.8l-0.8,3.7h-3l0.1,8.9h-3.7v-8.8h-3v-3.8h3v-3c0-3.1,2-4.6,4.7-4.6
                         C19.9,5.9,21,6,21.2,6V9.2z"/>
@@ -157,7 +157,7 @@ App.view.extend('content', function() {
                     Share to Facebook
                 </a>
                 <a class="fika-menu-nav-item small flex-y-center fika-share-fika"
-                 data-type="tw" style="margin-bottom: -6px;margin-left: -4px" href="https://twitter.com/intent/retweet?tweet_id=1117715831540965376" target="_blank">
+                 data-type="tw" style="display:none;margin-bottom: -6px;margin-left: -4px" href="https://twitter.com/intent/retweet?tweet_id=1117715831540965376" target="_blank">
                     <svg class="fika-icon" height="20px" width="20px" viewBox="0 0 32 32">
                     <path class="st0" d="M23.9,11.9c0,0.2,0,0.3,0,0.5c0,5.3-4.1,11.4-11.4,11.4c-2.2,0-4.4-0.7-6.2-1.8c0.3,0.1,0.7,0.1,1,0.1
                         c1.9,0,3.7-0.7,5-1.7c-1.7,0-3.3-1.2-3.8-2.8c0.2,0.1,0.5,0.1,0.7,0.1c0.4,0,0.7,0,1.1-0.1c-1.9-0.4-3.3-2-3.3-3.9v-0.1
