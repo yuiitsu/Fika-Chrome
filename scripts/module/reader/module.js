@@ -250,7 +250,6 @@ App.module.extend('reader', function() {
 			type:'photo'
 		}, $('.fika-photo-grid[data-tab="photo"]'));
 		self.background()
-		console.log('more',data)
 	};
 
 	// autopilot
@@ -416,11 +415,9 @@ App.module.extend('reader', function() {
 
         $('#fika-settings').click(function (){
         	self.toggleMenu();
-        	if (store.user && store.user.type !== 'beta'){
-				chrome.extension.sendMessage({
-					'method': 'getUserType'
-				}, function () {});
-			}
+			chrome.extension.sendMessage({
+				'method': 'getUserStore'
+			}, function () {});
 		});
         $(document).mouseup(function(e) {
             let container = $(".fika-menu");
@@ -539,7 +536,6 @@ App.module.extend('reader', function() {
 			let win = window.open('https://twitter.com/intent/retweet?tweet_id=1117715831540965376', 'twitter_share', 'width=600, height=480');
 			let interval = setInterval(function(){
 				if (win.closed){
-					console.log(win)
 					chrome.extension.sendMessage({
 						'method': 'changeUserType'
 					}, function () {});
@@ -690,7 +686,6 @@ App.module.extend('reader', function() {
 		store = _store;
 		self.view.display('reader', 'userProfile', store.user , $('.fika-menu-login'));
 		this.loginClick();
-		console.log('store', store)
 		$('#fika-loading-login').hide();
 		if (store.user ){
 			$('#fika-user-expand').click(function () {
@@ -700,6 +695,10 @@ App.module.extend('reader', function() {
 			$('#fika-logout').click(function () {
 				self.logout()
 			});
+		} else {
+			$('.fika-app').removeClass('fika-bg-on');
+			$('.fika-share-fika').hide();
+			$('.fika-pro-item').addClass('fika-disabled');
 		}
 		if (store.user && store.user.type === 'beta'){
 			$('.fika-disabled').removeClass('fika-disabled');
@@ -724,7 +723,7 @@ App.module.extend('reader', function() {
 		this.loginClick();
 		$('#fika-loading-login').hide();
 		store.user = null;
-		chrome.storage.sync.set({user: null, autopilotWhitelist: []})
+		chrome.storage.sync.set({user: null})
 	};
 	this.loginClick = function () {
 		$('#fika-login').click(function () {

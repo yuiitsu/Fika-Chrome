@@ -233,14 +233,11 @@ App.module.extend('background', function() {
                 store['user'] = user;
                 store['autopilotWhitelist'] = await this.fetchAutopilotWhitelist();
                 chrome.storage.sync.set({user}, function(){});
-                chrome.tabs.query({}, function(tabs) {
-                    tabs.forEach(function(tab){
-                        console.log('store', store)
-                        chrome.tabs.sendMessage(tab.id, {
-                            'method': 'loginUser',
-                            'data': store
-                        }, function (response) {});
-                    })
+                chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                    chrome.tabs.sendMessage(tabs[0].id, {
+                        'method': 'loginUser',
+                        'data': store
+                    }, function (response) {});
                 })
             }
         } catch(err){
@@ -248,26 +245,37 @@ App.module.extend('background', function() {
         }
     };
     
-    this.getUserType = function (data, send_response) {
-        $.ajax({
-            url: "http://www.yuiapi.com/api/v1/user/info",
-            data: {token: store.user.token},
-            type: "GET",
-            success: res => {
-                if (res.code === 0){
-                    store['user'] = Object.assign(store.user, {type: res.data.user_type});
-                    chrome.storage.sync.set({user: store['user']}, function(){});
-                    chrome.tabs.query({}, function(tabs) {
-                        tabs.forEach(function(tab){
-                            chrome.tabs.sendMessage(tab.id, {
-                                'method': 'loginUser',
-                                'data': store
-                            }, function (response) {});
-                        })
-                    })
-                }
+    this.getUserStore = function (data, send_response) {
+        self.getStore().then(res=>{
+            store = res
+            console.log(store)
+            if (store.user && store.user.type === 'normal'){
+                $.ajax({
+                    url: "http://www.yuiapi.com/api/v1/user/info",
+                    data: {token: store.user.token},
+                    type: "GET",
+                    success: res => {
+                        if (res.code === 0){
+                            store['user'] = Object.assign(store.user, {type: res.data.user_type});
+                            chrome.storage.sync.set({user: store['user']}, function(){});
+                            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                                chrome.tabs.sendMessage(tabs[0].id, {
+                                    'method': 'loginUser',
+                                    'data': store
+                                }, function (response) {});
+                            })
+                        }
+                    }
+                });
+            } else {
+                chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                    chrome.tabs.sendMessage(tabs[0].id, {
+                        'method': 'loginUser',
+                        'data': store
+                    }, function (response) {});
+                })
             }
-        });
+        })
         send_response('')
     }
 
@@ -283,13 +291,11 @@ App.module.extend('background', function() {
                 if (res.code === 0){
                     store.user = Object.assign(store.user, {type: 'beta'})
                     chrome.storage.sync.set({user: store.user})
-                    chrome.tabs.query({}, function(tabs) {
-                        tabs.forEach(function(tab){
-                            chrome.tabs.sendMessage(tab.id, {
-                                'method': 'loginUser',
-                                'data': store
-                            }, function (response) {});
-                        })
+                    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                        chrome.tabs.sendMessage(tabs[0].id, {
+                            'method': 'loginUser',
+                            'data': store
+                        }, function (response) {});
                     })
                 }
             }
@@ -323,10 +329,8 @@ App.module.extend('background', function() {
                             for (let i of res.data){
                                 if (i.is_auto === 1) whiteList.push(i.host)
                             }
-                            resolve(whiteList)
-                        } else {
-                            resolve([])
                         }
+                        resolve(whiteList)
                     }
                 });
             } else {
