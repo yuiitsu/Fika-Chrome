@@ -233,11 +233,14 @@ App.module.extend('background', function() {
                 store['user'] = user;
                 store['autopilotWhitelist'] = await this.fetchAutopilotWhitelist();
                 chrome.storage.sync.set({user}, function(){});
-                chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                    chrome.tabs.sendMessage(tabs[0].id, {
-                        'method': 'loginUser',
-                        'data': store
-                    }, function (response) {});
+                chrome.tabs.query({}, function(tabs) {
+                    tabs.forEach(function(tab){
+                        console.log('store', store)
+                        chrome.tabs.sendMessage(tab.id, {
+                            'method': 'loginUser',
+                            'data': store
+                        }, function (response) {});
+                    })
                 })
             }
         } catch(err){
@@ -254,11 +257,13 @@ App.module.extend('background', function() {
                 if (res.code === 0){
                     store['user'] = Object.assign(store.user, {type: res.data.user_type});
                     chrome.storage.sync.set({user: store['user']}, function(){});
-                    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                        chrome.tabs.sendMessage(tabs[0].id, {
-                            'method': 'loginUser',
-                            'data': store
-                        }, function (response) {});
+                    chrome.tabs.query({}, function(tabs) {
+                        tabs.forEach(function(tab){
+                            chrome.tabs.sendMessage(tab.id, {
+                                'method': 'loginUser',
+                                'data': store
+                            }, function (response) {});
+                        })
                     })
                 }
             }
@@ -278,11 +283,13 @@ App.module.extend('background', function() {
                 if (res.code === 0){
                     store.user = Object.assign(store.user, {type: 'beta'})
                     chrome.storage.sync.set({user: store.user})
-                    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                        chrome.tabs.sendMessage(tabs[0].id, {
-                            'method': 'loginUser',
-                            'data': store
-                        }, function (response) {});
+                    chrome.tabs.query({}, function(tabs) {
+                        tabs.forEach(function(tab){
+                            chrome.tabs.sendMessage(tab.id, {
+                                'method': 'loginUser',
+                                'data': store
+                            }, function (response) {});
+                        })
                     })
                 }
             }

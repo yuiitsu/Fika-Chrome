@@ -690,6 +690,7 @@ App.module.extend('reader', function() {
 		store = _store;
 		self.view.display('reader', 'userProfile', store.user , $('.fika-menu-login'));
 		this.loginClick();
+		console.log('store', store)
 		$('#fika-loading-login').hide();
 		if (store.user ){
 			$('#fika-user-expand').click(function () {
