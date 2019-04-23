@@ -167,7 +167,7 @@ App.view.extend('content', function() {
                     Share to Twitter
                 </a>       
            
-                <div class="fika-menu-nav-item small mb-1" href="http://fika.io/updatelog" target="_blank">What's new</div>
+                <a class="fika-menu-nav-item small mb-1" href="http://fika.io/updatelog" target="_blank">What's new</a>
                 <div class="fika-menu-nav-item static small" style="font-size: 12px;
     line-height: 16px;">
                     <div class="fika-pro" style=" margin-left: -4px;"></div>
