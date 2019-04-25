@@ -15,7 +15,7 @@ const Fonts = {
 			]
 		},
 		{
-			lang:['jp'],
+			lang:['jp','ja'],
 			script:'japanese',
 			default: 0,
 			fonts:[

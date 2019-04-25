@@ -670,6 +670,7 @@ App.module.extend('reader', function() {
 					mainLang['typeface'] = Fonts.typeface[3]
 				}
 			}
+			console.log(mainLang)
             // 加入切换字体的按钮
             self.view.display('reader', 'fonts', mainLang['typeface']['fonts'], $('.fika-select-fonts'))
 
