@@ -42,6 +42,7 @@ App.module.extend('content', function() {
             'qrcode',
             'clearfix',
             'thumb',
+            'tag',
             'tags',
             'post-header'
         ],
