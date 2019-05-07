@@ -658,7 +658,7 @@ App.module.extend('reader', function() {
 		self.feedback();
 		self.login(store);
 		if (store.version !== Version.currentVersion) {
-			self.toast(`Check out <a href="http://fika.io/updatelog" target="_blank">hat's new?</a>`, true)
+			self.toast(`Check out <a href="http://fika.io/updatelog" target="_blank">what's new?</a>`, true)
 		}
 		// 处理语言
         chrome.i18n.detectLanguage(content, function(result) {
