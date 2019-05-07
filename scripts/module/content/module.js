@@ -107,12 +107,13 @@ App.module.extend('content', function() {
         }
 
         this.findNextNodePro(root[0]);
-        console.log(topElement, topPoint);
+        // console.log(topElement, topPoint);
         if (topElement && topElement.innerText.length > 300) {
             isAvailable = true;
             // if is available then execute autopilot
             this.readerMode();
             this.autopilot();
+            this.newBadge();
         } else {
             chrome.extension.sendMessage({
                 'method': 'sendGA',
@@ -122,6 +123,17 @@ App.module.extend('content', function() {
         }
         //
         this.isReady();
+    };
+
+    this.newBadge = function() {
+        // if readerMode is ready and user is using a older version, show 'new' badge text
+        if (store.version !== Version.currentVersion) {
+            chrome.extension.sendMessage({
+                'method': 'new_badge',
+                'data': true
+            }, function () {
+            });
+        }
     };
 
     this.findNextNodePro = function(element) {
@@ -685,7 +697,6 @@ App.module.extend('content', function() {
             // 计算用户使用时间
             if (openedTimeStamp !== 0){
                 let duration = new Date().getTime() - openedTimeStamp
-                console.log('duration', Math.round(duration))
                 chrome.extension.sendMessage({
                     'method': 'sendGA',
                     'data': {

@@ -68,3 +68,23 @@ theme(tool, "tool")
       display block
     &:nth-child(2)
       display none
+
+#fika-tool-btn.fika-whats-new[data-whats-new="menu"]
+  transform: translateX(0)
+  animation: shake 5s cubic-bezier(.36,.07,.19,.97) infinite;
+
+@keyframes shake
+  10%, 26%
+    transform: translateX(-1px);
+
+  12%, 24%
+    transform: translateX(2px);
+
+  14%, 18%, 22%
+    transform: translateX(-4px);
+
+  16%, 20%
+    transform: translateX(4px);
+
+  26%, 100%
+    transform: translateX(0)

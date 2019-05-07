@@ -1,6 +1,7 @@
 /**
  * Created by Yuiitsu on 2018/10/23.
  */
+
 App.module.extend('background', function() {
     //
     let self = this,
@@ -58,6 +59,8 @@ App.module.extend('background', function() {
         //     });
         //     return false;
         // });
+
+
         self.initGA();
         chrome.runtime.setUninstallURL('https://forms.gle/XDMmfdceYsac9p4z8')
     };
@@ -85,6 +88,11 @@ App.module.extend('background', function() {
         // 更新版本后 推送版本更新消息 （暂时先关闭！！！）
         // Version.notice();
         send_response('');
+    };
+
+    this.new_badge = function(data, send_response) {
+        self.badge_text.run('new');
+        send_response(true);
     };
 
     this.is_open = function(data, send_response) {
@@ -157,6 +165,7 @@ App.module.extend('background', function() {
         chrome.tabs.sendMessage(tab.id, {
             'method': 'openReaderMode'
         }, function (response) {});
+        chrome.storage.sync.set({version:Version.currentVersion})
     };
 
     this.initGA = function () {
@@ -405,7 +414,7 @@ App.module.extend('background', function() {
                 // photos = localStorage.getItem('photos') || [],
                 bgType = store['bgType'] || 'default',
                 bg = store['bg'],
-                whatsnew = store['whatsnew'] || ['settings','autopilot-local'];
+                whatsnew = store['whatsnew'] || ['settings','autopilot-local','menu'];
             // request photos and cache
             let res = await $.ajax({
                 methods:'GET',
@@ -429,6 +438,7 @@ App.module.extend('background', function() {
             }
             // autopilot whitelist
             let whiteList = await this.fetchAutopilotWhitelist();
+
             chrome.storage.sync.set({
                 autopilotWhitelist: whiteList,
                 photoLastFetchedDate: now,

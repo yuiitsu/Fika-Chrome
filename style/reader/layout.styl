@@ -45,18 +45,21 @@ for i in (space-around space-between center flex-start flex-end)
 directions = a y x l r t b
 // auto margin
 for d in directions
-  .m{d}-auto
-    $margin(d, auto)
+  .fika-app
+    .m{d}-auto
+      $margin(d, auto)
 
 // margin
 for i in (0..6)
   for d in directions
-    .m{d}-{i}
-      $margin(d, i)
+    .fika-app
+      .m{d}-{i}
+        $margin(d, i)
 
 // padding
 for i in (0..6)
   for d in directions
-    .p{d}-{i}
-      $padding(d, i)
+    .fika-app
+      .p{d}-{i}
+        $padding(d, i)
 

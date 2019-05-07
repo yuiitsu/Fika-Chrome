@@ -3,8 +3,13 @@
 /*! Button */
 
 btn($theme)
-  &:hover
-    background: rgba($theme.text, $hover-opacity)
+  &:not(.s-btn):hover
+    color: inherit !important
+    background: rgba($theme.text, $hover-opacity) !important
+
+  &:not(.s-btn):focus
+    background: none  !important
+    color: inherit !important
 
   &.active
     border: 2px solid $theme.accent

@@ -75,6 +75,10 @@ App.module.extend('reader', function() {
 				font: {
 					val: store.font ? store.font[typeface.script] ? store.font[typeface.script] : typeface.fonts[typeface.default]['class'] : typeface.fonts[typeface.default]['class'] ,
 					cont: $('.fika-article'),
+				},
+				align: {
+					val: store.align || 'normal',
+					cont: $('.fika-article')
 				}
 			};
         function setAppearance(data) {
@@ -101,6 +105,7 @@ App.module.extend('reader', function() {
 		setAppearance('size-' + settings['size'].val);
         setAppearance('theme-' + settings['theme'].val);
         setAppearance('font-' + settings['font'].val);
+        setAppearance('align-' + settings['align'].val);
 /*        settings['theme'].selects.click(function(){
             const selectTheme = $(this).attr('class').split(/\s+/)[1].split('-')[1]
             setAppearance('theme', selectTheme)
@@ -670,7 +675,7 @@ App.module.extend('reader', function() {
 					mainLang['typeface'] = Fonts.typeface[3]
 				}
 			}
-			console.log(mainLang)
+			// console.log(mainLang)
             // 加入切换字体的按钮
             self.view.display('reader', 'fonts', mainLang['typeface']['fonts'], $('.fika-select-fonts'))
 

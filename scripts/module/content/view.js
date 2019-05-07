@@ -10,7 +10,7 @@ App.view.extend('content', function() {
                     <!--drawer-->
                     <div class="fika-tool">
                         <!--open-->
-                        <button class="fika-btn fika-btn-icon mr-1" id="fika-tool-btn">
+                        <button class="fika-btn fika-btn-icon mr-1" id="fika-tool-btn" data-whats-new="menu">
                             <svg class="fika-icon" viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
                         </button>
                         <!--toc-->
@@ -184,6 +184,11 @@ App.view.extend('content', function() {
                         <div class="fika-tab-item" style="font-size:12px" data-sel="size-small">small</div>
                         <div class="fika-tab-item" style="font-size:14px" data-sel="size-medium">medium</div>
                         <div class="fika-tab-item" style="font-size:16px" data-sel="size-large">large</div>
+                    </div>
+                    <div class="fika-menu-label mt-3">Alignment</div>
+                    <div class="fika-tab">
+                        <div class="fika-tab-item" data-sel="align-normal">normal</div>
+                        <div class="fika-tab-item" data-sel="align-justify">justify</div>
                     </div>
                     <div class="fika-menu-label mt-3">Font</div>
                     <div class="fika-select fika-select-fonts"></div>

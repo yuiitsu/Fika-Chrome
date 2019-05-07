@@ -33,6 +33,7 @@
             "scripts/app.js",
             "scripts/model.js",
             "scripts/module/fonts.js",
+            "scripts/module/version.js",
             "scripts/module/reader/module.js",
             "scripts/module/reader/view.js",
             "scripts/module/common/module.js",

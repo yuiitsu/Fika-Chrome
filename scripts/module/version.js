@@ -4,12 +4,15 @@
  */
 const Version = {
 
-    currentVersion: 'v0.6.0',
+    currentVersion: 'v0.7.0',
 
     /**
      * 更新记录
      */
     updateLogs: {
+        'v0.7.0':[
+            'Text alignment settings'
+        ],
         'v0.6.0': [
             'User authentication',
             'Photo & color background',
