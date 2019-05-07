@@ -346,14 +346,23 @@ App.module.extend('reader', function() {
 	};
 
 	// Toast
-	this.toast = function (msg) {
-		let el = $('.fika-toast');
-		el.html(msg)
+	this.toast = function (msg, closeBtn ) {
+		let el = $('.fika-toast'),
+			btn = $('#fika-toast-close')
+		$('#fika-toast-msg').html(msg);
 		el.addClass('active')
 		window.clearTimeout(window.toastTimeout)
-		window.toastTimeout = setTimeout(()=>{
+		btn.click(function () {
 			el.removeClass('active')
-		}, 3000)
+		})
+		if (closeBtn){
+			btn.show()
+		} else {
+			btn.hide()
+			window.toastTimeout = setTimeout(()=>{
+				el.removeClass('active')
+			}, 3000)
+		}
 	}
 
 	// Toc Drawer
@@ -648,6 +657,9 @@ App.module.extend('reader', function() {
 		self._initTools();
 		self.feedback();
 		self.login(store);
+		if (store.version !== Version.currentVersion) {
+			self.toast(`Check out <a href="http://fika.io/updatelog" target="_blank">hat's new?</a>`, true)
+		}
 		// 处理语言
         chrome.i18n.detectLanguage(content, function(result) {
             // demo
@@ -701,6 +713,7 @@ App.module.extend('reader', function() {
 			$('#fika-logout').click(function () {
 				self.logout()
 			});
+			$('#fika-beta-info').hide();
 		} else {
 			$('.fika-app').removeClass('fika-bg-on');
 			$('.fika-share-fika').hide();
@@ -726,6 +739,7 @@ App.module.extend('reader', function() {
 		$('.fika-photo-grid-tab').unbind('click');
 		$('.fika-app').removeClass('fika-bg-on');
 		$('.fika-share-fika').hide();
+		$('#fika-beta-info').show()
 		this.loginClick();
 		$('#fika-loading-login').hide();
 		store.user = null;

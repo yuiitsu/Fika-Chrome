@@ -80,9 +80,9 @@ App.view.extend('content', function() {
                                     {{ end }}
                                     <span>{{ data['domain'] }}</span>
                                 </div>
-                                <h1 class="fika-article-title">
+                                <div class="fika-article-title">
                                     {{ data['title'] }}
-                                </h1>
+                                </div>
                                 <div class="fika-article-divider"></div>
                                 <div class="fika-content">
                                     {{ data['content'] }}
@@ -130,7 +130,10 @@ App.view.extend('content', function() {
                         </div>
                     </div>
                     <!--message toast-->
-                    <div class="fika-toast"></div>
+                    <div class="fika-toast">
+                        <span id="fika-toast-msg"></span>
+                        <a class="ml-5" id="fika-toast-close">close</a>
+                    </div>
                     <!--background photo-->
                     <div class="fika-bg"></div>
                     <div class="fika-loading" id="fika-loading-bg" style="display: none;position: fixed;right: 24px;bottom: 24px;"></div>
@@ -169,7 +172,7 @@ App.view.extend('content', function() {
            
                 <a class="fika-menu-nav-item small mb-1" href="http://fika.io/updatelog" target="_blank">What's new</a>
                 <div class="fika-menu-nav-item static small" style="font-size: 12px;
-    line-height: 16px;">
+    line-height: 16px;" id="fika-beta-info">
                     <div class="fika-pro" style=" margin-left: -4px;"></div>
                     Login and share Fika to gain BETA access.
                 </div>

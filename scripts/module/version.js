@@ -11,7 +11,8 @@ const Version = {
      */
     updateLogs: {
         'v0.7.0':[
-            'Text alignment settings'
+            'Text alignment settings',
+            'Japanese font support'
         ],
         'v0.6.0': [
             'User authentication',
