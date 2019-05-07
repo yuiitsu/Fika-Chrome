@@ -197,6 +197,7 @@ App.module.extend('reader', function() {
 				$('.fika-photo-grid-item.active').removeClass('active');
 				$('.fika-photo-grid-default').addClass('active');
 				fikaApp.removeClass('fika-bg-on fika-bg-dark fika-bg-light');
+				chrome.storage.sync.set({bg: null, bgType: 'default'})
 			} else {
 				fikaApp.addClass('fika-bg-on');
 				fikaApp.removeClass('fika-bg-dark fika-bg-light');
