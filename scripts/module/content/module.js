@@ -37,12 +37,10 @@ App.module.extend('content', function() {
             'crumb',
             'comment',
             'recommend',
-            'side',
             'video',
             'qrcode',
             'clearfix',
             'thumb',
-            'tag',
             'tags',
             'post-header'
         ],
