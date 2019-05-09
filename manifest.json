@@ -2,11 +2,11 @@
     "manifest_version": 2,
     "name": "Fika - Reader Mode",
     "short_name": "Fika",
-    "version": "0.6.0",
+    "version": "0.7.0",
     "description":"A Kindle-like reading experience for the web.",
     "homepage_url": "http://www.fika.io",
     "author":"Fika",
-    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; https://www.google-analytics.com; object-src 'self';",
     "default_locale": "en",
     "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlRc/NUFDfCfaPI7r+5g/kIO1ktJ6zXqh5cIwaysH1Lvx+ilqjwu2WJ+5//Mw5y2o36+Gx1MSYqF7EIWdDLzpMDv45qG0KlITOEs7A440EE+L1ZzZT0UXY4GKhW+vGMcYd5JMIWZNA2X6R6FX5sU5MC1k58ytL4H4inWseZMo49oJtuSXY20kLE60jAnNhWs3ngq489I8ZAMahb2clVhgVMQOpU2ZMdUHuLvjhgs169LJLDJeKCbm2OMEe7Uhg/sQyxmbVb3bIGTaLssMVxBNQ2SyCpEDqRkgYpTSscqf6PvKzwq6cQMJinSRTLtgMurk6nunkjAh5Zg+wMuCALUSZQIDAQAB",
     "background": {
@@ -71,7 +71,6 @@
         "*.ttf",
         "images/*"
     ],
-    "content_security_policy":"script-src 'self' https://www.google-analytics.com; object-src 'self'",
     "oauth2": {
         "client_id": "386130166125-uoa0kfcm866v0k5l2mlddenj5fnpobmu.apps.googleusercontent.com",
         "scopes": [
