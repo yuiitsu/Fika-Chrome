@@ -1,6 +1,3 @@
-/**
- * Created by Yuiitsu on 2018/10/23.
- */
 App.module.extend('content', function() {
     //
     let self = this,
@@ -178,56 +175,56 @@ App.module.extend('content', function() {
         //     return true;
         // } else {
             //
-            if (excludeTags.indexOf(nodeName) !== -1) {
-                return false;
-            }
-            //
-            let childNodesLen = element.childNodes.length;
-            if (childNodesLen > 0) {
-                for (let i = 0; i < childNodesLen; i++) {
-                    if (element.childNodes[i]) {
-                        if(this.findNextNodePro(element.childNodes[i])) {
-                            return true;
-                        }
+        if (excludeTags.indexOf(nodeName) !== -1) {
+            return false;
+        }
+        //
+        let childNodesLen = element.childNodes.length;
+        if (childNodesLen > 0) {
+            for (let i = 0; i < childNodesLen; i++) {
+                if (element.childNodes[i]) {
+                    if(this.findNextNodePro(element.childNodes[i])) {
+                        return true;
                     }
                 }
             }
-            //
-            let fl = element['fl'];
-            if (fl > 0 && fl <= 2) {
-                element.parentElement['fl'] = (element.parentElement.childNodes.length === 1 || tags.indexOf(nodeName) !== -1) && element.parentElement['fl'] > 0 ? 1 : fl - 1;
+        }
+        //
+        let fl = element['fl'];
+        if (fl > 0 && fl <= 2) {
+            element.parentElement['fl'] = (element.parentElement.childNodes.length === 1 || tags.indexOf(nodeName) !== -1) && element.parentElement['fl'] > 0 ? 1 : fl - 1;
+        }
+        //
+        if (element['fp'] && element['fp'] > 0) {
+            let point = element.parentElement.childNodes.length === 1 ? element['fp'] : (fl > 0 ? element['fp'] : 1);
+            for (var i in excludeAttrName) {
+                try {
+                    if (element.className && element.className.toLocaleLowerCase().indexOf(excludeAttrName[i]) !== -1) {
+                        point -= 100;
+                    }
+                } catch (e) {
+                }
             }
             //
-            if (element['fp'] && element['fp'] > 0) {
-                let point = element.parentElement.childNodes.length === 1 ? element['fp'] : (fl > 0 ? element['fp'] : 1);
-                for (var i in excludeAttrName) {
-                    try {
-                        if (element.className && element.className.toLocaleLowerCase().indexOf(excludeAttrName[i]) !== -1) {
-                            point -= 100;
-                        }
-                    } catch (e) {
-                    }
-                }
-                //
-                if (tags.indexOf(element.nodeName) !== -1) {
-                    // if (element.nodeName === 'ARTICLE' && element.innerText.length > 400) {
-                    //     element['fp'] += 15000;
-                    // } else {
-                        element['fp'] += 10;
-                    // }
-                    point += 10;
-                } else if (element.nodeName === 'DIV') {
-                    element['fp'] += 5;
-                } else if (element.nodeName === 'LI') {
-                    point -= 10;
-                }
+            if (tags.indexOf(element.nodeName) !== -1) {
+                // if (element.nodeName === 'ARTICLE' && element.innerText.length > 400) {
+                //     element['fp'] += 15000;
+                // } else {
+                    element['fp'] += 10;
+                // }
+                point += 10;
+            } else if (element.nodeName === 'DIV') {
+                element['fp'] += 5;
+            } else if (element.nodeName === 'LI') {
+                point -= 10;
+            }
 
-                this.pointToParentElement(element.parentElement, point);
-                if (element['fp'] > topPoint) {
-                    topPoint = element['fp'];
-                    topElement = element;
-                }
+            this.pointToParentElement(element.parentElement, point);
+            if (element['fp'] > topPoint) {
+                topPoint = element['fp'];
+                topElement = element;
             }
+        }
         // }
     };
 
@@ -636,7 +633,7 @@ App.module.extend('content', function() {
             })
         }
     };
-    
+
     this.highlightCode = function () {
         let fikaApp = document.getElementById('fika-reader');
         fikaApp.querySelectorAll('pre code').forEach((block) => {
@@ -749,6 +746,11 @@ App.module.extend('content', function() {
         this.module.reader.login(data);
     };
 
+    this.loginFailed = function (errorType) {
+        console.log(errorType)
+        this.module.reader.loginFailed(errorType)
+    };
+
     this.checkAvailable = function() {
         if (isAvailable) {
             this.isReady();
@@ -761,7 +763,7 @@ App.module.extend('content', function() {
             'data': {is_available: isAvailable,}
         }, function () {});
     };
-    
+
     this.updatePhotoSrc = function (data) {
         this.module.reader.updatePhotoSrc = data
     }

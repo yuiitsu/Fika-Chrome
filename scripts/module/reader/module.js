@@ -347,7 +347,7 @@ App.module.extend('reader', function() {
 	};
 
 	// Toast
-	this.toast = function (msg, closeBtn ) {
+	this.toast = function (msg, closeBtn, duration = 3000) {
 		let el = $('.fika-toast'),
 			btn = $('#fika-toast-close')
 		$('#fika-toast-msg').html(msg);
@@ -362,7 +362,7 @@ App.module.extend('reader', function() {
 			btn.hide()
 			window.toastTimeout = setTimeout(()=>{
 				el.removeClass('active')
-			}, 3000)
+			}, duration)
 		}
 	}
 
@@ -511,19 +511,19 @@ App.module.extend('reader', function() {
 				}
 			});
         });
-		$('.fika-share-to-unlock-btn').click(function () {
-			let type = $(this).attr('data-type');
-			if (store.user) {
-				self.shareToUnlock(type);
-			} else {
-				$('#fika-loading-login').show();
-				pendingToShare = type;
-				chrome.extension.sendMessage({
-					'method': 'oauth',
-					'data':{}
-				}, function () {});
-			}
-		})
+		// $('.fika-share-to-unlock-btn').click(function () {
+		// 	let type = $(this).attr('data-type');
+		// 	if (store.user) {
+		// 		self.shareToUnlock(type);
+		// 	} else {
+		// 		$('#fika-loading-login').show();
+		// 		pendingToShare = type;
+		// 		chrome.extension.sendMessage({
+		// 			'method': 'oauth',
+		// 			'data':{}
+		// 		}, function () {});
+		// 	}
+		// })
 		//whats new dot
 		if (store.whatsnew.length > 0){
 			$('[data-whats-new]').each(function () {
@@ -543,30 +543,30 @@ App.module.extend('reader', function() {
 		}
     };
 
-    this.shareToUnlock = function (type) {
-		if (type === 'fb'){
-			window.open('http://fika.io/sharetounlock?t=' + store.user.token);
-			self.toggleMenu(false);
-		} else if (type === 'tw') {
-			let win = window.open('https://twitter.com/intent/retweet?tweet_id=1117715831540965376', 'twitter_share', 'width=600, height=480');
-			let interval = setInterval(function(){
-				if (win.closed){
-					chrome.extension.sendMessage({
-						'method': 'changeUserType'
-					}, function () {});
-					clearInterval(interval)
-				}
-			}, 500)
-			self.toggleMenu(false);
-		}
-		chrome.extension.sendMessage({
-			'method': 'sendGA',
-			'data': {
-				type: 'event',
-				p: ['beta-access', type]
-			}
-		});
-	}
+    // this.shareToUnlock = function (type) {
+	// 	if (type === 'fb'){
+	// 		window.open('http://fika.io/sharetounlock?t=' + store.user.token);
+	// 		self.toggleMenu(false);
+	// 	} else if (type === 'tw') {
+	// 		let win = window.open('https://twitter.com/intent/retweet?tweet_id=1117715831540965376', 'twitter_share', 'width=600, height=480');
+	// 		let interval = setInterval(function(){
+	// 			if (win.closed){
+	// 				chrome.extension.sendMessage({
+	// 					'method': 'changeUserType'
+	// 				}, function () {});
+	// 				clearInterval(interval)
+	// 			}
+	// 		}, 500)
+	// 		self.toggleMenu(false);
+	// 	}
+	// 	chrome.extension.sendMessage({
+	// 		'method': 'sendGA',
+	// 		'data': {
+	// 			type: 'event',
+	// 			p: ['beta-access', type]
+	// 		}
+	// 	});
+	// }
 
     this.feedback = function () {
 	    let feedbackBtns = $('.fika-feedback-button'),
@@ -653,14 +653,15 @@ App.module.extend('reader', function() {
 			value: store['monoColors'],
 			type:'color'
 		}, $('.fika-photo-grid[data-tab="color"]'));
-		self.view.display('reader', 'shareToUnlock', {}, $('.fika-share-to-unlock'))
+		self.view.display('reader', 'loginToUnlock', {}, $('.fika-share-to-unlock'))
 		self.retrieveToc();
 		self._initTools();
 		self.feedback();
 		self.login(store);
-		if (store.version !== Version.currentVersion) {
-			self.toast(`Check out <a href="http://fika.io/updatelog" target="_blank">what's new?</a>`, true)
-		}
+		// v0.8.0 不显示what's new
+		// if (store.version !== Version.currentVersion) {
+		// 	self.toast(`Check out <a href="http://fika.io/updatelog" target="_blank">what's new?</a>`, true)
+		// }
 		// 处理语言
         chrome.i18n.detectLanguage(content, function(result) {
             // demo
@@ -720,17 +721,29 @@ App.module.extend('reader', function() {
 			$('.fika-share-fika').hide();
 			$('.fika-pro-item').addClass('fika-disabled');
 		}
-		if (store.user && store.user.type === 'beta'){
+		if (store.user) {
+			// 机制更新： 登录后就可以解锁更多功能
 			$('.fika-disabled').removeClass('fika-disabled');
 			$('input').prop('disabled', false);
-			$('.fika-share-fika').css('display','flex');
+			$('.fika-share-fika').css('display', 'flex');
 			self.background();
 			self.autopilot();
-		} else if (pendingToShare){
-			self.shareToUnlock(pendingToShare);
-			pendingToShare = null
 		}
+		// } else if (pendingToShare){
+		// 	self.shareToUnlock(pendingToShare);
+		// 	pendingToShare = null
+		// }
 	};
+
+	this.loginFailed = function (errorType) {
+		if (errorType === 1){
+			self.toast(`⚠️ Google OAuth has been disabled for this account!`, null, 6000);
+		} else {
+			self.toast(`⚠️ Network error!`);
+		}
+		$('#fika-loading-login').hide();
+	};
+
 	this.logout = function () {
 		self.view.display('reader', 'userProfile', null , $('.fika-menu-login'));
 		$('.fika-pro-item').addClass('fika-disabled');
@@ -747,7 +760,7 @@ App.module.extend('reader', function() {
 		chrome.storage.sync.set({user: null})
 	};
 	this.loginClick = function () {
-		$('#fika-login').click(function () {
+		$('.fika-login').click(function () {
 			$('#fika-loading-login').show();
 			chrome.extension.sendMessage({
 				'method': 'oauth',

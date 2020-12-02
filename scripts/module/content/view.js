@@ -171,11 +171,11 @@ App.view.extend('content', function() {
                 </a>       
            
                 <a class="fika-menu-nav-item small mb-1" href="http://fika.io/updatelog" target="_blank">What's new</a>
-                <div class="fika-menu-nav-item static small" style="font-size: 12px;
-    line-height: 16px;" id="fika-beta-info">
-                    <div class="fika-pro" style=" margin-left: -4px;"></div>
-                    Login and share Fika to gain BETA access.
-                </div>
+<!--                <div class="fika-menu-nav-item static small" style="font-size: 12px;-->
+<!--    line-height: 16px;" id="fika-beta-info">-->
+<!--                    <div class="fika-pro" style=" margin-left: -4px;"></div>-->
+<!--                    Login and share Fika to gain BETA access.-->
+<!--                </div>-->
                 <!--<a class="fika-menu-nav-item small" href="http://fika.io/pro" target="_blank">Upgrade to Pro</a>-->
                 <div class="fika-menu-login"></div>
             </div>

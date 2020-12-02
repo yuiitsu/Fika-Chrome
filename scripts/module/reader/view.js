@@ -76,7 +76,7 @@ App.view.extend('reader', function() {
                 </div>
                 <a class="fika-menu-nav-item small mt-1 d-block" id="fika-logout" style="display: none" id="fika-logout">Logout</a>
             {{ else }}
-                <div id="fika-login" class="px-2">
+                <div class="fika-login px-2">
                     <div class="mb-1">Log in</div>
                     <div>with Google account</div>
                 </div>
@@ -85,27 +85,30 @@ App.view.extend('reader', function() {
         `
     }
 
-    this.shareToUnlock = function () {
+    this.loginToUnlock = function () {
         return `
-            <div style="font-weight: bold">Login & Share to Unlock</div>
-            <div class="mt-2">
-                <button class="fika-btn fika-share-to-unlock-btn" data-type="fb" style="background: #3A5CA9">
-                    <svg  height="20px" width="20px" viewBox="0 0 32 32" fill="#fff">
-                    <path class="st0" d="M21.2,9.2h-2c-1.5,0-1.9,0.8-1.9,1.8v2.5h3.8l-0.8,3.7h-3l0.1,8.9h-3.7v-8.8h-3v-3.8h3v-3c0-3.1,2-4.6,4.7-4.6
-                        C19.9,5.9,21,6,21.2,6V9.2z"/>
-                    </svg>
-                    Facebook
-                </button>
-                <button class="ml-2 fika-btn fika-share-to-unlock-btn" data-type="tw" style="background: #1A97F0">
-                    <svg height="20px" width="20px" viewBox="0 0 32 32" fill="#fff">
-                    <path class="st0" d="M23.9,11.9c0,0.2,0,0.3,0,0.5c0,5.3-4.1,11.4-11.4,11.4c-2.2,0-4.4-0.7-6.2-1.8c0.3,0.1,0.7,0.1,1,0.1
-                        c1.9,0,3.7-0.7,5-1.7c-1.7,0-3.3-1.2-3.8-2.8c0.2,0.1,0.5,0.1,0.7,0.1c0.4,0,0.7,0,1.1-0.1c-1.9-0.4-3.3-2-3.3-3.9v-0.1
-                        c0.5,0.3,1.1,0.5,1.8,0.5c-1.1-0.7-1.8-2-1.8-3.3c0-0.7,0.2-1.4,0.6-2c2,2.4,4.9,4,8.4,4.1c0-0.3-0.1-0.6-0.1-0.9c0-2.2,1.8-4,4-4
-                        C21,8,22,8.5,22.8,9.3c0.9-0.2,1.7-0.5,2.5-1c-0.3,0.9-1,1.7-1.8,2.2c0.8,0,1.5-0.2,2.3-0.6C25.2,10.8,24.6,11.4,23.9,11.9z"/>
-                    </svg>
-                    Twitter
-                </button>
+            <div style="font-weight: bold">
+                <a class="fika-login inline">Log in</a> 
+                &nbsp;to use
             </div>
+<!--            <div class="mt-2">-->
+<!--                <button class="fika-btn fika-share-to-unlock-btn" data-type="fb" style="background: #3A5CA9">-->
+<!--                    <svg  height="20px" width="20px" viewBox="0 0 32 32" fill="#fff">-->
+<!--                    <path class="st0" d="M21.2,9.2h-2c-1.5,0-1.9,0.8-1.9,1.8v2.5h3.8l-0.8,3.7h-3l0.1,8.9h-3.7v-8.8h-3v-3.8h3v-3c0-3.1,2-4.6,4.7-4.6-->
+<!--                        C19.9,5.9,21,6,21.2,6V9.2z"/>-->
+<!--                    </svg>-->
+<!--                    Facebook-->
+<!--                </button>-->
+<!--                <button class="ml-2 fika-btn fika-share-to-unlock-btn" data-type="tw" style="background: #1A97F0">-->
+<!--                    <svg height="20px" width="20px" viewBox="0 0 32 32" fill="#fff">-->
+<!--                    <path class="st0" d="M23.9,11.9c0,0.2,0,0.3,0,0.5c0,5.3-4.1,11.4-11.4,11.4c-2.2,0-4.4-0.7-6.2-1.8c0.3,0.1,0.7,0.1,1,0.1-->
+<!--                        c1.9,0,3.7-0.7,5-1.7c-1.7,0-3.3-1.2-3.8-2.8c0.2,0.1,0.5,0.1,0.7,0.1c0.4,0,0.7,0,1.1-0.1c-1.9-0.4-3.3-2-3.3-3.9v-0.1-->
+<!--                        c0.5,0.3,1.1,0.5,1.8,0.5c-1.1-0.7-1.8-2-1.8-3.3c0-0.7,0.2-1.4,0.6-2c2,2.4,4.9,4,8.4,4.1c0-0.3-0.1-0.6-0.1-0.9c0-2.2,1.8-4,4-4-->
+<!--                        C21,8,22,8.5,22.8,9.3c0.9-0.2,1.7-0.5,2.5-1c-0.3,0.9-1,1.7-1.8,2.2c0.8,0,1.5-0.2,2.3-0.6C25.2,10.8,24.6,11.4,23.9,11.9z"/>-->
+<!--                    </svg>-->
+<!--                    Twitter-->
+<!--                </button>-->
+<!--            </div>-->
         `
     }
 

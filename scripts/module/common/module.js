@@ -1,9 +1,6 @@
-/**
- * Created by onlyfu on 2017/9/6.
- */
 App.module.extend('common', function() {
     let self = this;
-    
+
     this.cache = {
         set: function(key, value) {
             chrome.extension.sendMessage({

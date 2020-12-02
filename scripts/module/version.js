@@ -4,12 +4,16 @@
  */
 const Version = {
 
-    currentVersion: 'v0.7.0',
+    currentVersion: 'v0.8.0',
 
     /**
      * 更新记录
      */
     updateLogs: {
+        'v0.8.0':[
+            'The mechanism of "Share to unlock advanced features" has been removed',
+            'Login bug fixed'
+        ],
         'v0.7.0':[
             'Text alignments',
             'Japanese font support'

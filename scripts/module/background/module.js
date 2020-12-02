@@ -1,7 +1,3 @@
-/**
- * Created by Yuiitsu on 2018/10/23.
- */
-
 App.module.extend('background', function() {
     //
     let self = this,
@@ -212,13 +208,14 @@ App.module.extend('background', function() {
 
     this.loginUser = async function(){
         try {
-            let userInfo = await new Promise((resolve)=>{
+            let userInfo = await new Promise((resolve, reject)=>{
                 chrome.identity.getAuthToken({interactive: true}, function(token) {
                     $.ajax({
                         url: "https://www.googleapis.com/oauth2/v1/userinfo?fields=email,family_name,gender,given_name,id,locale,name,picture",
                         headers: { Authorization: 'Bearer '+ token},
                         type: "GET",
-                        success: (data)=> resolve(data)
+                        success: (data)=> resolve(data),
+                        error: (err) => reject(err)
                     });
                 });
             });
@@ -248,12 +245,25 @@ App.module.extend('background', function() {
                         'data': store
                     }, function (response) {});
                 })
+            } else {
+                chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                    chrome.tabs.sendMessage(tabs[0].id, {
+                        'method': 'loginFailed',
+                        'data': 0
+                    }, function (response) {});
+                })
             }
         } catch(err){
             console.log(err)
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, {
+                    'method': 'loginFailed',
+                    'data': 1
+                }, function (response) {});
+            })
         }
     };
-    
+
     this.getUserStore = function (data, send_response) {
         self.getStore().then(res=>{
             store = res
@@ -451,6 +461,6 @@ App.module.extend('background', function() {
         } catch(err) {
             console.log(err)
         }
-    
+
     };
 });
