@@ -653,11 +653,11 @@ App.module.extend('reader', function() {
 			value: store['monoColors'],
 			type:'color'
 		}, $('.fika-photo-grid[data-tab="color"]'));
-		self.view.display('reader', 'loginToUnlock', {}, $('.fika-share-to-unlock'))
+		// self.view.display('reader', 'loginToUnlock', {}, $('.fika-share-to-unlock'))
 		self.retrieveToc();
 		self._initTools();
 		self.feedback();
-		self.login(store);
+		// self.login(store);
 		// v0.8.0 不显示what's new
 		// if (store.version !== Version.currentVersion) {
 		// 	self.toast(`Check out <a href="http://fika.io/updatelog" target="_blank">what's new?</a>`, true)
@@ -704,7 +704,7 @@ App.module.extend('reader', function() {
     // auth
 	this.login = function (_store) {
 		store = _store;
-		self.view.display('reader', 'userProfile', store.user , $('.fika-menu-login'));
+		// self.view.display('reader', 'userProfile', store.user , $('.fika-menu-login'));
 		this.loginClick();
 		$('#fika-loading-login').hide();
 		if (store.user ){
@@ -721,14 +721,14 @@ App.module.extend('reader', function() {
 			$('.fika-share-fika').hide();
 			$('.fika-pro-item').addClass('fika-disabled');
 		}
-		if (store.user) {
+		// if (store.user) {
 			// 机制更新： 登录后就可以解锁更多功能
 			$('.fika-disabled').removeClass('fika-disabled');
 			$('input').prop('disabled', false);
 			$('.fika-share-fika').css('display', 'flex');
 			self.background();
 			self.autopilot();
-		}
+		// }
 		// } else if (pendingToShare){
 		// 	self.shareToUnlock(pendingToShare);
 		// 	pendingToShare = null
@@ -745,7 +745,7 @@ App.module.extend('reader', function() {
 	};
 
 	this.logout = function () {
-		self.view.display('reader', 'userProfile', null , $('.fika-menu-login'));
+		// self.view.display('reader', 'userProfile', null , $('.fika-menu-login'));
 		$('.fika-pro-item').addClass('fika-disabled');
 		$('.fika-pro-item input').prop('disabled', true);
 		$('#fika-autopilot-local').unbind('click');

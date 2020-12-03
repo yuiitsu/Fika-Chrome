@@ -65,7 +65,6 @@ App.view.extend('reader', function() {
     // login user
     this.userProfile = function () {
         return `
-            {{ if Boolean(data) === true }}
                 <div class="fika-user">
                     <img class="fika-user-avatar" src="{{ data['avatar'] }}">
                     <div class="fika-user-name mx-1">{{ data['name'] }}</div>
@@ -75,22 +74,17 @@ App.view.extend('reader', function() {
                     </div>
                 </div>
                 <a class="fika-menu-nav-item small mt-1 d-block" id="fika-logout" style="display: none" id="fika-logout">Logout</a>
-            {{ else }}
-                <div class="fika-login px-2">
-                    <div class="mb-1">Log in</div>
-                    <div>with Google account</div>
-                </div>
-                <div class="fika-loading" id="fika-loading-login" style="display: none;position: absolute;right: 16px;bottom: 24px;"></div>
-            {{ end }}
         `
     }
 
     this.loginToUnlock = function () {
         return `
+        <!--
             <div style="font-weight: bold">
                 <a class="fika-login inline">Log in</a> 
                 &nbsp;to use
             </div>
+            -->
 <!--            <div class="mt-2">-->
 <!--                <button class="fika-btn fika-share-to-unlock-btn" data-type="fb" style="background: #3A5CA9">-->
 <!--                    <svg  height="20px" width="20px" viewBox="0 0 32 32" fill="#fff">-->

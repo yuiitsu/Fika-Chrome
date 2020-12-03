@@ -108,7 +108,7 @@ App.module.extend('content', function() {
             isAvailable = true;
             // if is available then execute autopilot
             this.readerMode();
-            this.autopilot();
+            // this.autopilot();
             this.newBadge();
         } else {
             chrome.extension.sendMessage({
@@ -748,7 +748,7 @@ App.module.extend('content', function() {
 
     this.loginFailed = function (errorType) {
         console.log(errorType)
-        this.module.reader.loginFailed(errorType)
+        // this.module.reader.loginFailed(errorType)
     };
 
     this.checkAvailable = function() {
