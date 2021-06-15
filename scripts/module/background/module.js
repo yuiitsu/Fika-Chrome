@@ -12,7 +12,7 @@ App.module.extend('background', function() {
             //     'method': 'openReaderMode'
             // }, function (response) {});
         });
-        chrome.extension.onMessage.addListener(function(request, _, send_response) {
+        browser.runtime.onMessage.addListener(function(request, _, send_response) {
 
         // listen content script message.
             let method = request.method;

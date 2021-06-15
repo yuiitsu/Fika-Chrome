@@ -657,6 +657,7 @@ App.module.extend('reader', function() {
 		self.retrieveToc();
 		self._initTools();
 		self.feedback();
+		self.background();
 		// self.login(store);
 		// v0.8.0 不显示what's new
 		// if (store.version !== Version.currentVersion) {

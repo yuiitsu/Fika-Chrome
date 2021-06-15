@@ -4,12 +4,15 @@
  */
 const Version = {
 
-    currentVersion: 'v0.9.0',
+    currentVersion: 'v0.9.1',
 
     /**
      * 更新记录
      */
     updateLogs: {
+        'v0.9.1': [
+            'Fix the bug that the background is not displayed'
+        ],
         'v0.9.0': [],
         'v0.8.0':[
             'The mechanism of "Share to unlock advanced features" has been removed',

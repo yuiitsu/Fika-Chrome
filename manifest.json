@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Fika - Reader Mode",
     "short_name": "Fika",
-    "version": "0.9.0",
+    "version": "0.9.1",
     "description":"A Kindle-like reading experience for the web.",
     "homepage_url": "http://www.fika.io",
     "author":"Fika",
