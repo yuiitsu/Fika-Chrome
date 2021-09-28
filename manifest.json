@@ -4,7 +4,7 @@
     "short_name": "Fika",
     "version": "0.9.1",
     "description":"A Kindle-like reading experience for the web.",
-    "homepage_url": "http://www.fika.io",
+    "homepage_url": "https://www.fika.io",
     "author":"Fika",
     "content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
     "default_locale": "en",

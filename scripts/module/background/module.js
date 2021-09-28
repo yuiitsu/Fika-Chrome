@@ -137,7 +137,7 @@ App.module.extend('background', function() {
 
     this.feedback = function(data, send_response) {
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            $.post('http://www.yuiapi.com/api/v1/fika/feedback', {
+            $.post('https://www.yuiapi.com/api/v1/fika/feedback', {
                 url: tabs[0]['url'],
                 is_match: data['is_match']
             }, function (res) {
@@ -220,7 +220,7 @@ App.module.extend('background', function() {
                 });
             });
             let res = await $.ajax({
-                url: "http://www.yuiapi.com/api/v1/third_part/google/app",
+                url: "https://www.yuiapi.com/api/v1/third_part/google/app",
                 data: Object.assign({avatar: userInfo['picture']}, userInfo),
                 type: "POST"
             });
@@ -270,7 +270,7 @@ App.module.extend('background', function() {
             console.log(store)
             if (store.user && store.user.type === 'normal'){
                 $.ajax({
-                    url: "http://www.yuiapi.com/api/v1/user/info",
+                    url: "https://www.yuiapi.com/api/v1/user/info",
                     data: {token: store.user.token},
                     type: "GET",
                     success: res => {
@@ -300,7 +300,7 @@ App.module.extend('background', function() {
 
     this.changeUserType = function (data, send_response) {
         $.ajax({
-            url: "http://www.yuiapi.com/api/v1/user/info",
+            url: "https://www.yuiapi.com/api/v1/user/info",
             data: {
                 user_type: 'beta',
                 token: store.user.token
@@ -324,7 +324,7 @@ App.module.extend('background', function() {
 
     this.updateWhitelist = function (data, send_response) {
         $.ajax({
-            url: "http://www.yuiapi.com/api/v1/fika/autopilot",
+            url: "https://www.yuiapi.com/api/v1/fika/autopilot",
             data: {
                 is_auto: data.method === 'add' ? 1: 0,
                 host: data.host,
@@ -340,7 +340,7 @@ App.module.extend('background', function() {
             let whiteList = [];
             if (store.user && store.user.token){
                 $.ajax({
-                    url: "http://www.yuiapi.com/api/v1/fika/autopilot",
+                    url: "https://www.yuiapi.com/api/v1/fika/autopilot",
                     data:{token: store.user.token},
                     type: "GET",
                     success: (res) => {
@@ -379,7 +379,7 @@ App.module.extend('background', function() {
             loadingPhotos = true
             $.ajax({
                 methods:'GET',
-                url: 'http://www.yuiapi.com/api/v1/fika/background?page_index='+pageIndex+'&page_size=33',
+                url: 'https://www.yuiapi.com/api/v1/fika/background?page_index='+pageIndex+'&page_size=33',
                 success: data =>{
                     for (let i of data.list){
                         photos.push(i)
@@ -428,7 +428,7 @@ App.module.extend('background', function() {
             // request photos and cache
             let res = await $.ajax({
                 methods:'GET',
-                url: 'http://www.yuiapi.com/api/v1/fika/background?page_index=1&page_size=32'
+                url: 'https://www.yuiapi.com/api/v1/fika/background?page_index=1&page_size=32'
             });
             photos = res.data.list;
             if (bg && store['bgType'] === 'photo' && photos.filter(x => x.id === bg['id']).length === 0){

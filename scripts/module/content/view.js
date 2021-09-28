@@ -113,7 +113,7 @@ App.view.extend('content', function() {
    
                         </div>
                         <div class="fika-footer">
-                            <a class="fika-footer-logo" href="http://fika.io" target="_blank">
+                            <a class="fika-footer-logo" href="https://fika.io" target="_blank">
                                 <img style="" src="{{ chrome.runtime.getURL('images/logo64.png') }}">
                                 Made with love by Fika
                             </a>
@@ -164,13 +164,13 @@ App.view.extend('content', function() {
                     Share to Twitter
                 </a>       
            
-                <a class="fika-menu-nav-item small mb-1" href="http://fika.io/updatelog" target="_blank">What's new</a>
+                <a class="fika-menu-nav-item small mb-1" href="https://fika.io/updatelog" target="_blank">What's new</a>
 <!--                <div class="fika-menu-nav-item static small" style="font-size: 12px;-->
 <!--    line-height: 16px;" id="fika-beta-info">-->
 <!--                    <div class="fika-pro" style=" margin-left: -4px;"></div>-->
 <!--                    Login and share Fika to gain BETA access.-->
 <!--                </div>-->
-                <!--<a class="fika-menu-nav-item small" href="http://fika.io/pro" target="_blank">Upgrade to Pro</a>-->
+                <!--<a class="fika-menu-nav-item small" href="https://fika.io/pro" target="_blank">Upgrade to Pro</a>-->
                 <div class="fika-menu-login"></div>
             </div>
             <div class="fika-menu-view-cont">
