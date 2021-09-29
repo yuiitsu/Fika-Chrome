@@ -4,12 +4,15 @@
  */
 const Version = {
 
-    currentVersion: 'v0.9.1',
+    currentVersion: 'v0.9.2',
 
     /**
      * 更新记录
      */
     updateLogs: {
+        'v0.9.2': [
+            'Support https.'
+        ],
         'v0.9.1': [
             'Fix the bug that the background is not displayed'
         ],
